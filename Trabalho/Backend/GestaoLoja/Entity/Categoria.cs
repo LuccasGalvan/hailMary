@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace GestaoLoja.Entity
 {
@@ -10,7 +11,10 @@ namespace GestaoLoja.Entity
         [Required]
         [StringLength(100)]
         public string Nome { get; set; } = default!;
+        public int? TipoCategoriaId { get; set; }
+        public TipoCategoria? TipoCategoria { get; set; }
         public int? ParentId { get; set; }
+        [JsonIgnore]
         public Categoria? Parent { get; set; }
         public ICollection<Categoria> Children { get; set; } = new List<Categoria>();
         public int? Ordem {  get; set; }
