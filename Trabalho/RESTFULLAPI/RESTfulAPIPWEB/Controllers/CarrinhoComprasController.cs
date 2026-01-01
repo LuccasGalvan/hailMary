@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RESTfulAPIPWEB.Data;
+using RESTfulAPIPWEB.DTO;
 using RESTfulAPIPWEB.Entity;
 using RESTfulAPIPWEB.Entity.Enums;
 
@@ -20,7 +21,7 @@ namespace RESTfulAPIPWEB.Controllers
 
         // GET: api/CarrinhoCompras/{userId}
         [HttpGet("{userId}")]
-        public async Task<ActionResult<IEnumerable<CarrinhoCompras>>> GetCarrinho(string userId)
+        public async Task<ActionResult<IEnumerable<CarrinhoItemDto>>> GetCarrinho(string userId)
         {
             var carrinho = await _context.CarrinhoCompras
                 .Include(c => c.Produto)
@@ -32,7 +33,16 @@ namespace RESTfulAPIPWEB.Controllers
                 return NotFound("Nenhum item encontrado no carrinho.");
             }
 
-            return Ok(carrinho);
+            var carrinhoDto = carrinho.Select(item => new CarrinhoItemDto
+            {
+                Id = item.Id,
+                ProdutoId = item.ProdutoId,
+                Produto = item.Produto == null ? null : MapProduto(item.Produto),
+                UserId = item.UserId,
+                Quantidade = item.Quantidade
+            }).ToList();
+
+            return Ok(carrinhoDto);
         }
 
         // PUT: api/CarrinhoCompras/limpar/{userId}
@@ -134,6 +144,29 @@ namespace RESTfulAPIPWEB.Controllers
             {
                 return StatusCode(500, $"Erro interno: {ex.Message}");
             }
+        }
+
+        private static ProdutoDto MapProduto(Produto produto)
+        {
+            return new ProdutoDto
+            {
+                Id = produto.Id,
+                Nome = produto.Nome,
+                Detalhe = produto.Detalhe,
+                Origem = produto.Origem,
+                Titulo = string.Empty,
+                UrlImagem = produto.UrlImagem,
+                Preco = produto.PrecoFinal ?? produto.PrecoBase,
+                Promocao = produto.Promocao,
+                MaisVendido = produto.MaisVendido,
+                EmStock = produto.EmStock,
+                Disponivel = produto.ParaVenda,
+                ModoEntregaId = produto.ModoEntregaId,
+                modoentrega = produto.modoentrega,
+                CategoriaId = produto.CategoriaId,
+                categoria = produto.categoria,
+                Imagem = produto.Imagem,
+            };
         }
     }
 }
