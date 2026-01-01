@@ -124,6 +124,43 @@ namespace GestaoLoja.Data
                 ("Casa", null, 3)
             };
 
+            var tiposCategoriaDesejados = new[]
+            {
+                new TipoCategoria { Id = 1, Nome = "Tecnologia" },
+                new TipoCategoria { Id = 2, Nome = "Casa" },
+                new TipoCategoria { Id = 3, Nome = "Lazer" }
+            };
+
+            var tiposExistentes = await context.TiposCategoria.ToListAsync();
+            foreach (var tipo in tiposCategoriaDesejados)
+            {
+                if (tiposExistentes.Any(t => t.Id == tipo.Id))
+                    continue;
+
+                context.TiposCategoria.Add(new TipoCategoria { Id = tipo.Id, Nome = tipo.Nome });
+            }
+
+            if (context.ChangeTracker.HasChanges())
+                await context.SaveChangesAsync();
+
+            var tipoCategoriaPorNome = tiposCategoriaDesejados.ToDictionary(t => t.Nome, t => t.Id, StringComparer.OrdinalIgnoreCase);
+            var tipoCategoriaPorCategoria = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase)
+            {
+                ["Eletrónicos"] = tipoCategoriaPorNome["Tecnologia"],
+                ["Computadores"] = tipoCategoriaPorNome["Tecnologia"],
+                ["Portáteis"] = tipoCategoriaPorNome["Tecnologia"],
+                ["Telemóveis"] = tipoCategoriaPorNome["Tecnologia"],
+                ["Acessórios"] = tipoCategoriaPorNome["Tecnologia"],
+                ["Moda"] = tipoCategoriaPorNome["Lazer"],
+                ["Moda Homem"] = tipoCategoriaPorNome["Lazer"],
+                ["Moda Mulher"] = tipoCategoriaPorNome["Lazer"],
+                ["Moda Calçado"] = tipoCategoriaPorNome["Lazer"],
+                ["Casa"] = tipoCategoriaPorNome["Casa"]
+            };
+
+            int? GetTipoCategoriaId(string nome)
+                => tipoCategoriaPorCategoria.TryGetValue(nome, out var id) ? id : null;
+
             var categoriasExistentes = await context.Categorias.ToListAsync();
             var categoriasPorNome = categoriasExistentes
                 .GroupBy(c => c.Nome)
@@ -131,12 +168,19 @@ namespace GestaoLoja.Data
 
             foreach (var (nome, parentNome, ordem) in categoriasDesejadas)
             {
-                if (categoriasPorNome.ContainsKey(nome))
+                if (categoriasPorNome.TryGetValue(nome, out var categoriaExistente))
+                {
+                    if (categoriaExistente.TipoCategoriaId is null)
+                    {
+                        categoriaExistente.TipoCategoriaId = GetTipoCategoriaId(nome);
+                    }
+
                     continue;
+                }
 
                 if (parentNome is null)
                 {
-                    var categoria = new Categoria { Nome = nome, Ordem = ordem };
+                    var categoria = new Categoria { Nome = nome, Ordem = ordem, TipoCategoriaId = GetTipoCategoriaId(nome) };
                     context.Categorias.Add(categoria);
                     categoriasPorNome[nome] = categoria;
                     continue;
@@ -144,12 +188,18 @@ namespace GestaoLoja.Data
 
                 if (!categoriasPorNome.TryGetValue(parentNome, out var parent))
                 {
-                    parent = new Categoria { Nome = parentNome, Ordem = 1 };
+                    parent = new Categoria { Nome = parentNome, Ordem = 1, TipoCategoriaId = GetTipoCategoriaId(parentNome) };
                     context.Categorias.Add(parent);
                     categoriasPorNome[parentNome] = parent;
                 }
 
-                var child = new Categoria { Nome = nome, Ordem = ordem, Parent = parent };
+                var child = new Categoria
+                {
+                    Nome = nome,
+                    Ordem = ordem,
+                    Parent = parent,
+                    TipoCategoriaId = GetTipoCategoriaId(nome)
+                };
                 context.Categorias.Add(child);
                 categoriasPorNome[nome] = child;
             }
@@ -381,9 +431,11 @@ namespace GestaoLoja.Data
                     var encomenda = new Encomenda
                     {
                         ClienteId = clienteId,
-                        Estado = estado
+                        Estado = estado,
+                        DataCriacao = DateTime.Now
                     };
 
+                    var total = 0m;
                     foreach (var (produto, quantidade) in linhas)
                     {
                         var preco = produto.PrecoFinal ?? produto.PrecoBase;
@@ -397,9 +449,10 @@ namespace GestaoLoja.Data
                             Subtotal = subtotal
                         });
 
-                        encomenda.ValorTotal += subtotal;
+                        total += subtotal;
                     }
 
+                    encomenda.ValorTotal = total;
                     return encomenda;
                 }
 
