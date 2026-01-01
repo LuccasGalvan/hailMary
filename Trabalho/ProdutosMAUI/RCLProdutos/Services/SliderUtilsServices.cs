@@ -62,30 +62,6 @@ namespace RCLProdutos.Services
             } 
         }
 
-        // --- NOVO: quantos slides por página (desktop) ---
-        private int _itensPorPagina = 2;
-        public int ItensPorPagina
-        {
-            get => _itensPorPagina;
-            set
-            {
-                _itensPorPagina = value <= 0 ? 1 : value;
-                NotificationOnChange();
-            }
-        }
-
-        // --- NOVO: estilo aplicado ao TRACK (usa Index como "pagina") ---
-        // WidthSlide2 já existe e vai ser 50 quando ItensPorPagina=2
-        public string TrackStyle => $"transform: translateX(-{Index * WidthSlide2}%);";
-
-        // --- NOVO: calcula máximo de páginas com base no total de produtos ---
-        public int MaxPagina(int totalProdutos)
-        {
-            if (totalProdutos <= 0) return 0;
-            return (int)Math.Ceiling(totalProdutos / (double)ItensPorPagina) - 1;
-        }
-
-
         public event Action OnChange;
         private void NotificationOnChange() => OnChange?.Invoke();
     }

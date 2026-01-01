@@ -1,29 +1,26 @@
-﻿<section class="carousel-cards">
+﻿
+<section class="carousel-cards">
+    @if (!string.IsNullOrWhiteSpace(Title))
+    {
+        <h3 class="carousel-title">@Title</h3>
+    }
     <div class="cards-container">
-        <button @onclick="PreviousCard" disabled="@PrevDisabled" class="btn-cards-left">
-            <img src="images/back.png" />
-        </button>
+        <button @onclick="PreviousCard" disabled="@IsDisbledPrevious" class="btn-cards-left"><img src="/images/back.png" /></button>
+        @if (categorias == null)
 
-        @if (categorias == null || categorias.Count == 0)
         {
-            <p>Aguarde carregando...</p>
-        }
-        else
+        <p>Aguarde carregando...</p>
+    }
+    else
+    {
+        @foreach (var categoria in categorias)
         {
-            <div class="cards-track" style="@TrackStyle">
-                @for (int i = 0; i < categorias.Count; i++)
-                {
-                    var categoria = categorias[i];
-                    <CardComponent categoria="@categoria"
-                                   selectedCatId="@SelectCategoria"
-                                   marginLeft="margin-left:0%"
-                                   OnSearchClick="SelecionarCategoria" />
-                }
-            </div>
+           <CardComponent categoria="@categoria"
+                          selectedCatId="@SelectedCategoryId"
+                          marginLeft="@GetMarginLeft(categorias.IndexOf(categoria))"
+                          OnSelect="OnSelect" />
         }
-
-        <button @onclick="NextCard" disabled="@NextDisabled" class="btn-cards-right">
-            <img src="images/next.png" />
-        </button>
+    }
+        <button @onclick="NextCard" disabled="@IsDisabledNext" class="btn-cards-right"><img src="/images/next.png" /></button>
     </div>
 </section>

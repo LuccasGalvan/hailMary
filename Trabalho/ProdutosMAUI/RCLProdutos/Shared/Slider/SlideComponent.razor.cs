@@ -6,10 +6,11 @@ using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.JSInterop;
 using RCLAPI.DTO;
 using RCLAPI.Services;
-using RCLProdutos.Services;
 using RCLProdutos.Services.Interfaces;
+using System;
 using System.Net.NetworkInformation;
 using System.Xml.Linq;
 using Xamarin.Essentials;
@@ -33,15 +34,15 @@ public partial class SlideComponent
 
     [Inject]
     public IApiServices? _apiServices { get; set; }
-
     [Inject]
-    public ICarrinhoServices CarrinhoServices { get; set; }
+    public IJSRuntime JSRuntime { get; set; }
     public int countSlide { get; set; } = 0;
 
-    public ProdutoDTO? produtoFavorito { get; set; } = new ProdutoDTO();
+    public ProdutoFavorito? produtoFavorito { get; set; } = new ProdutoFavorito();
     private string? uidprod { get; set; }
     private string? favoritoicon { get; set; }
     private string? pathurlimg { get; set; }
+    private string? favoritoAuthMessage { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -61,6 +62,26 @@ public partial class SlideComponent
     private string mostraInfo;
     private string fazcompra;
 
+    private string acao;
+    private string acaocompra;
+    private void Info()
+    {
+        acao = mostraInfo;
+
+        if (acao == "none")
+            mostraInfo = "block";
+        else mostraInfo = "none";
+    }
+
+    private void Comprar()
+    {
+        acaocompra = fazcompra;
+
+        if (acaocompra == "none")
+            fazcompra = "block";
+        else fazcompra = "dispose";
+    }
+
     //*************** MODAIS ************
 
     private string modalDisplay1 = "none;";
@@ -74,7 +95,51 @@ public partial class SlideComponent
 
     private bool abreModal1 = false;
     private bool abreModal2 = false;
-    
+
+    //public async void AbreFecha(string janela1, string janela2)
+    //{
+    //    if (janela1 == "abre")
+    //    {
+    //        modalDisplay1 = "block";
+    //        abreModal1 = true;
+    //    }
+    //    else if (janela1 == "fecha")
+    //    {
+    //        modalDisplay1 = "none";
+    //        abreModal1 = false;
+    //    }
+    //    else if (janela1 == "grava")
+    //    {
+    //        modalDisplay2 = "none";
+    //        abreModal2 = false;
+
+    //        var carrinhoCompra = new ItemCarrinhoCompra()
+    //        {
+    //            Quantidade = quantidade,
+    //            PrecoUnitario = produto.Preco,
+    //            ValorTotal = total,
+    //            ProdutoId = produto.Id,
+    //            UserId = "user"
+    //        };
+
+    //        var response = await _apiServices.AdicionaItemNoCarrinho(carrinhoCompra);
+
+    //    }
+
+    //    if (janela2 == "abre")
+    //    {
+    //        modalDisplay2 = "block";
+    //        abreModal2 = true;
+    //    }
+    //    else if (janela2 == "fecha")
+    //    {
+    //        modalDisplay2 = "none";
+    //        abreModal2 = false;
+    //        quantidade = 0;
+    //    }
+
+    //}
+
     public async void AbreFecha(string janela1, string janela2)
     {
         if (janela1 == "abre")
@@ -92,22 +157,26 @@ public partial class SlideComponent
             modalDisplay2 = "none";
             abreModal2 = false;
 
-            var carrinhoCompra = new ItemCarrinhoCompra()
+            if (quantidade > 0)
             {
-                Quantidade = quantidade,
-                PrecoUnitario = produto.Preco,
-                ValorTotal = total,
-                ProdutoId = produto.Id,
-                UserId = "user"
-            };
+                var cartUserId = await GetCartUserIdAsync();
+                var response = await _apiServices.AtualizarCarrinho(cartUserId, produto.Id, "adicionar", quantidade);
 
-            
-            CarrinhoServices.AdicionarItem(carrinhoCompra);
+                if (response.Success)
+                {
+                    Console.WriteLine("Item adicionado ao carrinho com sucesso!");
+                }
+                else
+                {
+                    Console.WriteLine($"Erro ao adicionar item ao carrinho: {response.Message}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Quantidade inválida para adicionar ao carrinho.");
+            }
 
-            // Limpar campos após gravar
             quantidade = 0;
-            total = 0;
-            limiteQtd = "";
         }
 
         if (janela2 == "abre")
@@ -121,23 +190,67 @@ public partial class SlideComponent
             abreModal2 = false;
             quantidade = 0;
         }
-
     }
 
+    private async Task<string> GetCartUserIdAsync()
+    {
+        var cartUserId = await JSRuntime.InvokeAsync<string>("localStorage.getItem", new object?[] { "cartUserId" });
+        if (!string.IsNullOrEmpty(cartUserId))
+        {
+            return cartUserId;
+        }
+
+        var userId = await JSRuntime.InvokeAsync<string>("localStorage.getItem", new object?[] { "userID" });
+        if (!string.IsNullOrEmpty(userId))
+        {
+            await JSRuntime.InvokeVoidAsync("localStorage.setItem", new object?[] { "cartUserId", userId });
+            return userId;
+        }
+
+        var guestId = $"guest_{Guid.NewGuid()}";
+        await JSRuntime.InvokeVoidAsync("localStorage.setItem", new object?[] { "cartUserId", guestId });
+        return guestId;
+    }
     public async void Favoritos(string acao, int pId)
     {
+        favoritoAuthMessage = null;
         if (favoritoicon == $"images/heart.png")
         {
             favoritoicon = $"images/heartfilltransp.png";
-            var altFavorito = await _apiServices.ActualizaFavorito("adiciona", pId);
+            var (sucesso, mensagemErro) = await _apiServices.ActualizaFavorito("heartfill", pId);
+            if (!sucesso)
+            {
+                HandleFavoritoError(mensagemErro, "images/heart.png");
+            }
         }
         else
         {
             favoritoicon = $"images/heart.png";
-            var altFavorito = await _apiServices.ActualizaFavorito("remove", pId);
+            var (sucesso, mensagemErro) = await _apiServices.ActualizaFavorito("heartsimples", pId);
+            if (!sucesso)
+            {
+                HandleFavoritoError(mensagemErro, "images/heartfilltransp.png");
+            }
+        }
+    }
+
+    private void HandleFavoritoError(string? mensagemErro, string iconFallback)
+    {
+        if (IsAuthError(mensagemErro))
+        {
+            favoritoAuthMessage = "Inicie sessão para gerir favoritos.";
+        }
+        else
+        {
+            favoritoAuthMessage = "Não foi possível atualizar os favoritos.";
         }
 
-        StateHasChanged();
+        favoritoicon = iconFallback;
+    }
+
+    private static bool IsAuthError(string? errorMessage)
+    {
+        return errorMessage == "Unauthorized" || errorMessage == "Forbidden";
     }
 
     public void Incrementa(string incredec, string janela2)

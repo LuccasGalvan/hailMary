@@ -2,10 +2,8 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using RCLAPI.DTO;
 using RCLAPI.Services;
-using RCLProdutos.Services;
 using RCLProdutos.Services.Interfaces;
 using System.Linq;
-
 
 namespace RCLProdutos.Shared.CardProduto;
 public partial class SlideProdutoComponent
@@ -17,9 +15,6 @@ public partial class SlideProdutoComponent
     public  bool _entra = false;
     public ProdutoDTO recebe = new ProdutoDTO();
     private int sugestId;
-
-    [Inject]
-    private ICarrinhoServices CarrinhoServices { get; set; }
     protected override async Task OnInitializedAsync()
     {
 
@@ -53,26 +48,6 @@ public partial class SlideProdutoComponent
         {
             modalDisplay1 = "none";
             abreModal1 = false;
-        }
-        else if (janela1 == "grava")
-        {
-            if (quantidade > 0)
-            {
-                ItemCarrinhoCompra item = new ItemCarrinhoCompra
-                {
-                    ProdutoId = sugestProduto.Id,
-                    PrecoUnitario = sugestProduto.Preco,
-                    Quantidade = Convert.ToInt32(quantidade),
-                    ValorTotal = total,
-                    UserId = "1"
-                };
-
-                CarrinhoServices.AdicionarItem(item);
-
-                modalDisplay1 = "none";
-                abreModal1 = false;
-                quantidade = 0;
-            }
         }
 
         if (janela2 == "abre")

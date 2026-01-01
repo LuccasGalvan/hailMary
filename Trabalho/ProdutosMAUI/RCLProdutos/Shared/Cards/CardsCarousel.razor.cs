@@ -1,109 +1,123 @@
 ﻿using Microsoft.AspNetCore.Components;
 using RCLAPI.DTO;
 using RCLAPI.Services;
-using RCLProdutos.Services.Interfaces;
 
 namespace RCLProdutos.Shared.Cards
 {
     public partial class CardsCarousel
     {
-        [Parameter]
-        public int SelectedId { get; set; }
-
-        [Parameter]
-        public int catSel { get; set; }
-
         [Inject]
         public IApiServices _apiServices { get; set; }
 
-        [Inject]
-        public ICardsUtilsServices cardsUtilsServices { get; set; }
-        [Parameter] public int? TipoCategoriaId { get; set; }
+        [Parameter]
+        public IEnumerable<Categoria>? Categories { get; set; }
 
-        private List<Categoria> categorias { get; set; } = new();
+        [Parameter]
+        public EventCallback<Categoria> OnSelect { get; set; }
 
+        [Parameter]
+        public int? SelectedCategoryId { get; set; }
+
+        [Parameter]
+        public string? Title { get; set; }
+
+        private List<Categoria>? categorias { get; set; }
+        private List<string> marginLeftSlide = new();
+        private int countSlide = 0;
         private bool IsDisabledNext { get; set; } = false;
         private bool IsDisbledPrevious { get; set; } = false;
 
-        private int SelectCategoria;
-        private int enviaCat;
-
-        private int currentIndex = 0;
-
-        // AJUSTA ESTE VALOR ao “tamanho real” de 1 card (largura + gap).
-        // Normalmente 220~280 costuma bater certo.
-        private const int StepPx = 240;
-
-        private string TrackStyle => $"transform: translateX(-{currentIndex * StepPx}px); transition: transform 450ms ease;";
-
-        private bool NextDisabled => categorias == null || currentIndex >= Math.Max(0, categorias.Count - 1);
-
-        // para não “ir infinito”. (simples e funciona)
-        private bool PrevDisabled => currentIndex <= 0;
-        [Parameter] public int SelectedCategoriaId { get; set; }
-        [Parameter] public EventCallback<int> SelectedCategoriaIdChanged { get; set; }
-
-
-
-        protected override void OnInitialized()
-        {
-            cardsUtilsServices.OnChange += StateHasChanged;
-        }
-        private async Task SelecionarCategoria(int id)
-        {
-            SelectCategoria = id; // mantém highlight/seleção se já tens
-            await SelectedCategoriaIdChanged.InvokeAsync(id);
-        }
-
-
         protected override async Task OnParametersSetAsync()
         {
-            // reset estado do slider (muito importante)
-            cardsUtilsServices.CountSlide = 0;
-            cardsUtilsServices.Index = 0;
-            cardsUtilsServices.MarginLeftSlide.Clear();
-
-            IsDisabledNext = false;
-            IsDisbledPrevious = false;
-            SelectCategoria = 0;
-
-            // carregar categorias filtradas pelo tipo selecionado
-            categorias = await _apiServices.GetCategorias(TipoCategoriaId) ?? new List<Categoria>();
-
-            // alinhar margens com a nova lista (à prova de bala)
-            cardsUtilsServices.MarginLeftSlide.Clear();
-            for (int i = 0; i < categorias.Count; i++)
-                cardsUtilsServices.MarginLeftSlide.Add("margin-left:0%");
-
-            // se por alguma razão ainda não bate certo, força
-            if (cardsUtilsServices.MarginLeftSlide.Count < categorias.Count)
+            if (Categories is not null)
             {
-                while (cardsUtilsServices.MarginLeftSlide.Count < categorias.Count)
-                    cardsUtilsServices.MarginLeftSlide.Add("margin-left:0%");
+                categorias = Categories.ToList();
+            }
+            else if (categorias == null)
+            {
+                categorias = await _apiServices.GetCategorias();
             }
 
-            StateHasChanged();
+            if (categorias != null)
+            {
+                await LoadMarginsLeft();
+                int qtdProd = categorias.Count;
+            }
+            else
+            {
+                Console.WriteLine("Failed to load categories.");
+            }
         }
 
-        void EnsureMargins()
+        async Task LoadMarginsLeft()
         {
-            cardsUtilsServices.MarginLeftSlide.Clear();
+            if (categorias == null)
+            {
+                // Handle the null case, maybe log an error or initialize categorias
+                return;
+            }
 
-            for (int i = 0; i < categorias.Count; i++)
-                cardsUtilsServices.MarginLeftSlide.Add("margin-left:0%");
+            countSlide = 0;
+            marginLeftSlide.Clear();
+            foreach (var categoria in categorias)
+            {
+                marginLeftSlide.Add("margin-left:0%");
+            }
         }
-
 
         void PreviousCard()
         {
-            if (currentIndex > 0)
-                currentIndex--;
+            if (marginLeftSlide.Count == 0)
+            {
+                IsDisbledPrevious = true;
+                IsDisabledNext = true;
+                return;
+            }
+
+            if (countSlide != 0)
+            {
+                marginLeftSlide[countSlide - 1] = "margin-left:0%";
+                countSlide--;
+                IsDisabledNext = false;
+                IsDisbledPrevious = false;
+            }
+            else
+            {
+                marginLeftSlide[0] = "margin-left:0%";
+                IsDisbledPrevious = true;
+            }
         }
 
         void NextCard()
         {
-            if (!IsDisabledNext)
-                currentIndex++;
+            if (marginLeftSlide.Count == 0)
+            {
+                IsDisbledPrevious = true;
+                IsDisabledNext = true;
+                return;
+            }
+
+            countSlide++;
+            if (countSlide < marginLeftSlide.Count)
+            {
+                marginLeftSlide[countSlide - 1] = $"margin-left:-7%";
+                IsDisabledNext = false;
+                IsDisbledPrevious = false;
+            }
+            else
+            {
+                IsDisabledNext = true;
+            }
+        }
+
+        private string GetMarginLeft(int index)
+        {
+            if (index < 0 || index >= marginLeftSlide.Count)
+            {
+                return "margin-left:0%";
+            }
+
+            return marginLeftSlide[index];
         }
     }
 }

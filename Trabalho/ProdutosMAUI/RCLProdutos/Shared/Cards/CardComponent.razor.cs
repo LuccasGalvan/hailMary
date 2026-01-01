@@ -15,25 +15,23 @@ namespace RCLProdutos.Shared.Cards
         [Parameter]
         public string? marginLeft { get; set; }
 
-        public int? selectedCategoriaId { get; set; }
-        [Parameter] public EventCallback<int> OnSearchClick { get; set; }
+        [Parameter]
+        public EventCallback<Categoria> OnSelect { get; set; }
 
+        private string SelectedClass => selectedCatId == categoria?.Id ? "selected" : string.Empty;
 
-        protected override async Task OnInitializedAsync()
+        private string CardStyle => categoria?.Imagem is { Length: > 0 }
+            ? $"background-image:url(data:image/*;base64,{Convert.ToBase64String(categoria.Imagem)});"
+            : string.Empty;
+
+        private async Task HandleSelect(Categoria categoria)
         {
-            selectedCategoriaId = selectedCatId;
-        }
-        protected string GetStyle()
-        {
-            var img = !string.IsNullOrWhiteSpace(categoria?.UrlImagem)
-                ? categoria!.UrlImagem
-                : "images/category-placeholder.png";
+            if (OnSelect.HasDelegate)
+            {
+                await OnSelect.InvokeAsync(categoria);
+                return;
+            }
 
-            return $"background-image:url('{img}'); {marginLeft} background-position:center; background-size:cover;";
-        }
-
-        private void Navega(Categoria categoria)
-        {
             NavigationManager.NavigateTo($"slider?Id={categoria.Id}&nomeCat={categoria.Nome}");
         }
     }

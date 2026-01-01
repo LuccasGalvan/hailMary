@@ -1,11 +1,17 @@
-﻿﻿.slider {
+﻿.slider-page {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.slider {
     margin: 0 0;
     padding: 0 !important;
     width: 100%;
     height: auto;
     overflow: hidden;
     position: relative;
-    top: 0px;
+    top: 0;
     left: 0;
     border-color: transparent;
 }
@@ -77,14 +83,30 @@
     transition: 1s;
 }
 
-    .select-slide:hover {
-        background-color: #ffffffc8;
-        transition: 1s;
-    }
+.select-slide:hover {
+    background-color: #ffffffc8;
+    transition: 1s;
+}
+
+.friso-filters {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 16px;
+    position: relative;
+}
 
 
 @media (max-width: 640px) {
+    .slider-page {
+        gap: 16px;
+    }
+
     .slider {
-        top: 60px;
+        top: 0;
+    }
+
+    .friso-filters {
+        margin-bottom: 0;
     }
 }
