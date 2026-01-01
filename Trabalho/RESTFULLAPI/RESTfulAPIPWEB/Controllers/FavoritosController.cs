@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RESTfulAPIPWEB.Data;
+using RESTfulAPIPWEB.DTO;
 using RESTfulAPIPWEB.Entity;
 
 namespace RESTfulAPIPWEB.Controllers
@@ -20,7 +21,7 @@ namespace RESTfulAPIPWEB.Controllers
 
         // GET: api/Favoritos/{userId}
         [HttpGet("{userId}")]
-        public async Task<ActionResult<IEnumerable<Favoritos>>> GetFavoritos(string userId)
+        public async Task<ActionResult<IEnumerable<FavoritoDto>>> GetFavoritos(string userId)
         {
             var favoritos = await _context.Favoritos
                 .Where(f => f.UserId == userId)
@@ -32,18 +33,31 @@ namespace RESTfulAPIPWEB.Controllers
                 return NotFound(new { Message = "Nenhum favorito encontrado." });
             }
 
-            var favoritosDTO = favoritos.Select(f => new Favoritos
+            var favoritosDTO = favoritos.Select(f => new FavoritoDto
             {
                 Id = f.Id,
                 ProdutoId = f.ProdutoId,
-                Produto = new Produto
-                {
-                    Id = f.Produto.Id,
-                    Nome = f.Produto.Nome,
-                    PrecoFinal = f.Produto.PrecoFinal,
-                    Estado = f.Produto.Estado,
-                    Imagem = f.Produto.Imagem
-                },
+                Produto = f.Produto == null
+                    ? null
+                    : new ProdutoDto
+                    {
+                        Id = f.Produto.Id,
+                        Nome = f.Produto.Nome,
+                        Detalhe = f.Produto.Detalhe,
+                        Origem = f.Produto.Origem,
+                        Titulo = string.Empty,
+                        UrlImagem = f.Produto.UrlImagem,
+                        Preco = f.Produto.PrecoFinal ?? f.Produto.PrecoBase,
+                        Promocao = f.Produto.Promocao,
+                        MaisVendido = f.Produto.MaisVendido,
+                        EmStock = f.Produto.EmStock,
+                        Disponivel = f.Produto.ParaVenda,
+                        ModoEntregaId = f.Produto.ModoEntregaId,
+                        modoentrega = f.Produto.modoentrega,
+                        CategoriaId = f.Produto.CategoriaId,
+                        categoria = f.Produto.categoria,
+                        Imagem = f.Produto.Imagem
+                    },
                 UserId = f.UserId
             }).ToList();
 
