@@ -1,0 +1,245 @@
+﻿@using RCLAPI.Services
+@inject IApiServices ApiService
+@inject NavigationManager NavigationManager
+
+@using RCLAPI.DTO
+
+<h3>Pagamento da Encomenda</h3>
+
+@if (encomendas == null)
+{
+    <p>Carregando encomenda(s)...</p>
+}
+else if (encomendas.Count == 0)
+{
+    <p>@(string.IsNullOrWhiteSpace(statusPagamento) ? "Sem encomendas." : statusPagamento)</p>
+}
+else
+{
+    <div>
+        <p><strong>Preço:</strong> @preco.ToString("C2")</p>
+    </div>
+
+
+    <div>
+        <h4>Método de Pagamento</h4>
+        <select class="form-select mb-3" @bind="metodoPagamento">
+            <option value="Cartao">Cartão</option>
+            <option value="MBWay">MBWay</option>
+            <option value="DEBUG">DEBUG</option>
+        </select>
+
+        @if (metodoPagamento == "Cartao")
+        {
+            <div class="mb-3">
+                <label for="numeroCartao" class="form-label">Número do Cartão:</label>
+                <input id="numeroCartao" class="form-control" @bind="numeroCartao" />
+                @if (!string.IsNullOrEmpty(erroNumeroCartao))
+                {
+                    <p class="text-danger">@erroNumeroCartao</p>
+                }
+                <label for="validadeCartao" class="form-label">Validade (MM/AAAA):</label>
+                <input id="validadeCartao" class="form-control" @bind="validadeCartao" />
+                @if (!string.IsNullOrEmpty(erroValidadeCartao))
+                {
+                    <p class="text-danger">@erroValidadeCartao</p>
+                }
+                <label for="cvvCartao" class="form-label">CVV:</label>
+                <input id="cvvCartao" class="form-control" @bind="cvvCartao" />
+                @if (!string.IsNullOrEmpty(erroCvvCartao))
+                {
+                    <p class="text-danger">@erroCvvCartao</p>
+                }
+            </div>
+        }
+        else if (metodoPagamento == "MBWay")
+        {
+            <div class="mb-3">
+                <label for="telefoneMBWay" class="form-label">Telefone:</label>
+                <input id="telefoneMBWay" class="form-control" @bind="telefoneMBWay" />
+                @if (!string.IsNullOrEmpty(erroTelefoneMBWay))
+                {
+                    <p class="text-danger">@erroTelefoneMBWay</p>
+                }
+            </div>
+        }
+
+        <button class="btn btn-primary" @onclick="Pagar">Pagar</button>
+    </div>
+
+
+    <p class="mt-3">@statusPagamento</p>
+}
+
+@code {
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string EncomendaIdsString { get; set; }
+
+    private List<int> EncomendaIds { get; set; } = new();
+
+    private List<EncomendaDTO> encomendas;
+    private decimal preco;
+    private string statusPagamento;
+    private string metodoPagamento = "Cartao";
+    private string numeroCartao;
+    private string validadeCartao;
+    private string cvvCartao;
+    private string telefoneMBWay;
+
+    private string erroNumeroCartao;
+    private string erroValidadeCartao;
+    private string erroCvvCartao;
+    private string erroTelefoneMBWay;
+
+    private bool encomendaPaga;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var isLoggedIn = await ApiService.IsUserLoggedIn();
+        if (!isLoggedIn)
+        {
+            NavigationManager.NavigateTo("/login");
+            return;
+        }
+
+        // inicializações seguras
+        encomendas = new List<EncomendaDTO>();
+        preco = 0;
+        statusPagamento = "";
+
+        // buscar todas as encomendas do user
+        var allEncomendas = await ApiService.GetEncomendasByUser();
+
+        // ✅ se não vierem IDs na querystring, mostra as pendentes (não pagas)
+        if (string.IsNullOrWhiteSpace(EncomendaIdsString))
+        {
+            statusPagamento = "Nenhuma encomenda selecionada para pagamento.";
+            encomendas = new List<EncomendaDTO>();
+            return;
+        }
+        
+        var ids = EncomendaIdsString
+    .Split(',', StringSplitOptions.RemoveEmptyEntries)
+    .Select(s => int.TryParse(s, out var id) ? id : 0)
+    .Where(id => id > 0)
+    .ToList();
+
+        encomendas = allEncomendas.Where(e => ids.Contains(e.Id)).ToList();
+        preco = encomendas.Sum(e => e.Preco);
+
+    }
+
+
+    private async Task Pagar()
+    {
+
+
+        // Limpa as mensagens de erro
+        erroNumeroCartao = null;
+        erroValidadeCartao = null;
+        erroCvvCartao = null;
+        erroTelefoneMBWay = null;
+
+        if (encomendaPaga)
+        {
+            statusPagamento = "Encomenda já paga.";
+            return;
+        }
+
+
+        // Validações específicas para cada método de pagamento
+        if (metodoPagamento == "Cartao")
+        {
+            if (string.IsNullOrWhiteSpace(numeroCartao) || numeroCartao.Length != 16 || !numeroCartao.All(char.IsDigit))
+            {
+                erroNumeroCartao = "Número do cartão inválido. Deve conter 16 dígitos.";
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(validadeCartao) || !ValidarValidadeCartao(validadeCartao))
+            {
+                erroValidadeCartao = "Validade inválida. Use o formato MM/AAAA.";
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(cvvCartao) || cvvCartao.Length != 3 || !cvvCartao.All(char.IsDigit))
+            {
+                erroCvvCartao = "CVV inválido. Deve conter 3 dígitos.";
+                return;
+            }
+        }
+        else if (metodoPagamento == "MBWay")
+        {
+            if (string.IsNullOrWhiteSpace(telefoneMBWay) || telefoneMBWay.Length != 9 || !telefoneMBWay.All(char.IsDigit))
+            {
+                erroTelefoneMBWay = "Número de telefone inválido. Deve conter 9 dígitos.";
+                return;
+            }
+        }
+        else if (metodoPagamento != "DEBUG")
+        {
+            statusPagamento = "Método de pagamento inválido.";
+            return;
+        }
+
+        await Task.Delay(1000); // Simular um delay de 1 segundo para o processamento
+
+        bool status = true;
+        // Envia a encomenda atualizada para o servidor
+        foreach (var encomenda in encomendas)
+        {
+            var response = await ApiService.PagaEncomenda(encomenda.Id);
+            if (response.Data)
+            {
+                encomenda.Paga = true;
+            }
+            else
+            {
+                status = false;
+                statusPagamento = "Erro ao pagar: " + (response.ErrorMessage ?? "sem detalhes");
+            }
+
+        }
+
+
+        if (status)
+            statusPagamento = "Pagamento realizado com sucesso!";
+        else if (string.IsNullOrWhiteSpace(statusPagamento))
+            statusPagamento = "Erro ao processar o pagamento.";
+
+
+        encomendaPaga = status;
+    }
+
+    private bool ValidarValidadeCartao(string validade)
+    {
+        // Verifica se a validade está no formato MM/AAAA
+        if (validade.Length != 7 || validade[2] != '/')
+        {
+            return false;
+        }
+
+        // Extrai mês e ano
+        string[] partes = validade.Split('/');
+        if (partes.Length != 2 || !int.TryParse(partes[0], out int mes) || !int.TryParse(partes[1], out int ano))
+        {
+            return false;
+        }
+
+        // Verifica se o mês está entre 1 e 12
+        if (mes < 1 || mes > 12)
+        {
+            return false;
+        }
+
+        // Verifica se o ano é maior ou igual ao ano atual
+        int anoAtual = DateTime.Now.Year; // Pega o ano completo
+        if (ano < anoAtual || (ano == anoAtual && mes < DateTime.Now.Month))
+        {
+            return false;
+        }
+
+        return true;
+    }
+}

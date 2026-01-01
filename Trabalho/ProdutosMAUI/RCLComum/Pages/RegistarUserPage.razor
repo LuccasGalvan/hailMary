@@ -1,0 +1,181 @@
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.EntityFrameworkCore
+@using RCLAPI.DTO
+@using RCLAPI.Services
+
+@inject NavigationManager NavigationManager
+
+<PageTitle>Criar Registo de Utilizador</PageTitle>
+
+<h1>Criar Registo de Utilizador WEB</h1>
+
+<h4>Utilizador</h4>
+<hr />
+<EditForm method="post" Model="Utilizador" OnValidSubmit="AddUser"
+          enctype="multipart/form-data" FormName="create" Enhance>
+    <DataAnnotationsValidator />
+    <ValidationSummary class="text-danger" />
+
+    <div>
+        @if (@Utilizador.Fotografia != null && @Utilizador.Fotografia.Length > 0)
+        {
+            <img title="@Utilizador.Nome" id="imagePreview"
+                 class="img-thumbnail mt-2"
+                 src="Utilizador\@Utilizador.Fotografia" style="width:100px;">
+        }
+        else
+        {
+            <img id="imagePreview" class="img-thumbnail mt-2"
+                 src="images/headicon.png"
+                 style="width:100px;">
+        }
+    </div>
+
+    <label for="imageUri" class="form-label">Imagem:</label>
+    <input id="imageUri"
+           type="file"
+           name="Utilizador.ImageFile"
+           class="form-control"
+           accept=".png, .jpg, .jpeg"
+           onchange="document.getElementById('imagePreview').src =
+                                window.URL.createObjectURL(this.files[0])" />
+    <div class="md-2">
+        <label for="nome" class="form-label">Nome:</label>
+        <InputText id="nome" @bind-Value="Utilizador.Nome" class="form-control" />
+        <ValidationMessage For="() => Utilizador.Nome" class="text-danger" />
+
+        <label for="apelido" class="form-label">Apelido:</label>
+        <InputText id="apelido" @bind-Value="Utilizador.Apelido" class="form-control" />
+        <ValidationMessage For="() => Utilizador.Apelido" class="text-danger" />
+
+    </div>
+
+    <label for="email" class="form-label">Email:</label>
+    <InputText id="email" @bind-Value="Utilizador.Email" class="form-control" />
+    <ValidationMessage For="() => Utilizador.Email" class="text-danger" />
+
+    <label for="password" class="form-label">Password:</label>
+    <InputText type="password" id="password" @bind-Value="Utilizador.Password" class="form-control" />
+    <ValidationMessage For="() => Utilizador.Password" class="text-danger" />
+
+    @*              <label for="confirmepassword" class="form-label">Confirme a Password:</label> 
+                <InputText type="password"  id="confirmepassword" 
+                    @bind-Value="Utilizador.ConfirmPassword" class="form-control" />
+                <ValidationMessage For="() => Utilizador.ConfirmPassword" class="text-danger" />
+ *@
+    <label for="nif" class="form-label">NIF:</label>
+    <InputNumber id="nif" @bind-Value="Utilizador.NIF" class="form-control" />
+    <ValidationMessage For="() => Utilizador.NIF" class="text-danger" />
+
+    @if (_ok)
+    {
+        <div class="alert alert-success">
+            Registo efetuado! A conta pode precisar de ativação.
+        </div>
+    }
+    @if (!string.IsNullOrWhiteSpace(_erro))
+    {
+        <div class="alert alert-danger">
+            @_erro
+        </div>
+    }
+
+    <label class="form-label">Tipo de conta:</label>
+    <InputSelect class="form-control" @bind-Value="Utilizador.Tipo">
+        <option value="Cliente">Cliente</option>
+        <option value="Fornecedor">Fornecedor</option>
+    </InputSelect>
+
+
+    <button type="submit" class="btn btn-primary">
+        <img title="Registar"
+             src="/images/icoperfil.png" style="height:30px" />
+    </button>
+    <a href="/" type="button" class="btn btn-outline-secondary">
+        <img title="Recuar"
+             src="/images/backicon.png" style="height:30px" />
+    </a>
+</EditForm>
+@code {
+    [SupplyParameterFromForm]
+    public Utilizador Utilizador { get; set; } = new();
+    [Inject]
+    public IApiServices? _apiServices { get; set; }
+
+    private string? _erro;
+    private bool _ok;
+
+    // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+    public async Task AddUser()
+    {
+        _erro = null;
+        _ok = false;
+
+        try
+        {
+            // Se não escolherem nada, default Cliente
+            Utilizador.Tipo ??= "Cliente";
+
+            // --- Voltar a processar a imagem (para não ter UI a pedir file e depois ignorar) ---
+            if (Utilizador.ImageFile != null)
+            {
+                if (Utilizador.ImageFile.Length > (200 * 1024))
+                {
+                    _erro = "Imagem demasiado grande (máx 200KB).";
+                    return;
+                }
+
+                if (!isValidFileType(Utilizador.ImageFile.FileName))
+                {
+                    _erro = "Tipo de imagem inválido (jpg/png).";
+                    return;
+                }
+
+                Utilizador.UrlImagem = Utilizador.ImageFile.FileName;
+
+                using var dataStream = new MemoryStream();
+                await Utilizador.ImageFile.CopyToAsync(dataStream);
+                Utilizador.Fotografia = dataStream.ToArray();
+            }
+            // -------------------------------------------------------------------------------
+
+            // (Opcional) Não precisas de fotografia/NIF para o endpoint atual,
+            // mas se quiseres manter, deixa como está. Só não rebenta.
+
+            var result = await _apiServices!.RegistarUtilizador(Utilizador);
+
+            if (result.Data)
+            {
+                _ok = true;
+                // normalmente fica pendente -> mostra mensagem e volta para login ou home
+                NavigationManager.NavigateTo("/login");
+                return;
+            }
+            else
+            {
+                _erro = string.IsNullOrWhiteSpace(result.ErrorMessage)
+                    ? "Não foi possível registar."
+                    : result.ErrorMessage;
+            }
+        }
+        catch (Exception ex)
+        {
+            _erro = ex.Message;
+        }
+    }
+    bool isValidFileType(string fileName)
+    {
+        string ext = Path.GetExtension(fileName);
+        switch (ext.ToLower())
+        {
+            case ".jpg":
+                return true;
+            case ".jpeg":
+                return true;
+            case ".png":
+                return true;
+            default:
+                return false;
+        }
+    }
+}

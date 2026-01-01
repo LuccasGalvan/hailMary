@@ -1,0 +1,56 @@
+﻿@page "/habituais"
+@using RCLProdutos.Services.Interfaces
+@using RCLProdutos.Services
+@using RCLProdutos.Shared
+@using RCLAPI.DTO
+@using RCLAPI.Services
+@using Microsoft.AspNetCore.Components.QuickGrid
+@inject NavigationManager NavigationManager
+@inject IApiServices ApiService
+
+@if (produtosHabituais != null && produtosHabituais.Any())
+{
+    <QuickGrid Items="produtosHabituais.AsQueryable()" Class="table">
+        <PropertyColumn Property="@(item => item.Nome)" Title="Produto" Sortable="true" />
+        <PropertyColumn Property="@(item => item.Descricao)" Title="Detalhe" />
+        <PropertyColumn Property="@(item => item.Preco)" Title="Preço" Format="C2" Sortable="true" />
+    </QuickGrid>
+
+
+}
+else
+{
+    <p>Não tem produtos favoritos.</p>
+}
+
+<Paginator State="@pagination" />
+
+<div class="pagination-controls">
+    <label for="itemsPerPage">Itens por página:</label>
+    <select id="itemsPerPage" @bind="pagination.ItemsPerPage">
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="15">15</option>
+    </select>
+</div>
+
+@code {
+    bool isUserLoggedIn;
+    List<ProdutoDTO> produtosHabituais;
+    string userId;
+    private PaginationState pagination = new PaginationState { ItemsPerPage = 5 };
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        isUserLoggedIn = await ApiService.IsUserLoggedIn();
+        if(!isUserLoggedIn)
+        {
+            NavigationManager.NavigateTo("/login");
+        }
+
+        userId = await ApiService.GetUserId();
+
+        produtosHabituais = await ApiService.GetFavoritos();
+    }
+}

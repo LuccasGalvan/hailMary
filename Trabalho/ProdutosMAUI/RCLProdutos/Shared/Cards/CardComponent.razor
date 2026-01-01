@@ -1,0 +1,32 @@
+﻿@using Microsoft.EntityFrameworkCore
+
+@using RCLAPI.Services
+@using Microsoft.AspNetCore.Components
+@using RCLAPI.DTO
+@using RCLProdutos.Shared.Slider
+@using RCLProdutos.Shared.Cards
+@using RCLProdutos.Shared.CardProduto
+
+@inject NavigationManager NavigationManager
+
+@* <div class="card" style="background-image:url(@pathurlimg); @marginLeft;position:center"> *@
+
+<div title="@categoria!.Nome"
+     class="card"
+     style="@GetStyle()">
+
+    <div>
+        <p>@categoria!.Nome</p>
+    </div>
+
+    <div class="footer-button">
+        <div class="footer-button">
+            <button type="button" @onclick="() => OnSearchClick.InvokeAsync(categoria.Id)">
+                <img alt="Pesquisar categoria"
+                     src="images/searchredicon50x50.png"
+                     width="30" />
+            </button>
+        </div>
+
+    </div>
+</div>

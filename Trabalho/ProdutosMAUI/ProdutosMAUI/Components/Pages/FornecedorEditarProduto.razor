@@ -1,0 +1,7 @@
+﻿@page "/fornecedor/produtos/editar/{id:int}"
+@using RCLComum.Pages
+<FornecedorProdutoEdit ProdutoId="id" />
+
+@code {
+    [Parameter] public int id { get; set; }
+}

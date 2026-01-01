@@ -1,0 +1,74 @@
+@using RCLProdutos.Shared.Slider
+@using RCLProdutos.Shared.Cards
+@using RCLProdutos.Shared.Tipos
+
+<div class="home-wrapper">
+
+    <!-- HERO / CABEÇALHO DA HOME -->
+    <section class="hero">
+        <div class="hero-text">
+            <h1>MyMedia</h1>
+            <p class="hero-subtitle">
+                Suportes de media e acessórios disponiveis
+            </p>
+
+            <div class="hero-actions">
+                <a href="/catalogo" class="btn-secondary-cta">Explorar catálogo</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECÇÃO DE CATEGORIAS / FRISOS -->
+    <section id="categorias" class="section-block">
+        <header class="section-header">
+            <h2>Explorar por categoria</h2>
+            <p class="section-subtitle">
+                Vê os produtos organizados pelas categorias principais da loja.
+            </p>
+        </header>
+
+        <div class="section-content">
+            <!-- FRISO 1: Tipos -->
+            <TiposCarousel SelectedTipoId="@tipoSelecionado"
+                           SelectedTipoIdChanged="OnTipoChanged" />
+            @* <p>DEBUG: tipoSelecionado = @tipoSelecionado</p> *@
+
+
+            <!-- FRISO 2: Categorias (filtradas pelo tipo selecionado) -->
+            @* <CardsCarousel TipoCategoriaId="@(tipoSelecionado == 0 ? null : (int?)tipoSelecionado)" /> *@
+        </div>
+    </section>
+
+    <div class="section-content">
+        <!-- FRISO 2: Categorias (filtradas pelo tipo selecionado) -->
+        <CardsCarousel TipoCategoriaId="@(tipoSelecionado == 0 ? null : (int?)tipoSelecionado)"
+                       SelectedCategoriaId="@categoriaSelecionada"
+                       SelectedCategoriaIdChanged="OnCategoriaChanged" />
+
+    </div>
+
+    <div class="section-content">
+        <SliderComponent initProd="-1"
+                         CategoriaId="@(categoriaSelecionada == 0 ? null : (int?)categoriaSelecionada)" />
+
+    </div>
+
+</div>
+
+@code {
+    private int tipoSelecionado = 0;
+    private int categoriaSelecionada = 0;
+
+    private void OnTipoChanged(int id)
+    {
+        tipoSelecionado = id;
+        categoriaSelecionada = 0; // reset quando mudas o tipo
+    }
+
+    private void OnCategoriaChanged(int id)
+    {
+        categoriaSelecionada = id;
+    }
+
+
+}

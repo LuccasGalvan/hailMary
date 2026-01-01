@@ -1,0 +1,29 @@
+﻿<section class="carousel-cards">
+    <div class="cards-container">
+        <button @onclick="PreviousCard" disabled="@PrevDisabled" class="btn-cards-left">
+            <img src="images/back.png" />
+        </button>
+
+        @if (categorias == null || categorias.Count == 0)
+        {
+            <p>Aguarde carregando...</p>
+        }
+        else
+        {
+            <div class="cards-track" style="@TrackStyle">
+                @for (int i = 0; i < categorias.Count; i++)
+                {
+                    var categoria = categorias[i];
+                    <CardComponent categoria="@categoria"
+                                   selectedCatId="@SelectCategoria"
+                                   marginLeft="margin-left:0%"
+                                   OnSearchClick="SelecionarCategoria" />
+                }
+            </div>
+        }
+
+        <button @onclick="NextCard" disabled="@NextDisabled" class="btn-cards-right">
+            <img src="images/next.png" />
+        </button>
+    </div>
+</section>

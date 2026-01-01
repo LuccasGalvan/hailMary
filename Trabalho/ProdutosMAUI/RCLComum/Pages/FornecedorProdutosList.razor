@@ -1,0 +1,136 @@
+﻿@using RCLAPI.DTO
+@using RCLAPI.Services
+@inject IApiServices Api
+@inject NavigationManager Nav
+
+<h1>Meus Produtos (Fornecedor)</h1>
+
+@if (!string.IsNullOrWhiteSpace(erro))
+{
+    <p class="text-danger">Erro: @erro</p>
+}
+
+@if (!isFornecedor)
+{
+    <p class="text-danger">Acesso reservado a fornecedores.</p>
+}
+else if (loading)
+{
+    <p>A carregar...</p>
+}
+else
+{
+    @if (!isFornecedor)
+    {
+        <p class="text-danger">Acesso reservado a fornecedores.</p>
+    }
+    else if (loading)
+    {
+        <p>A carregar...</p>
+    }
+    else
+    {
+        <!-- ✅ SEMPRE visível -->
+        <div style="margin-bottom:12px;">
+            <button class="btn btn-primary" @onclick="Novo">+ Novo Produto</button>
+        </div>
+
+        @if (produtos.Count == 0)
+        {
+            <p>Sem produtos ainda.</p>
+        }
+        else
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Preço</th>
+                        <th>Stock</th>
+                        <th>Estado</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var p in produtos)
+                    {
+                        <tr>
+                            <td>@p.ProdutoId</td>
+                            <td>@p.Nome</td>
+                            <td>@p.PrecoBase</td>
+                            <td>@p.Stock</td>
+                            <td>@EstadoToTexto(p.Estado)</td>
+                            <td>
+                                <!-- ✅ ESTES botões só fazem sentido quando há produtos -->
+                                <button class="btn btn-sm btn-outline-secondary" @onclick="() => Editar(p.ProdutoId)">Editar</button>
+                                <button class="btn btn-sm btn-outline-danger" style="margin-left:6px;" @onclick="() => Inativar(p.ProdutoId)">Inativar</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    }
+
+
+        @if (!string.IsNullOrWhiteSpace(msg))
+        {
+            <p>@msg</p>
+        }
+}
+
+@code {
+    private bool loading = true;
+    private bool isFornecedor = false;
+    private List<FornecedorProdutoDto> produtos = new();
+    private string? msg;
+
+    private string? erro;
+
+    protected override async Task OnInitializedAsync()
+    {
+        loading = true;
+        erro = null;
+
+        try
+        {
+            isFornecedor = await Api.IsFornecedor();
+            if (!isFornecedor)
+            {
+                return;
+            }
+
+            produtos = await Api.GetMeusProdutosFornecedor();
+        }
+        catch (Exception ex)
+        {
+            erro = ex.Message;
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+
+    private static string EstadoToTexto(int estado) => estado switch
+    {
+        0 => "Pendente",
+        1 => "Ativo",
+        2 => "Inativo",
+        _ => $"Desconhecido ({estado})"
+    };
+
+
+
+    void Novo() => Nav.NavigateTo("/fornecedor/produtos/novo");
+    void Editar(int id) => Nav.NavigateTo($"/fornecedor/produtos/editar/{id}");
+
+    private async Task Inativar(int id)
+    {
+        var res = await Api.ApagarProdutoFornecedor(id);
+        msg = res.Data ? "Produto inativado." : $"Erro: {res.ErrorMessage}";
+        produtos = await Api.GetMeusProdutosFornecedor();
+        StateHasChanged();
+    }
+}

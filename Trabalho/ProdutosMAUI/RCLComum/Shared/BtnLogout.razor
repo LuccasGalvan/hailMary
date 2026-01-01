@@ -1,0 +1,16 @@
+﻿@inject IApiServices ApiService
+@inject NavigationManager NavigationManager
+@using RCLAPI.Services
+
+
+<button @onclick="Logout" class="btn-logout">
+    <img src="images/icosair.png" alt="Logout" /> Logout
+</button>
+
+@code {
+    private async Task Logout()
+    {
+        await ApiService.Logout();
+        NavigationManager.NavigateTo("/", true);
+    }
+}

@@ -1,0 +1,172 @@
+﻿@page "/encomenda/edit"
+@rendermode InteractiveServer
+@attribute [Authorize(Roles = "Admin,Gestor")]
+
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.EntityFrameworkCore
+@using GestaoLoja.Data
+@using GestaoLoja.Entity
+@using GestaoLoja.Entity.Enums
+@using GestaoLoja.Services
+
+@inject IDbContextFactory<ApplicationDbContext> DbFactory
+@inject NavigationManager NavigationManager
+@inject EncomendaWorkflowService WorkflowService
+
+<PageTitle>Editar Encomenda</PageTitle>
+
+<h1>Editar Encomenda</h1>
+
+@if (notFound)
+{
+    <p><em>Not found.</em></p>
+}
+else if (!loaded)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    var encomenda = Encomenda!;
+
+    <h2>Encomenda</h2>
+    <hr />
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="mb-3">
+                <label class="form-label">Id</label>
+                <input class="form-control" value="@encomenda.Id.ToString()" disabled />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Cliente</label>
+                <input class="form-control" value="@clienteDisplay" disabled />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Estado</label>
+                <input class="form-control" value="@encomenda.Estado.ToString()" disabled />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Total</label>
+                <input class="form-control" value="@encomenda.Total.ToString("F2")" disabled />
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(actionError))
+            {
+                <div class="alert alert-danger" role="alert">@actionError</div>
+            }
+
+            <div class="d-flex flex-wrap gap-2">
+                <button type="button"
+                        class="btn btn-success"
+                        @onclick="() => UpdateEncomenda(EncomendaEstado.Confirmada)"
+                        disabled="@(!CanConfirm || isUpdating)">
+                    Confirmar
+                </button>
+                <button type="button"
+                        class="btn btn-danger"
+                        @onclick="() => UpdateEncomenda(EncomendaEstado.Rejeitada)"
+                        disabled="@(!CanReject || isUpdating)">
+                    Rejeitar
+                </button>
+                <button type="button"
+                        class="btn btn-primary"
+                        @onclick="() => UpdateEncomenda(EncomendaEstado.Expedida)"
+                        disabled="@(!CanShip || isUpdating)">
+                    Expedir
+                </button>
+                <a class="btn btn-secondary ms-2" href="/encomenda">Back to List</a>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [SupplyParameterFromQuery]
+    private Guid Id { get; set; }
+
+    private Encomenda? Encomenda { get; set; }
+    private string? actionError;
+    private bool isUpdating;
+    private bool loaded;
+    private bool notFound;
+    private string clienteDisplay = "—";
+
+    private bool CanConfirm => Encomenda is not null
+        && WorkflowService.CanTransition(Encomenda.Estado, EncomendaEstado.Confirmada);
+    private bool CanReject => Encomenda is not null
+        && WorkflowService.CanTransition(Encomenda.Estado, EncomendaEstado.Rejeitada);
+    private bool CanShip => Encomenda is not null
+        && WorkflowService.CanTransition(Encomenda.Estado, EncomendaEstado.Expedida);
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadEncomendaAsync();
+    }
+
+    private async Task LoadEncomendaAsync()
+    {
+        await using var db = await DbFactory.CreateDbContextAsync();
+
+        Encomenda = await db.Encomendas
+            .AsNoTracking()
+            .FirstOrDefaultAsync(e => e.Id == Id);
+
+        if (Encomenda is null)
+        {
+            notFound = true;
+            loaded = true;
+            return;
+        }
+
+        var cliente = await db.Users
+            .AsNoTracking()
+            .FirstOrDefaultAsync(u => u.Id == Encomenda.ClienteId);
+
+        clienteDisplay = BuildUserDisplay(cliente, Encomenda.ClienteId);
+
+        loaded = true;
+    }
+
+    private async Task UpdateEncomenda(EncomendaEstado targetEstado)
+    {
+        if (Encomenda is null)
+            return;
+
+        isUpdating = true;
+        actionError = null;
+
+        if (!WorkflowService.CanTransition(Encomenda.Estado, targetEstado))
+        {
+            actionError = "Transição de estado não permitida.";
+            await LoadEncomendaAsync();
+            isUpdating = false;
+            return;
+        }
+
+        var result = await WorkflowService.TryTransitionAsync(Id, targetEstado);
+        if (!result.Success)
+            actionError = result.ErrorMessage ?? "Transição inválida.";
+
+        await LoadEncomendaAsync();
+        isUpdating = false;
+    }
+
+    private static string BuildUserDisplay(ApplicationUser? user, string? fallbackId)
+    {
+        if (user is not null)
+        {
+            var fullName = $"{user.Nome} {user.Apelido}".Trim();
+            if (!string.IsNullOrWhiteSpace(fullName))
+                return fullName;
+
+            if (!string.IsNullOrWhiteSpace(user.Email))
+                return user.Email;
+        }
+
+        return string.IsNullOrWhiteSpace(fallbackId) ? "—" : fallbackId;
+    }
+}

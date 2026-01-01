@@ -1,0 +1,66 @@
+﻿.carousel-cards {
+    width: 100%;
+    position: relative;
+    margin: 0 auto;
+    padding: 0 !important;
+    overflow: hidden;
+    height: 150px;
+}
+
+/* janela do carousel */
+.viewport {
+    overflow: hidden;
+    width: 100%;
+    height: 150px;
+}
+
+/* faixa que desliza */
+.track {
+    display: flex;
+    align-items: center;
+    transition: transform 450ms ease;
+    will-change: transform;
+}
+
+/* botões por cima do track */
+.btn-cards-left,
+.btn-cards-right {
+    border: 0;
+    padding: 0;
+    height: 140px;
+    background-color: transparent;
+    position: absolute;
+    top: 5px;
+    z-index: 9999;
+    pointer-events: auto;
+}
+
+.btn-cards-left { left: 0; }
+.btn-cards-right { right: 0; }
+
+.btn-cards-left img,
+.btn-cards-right img {
+    height: 28px;
+}
+
+.loading {
+    color: white;
+    margin-left: 20px;
+}
+
+.cards-container {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+
+/* este é o “friso” que desliza */
+.cards-track {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 12px; /* ajusta se quiseres */
+    will-change: transform;
+}

@@ -1,0 +1,35 @@
+﻿﻿@using RCLProdutos.Shared.Slider
+@using RCLProdutos.Shared.Cards
+@using RCLProdutos.Shared.CardProduto
+@page "/slider"
+
+<section class="slider">
+    <div class="slider-container" style="width:@(witdthPerc)%">
+        <button @onclick="PreviousSlide" disabled="@IsDisbledPrevious" class="btn-slides-left"><img src="images/back.png" /></button>
+
+        @if (produtos.Count == 0 || sliderUtilsService.MarginLeftSlide.Count < produtos.Count)
+        {
+            <p>Produto indisponivel...</p>
+        }
+        else
+        {
+            @for (int i = 0; i < produtos.Count; i++)
+            {
+                var produto = produtos[i];
+                <SlideComponent produto="@produto"
+                                width="@sliderUtilsService.WidthSlide2"
+                                marginLeft="@(i < sliderUtilsService.MarginLeftSlide.Count ? sliderUtilsService.MarginLeftSlide[i] : "margin-left:0%")" />
+            }
+
+        }
+
+        <button @onclick="NextSlide" disabled="@IsDisabledNext" class="btn-slides-right"><img src="images/next.png" /></button>
+    </div>
+</section>
+
+@* @if (Id > 0)
+{
+    <CardsCarousel catSel="Id" />
+} *@
+
+<SlideProdutoComponent sugestProduto="@sugestaoProduto" />

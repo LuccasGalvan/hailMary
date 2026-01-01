@@ -1,0 +1,223 @@
+﻿@using RCLAPI.DTO
+@using RCLAPI.Services
+@inject IApiServices Api
+@inject NavigationManager Nav
+
+<h1>@(IsNovo ? "Novo Produto" : "Editar Produto")</h1>
+
+@if (!isFornecedor)
+{
+    <p class="text-danger">Acesso reservado a fornecedores.</p>
+}
+else if (loading)
+{
+    <p>A carregar...</p>
+}
+else
+{
+    <EditForm Model="model" OnValidSubmit="Guardar">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="mb-2">
+            <label>Nome</label>
+            <InputText class="form-control" @bind-Value="model.Nome" />
+        </div>
+
+        <div class="mb-2">
+            <label>Descrição</label>
+            <InputText class="form-control" @bind-Value="model.Descricao" />
+        </div>
+
+        <div class="mb-2">
+            <label>Preço Base</label>
+            <InputNumber class="form-control" @bind-Value="model.PrecoBase" />
+        </div>
+
+        <div class="mb-2">
+            <label>Stock</label>
+            <InputNumber class="form-control" @bind-Value="model.Stock" />
+        </div>
+
+        <div class="mb-2">
+            <label>Modo de disponibilização</label>
+
+            <InputSelect class="form-control" @bind-Value="model.ModoDisponibilizacaoId">
+                <option value="0">-- Seleciona --</option>
+                @foreach (var m in modosDisponibilizacao)
+                {
+                    <option value="@m.Id">@m.Nome</option>
+                }
+            </InputSelect>
+
+            <small class="text-muted">Escolhe como o produto deve ser tratado na loja.</small>
+        </div>
+
+
+
+        <div class="mb-2">
+            <label>UrlImagem</label>
+            <InputText class="form-control" @bind-Value="model.UrlImagem" />
+        </div>
+
+        <hr />
+        <h4>Categorias</h4>
+
+        @if (categorias.Count == 0)
+        {
+            <p>Sem categorias disponíveis.</p>
+        }
+        else
+        {
+            <div class="cat-grid">
+                @foreach (var c in categorias)
+                {
+                    <label class="cat-item">
+                        <input type="checkbox"
+                               checked="@model.CategoriaIds.Contains(c.Id)"
+                               @onchange="(e) => ToggleCategoria(c.Id, GetBool(e))" />
+                        <span>@(string.IsNullOrWhiteSpace(c.Nome) ? $"Categoria {c.Id}" : c.Nome)</span>
+                    </label>
+                }
+            </div>
+
+        }
+
+        <div style="margin-top:16px;">
+            <button class="btn btn-primary" type="submit">Guardar</button>
+            <button class="btn btn-secondary" style="margin-left:8px;" type="button" @onclick="Voltar">Voltar</button>
+        </div>
+
+        @if (!string.IsNullOrWhiteSpace(msg))
+        {
+            <p style="margin-top:12px;">@msg</p>
+        }
+    </EditForm>
+}
+
+@code {
+    [Parameter] public int? ProdutoId { get; set; }
+    private bool IsNovo => ProdutoId is null;
+
+    private bool loading = true;
+    private bool isFornecedor = false;
+
+    private UpsertProdutoDto model = new();
+    private List<Categoria> categorias = new();
+
+    private string? msg;
+
+    protected override async Task OnInitializedAsync()
+    {
+        isFornecedor = await Api.IsFornecedor();
+        if (!isFornecedor)
+        {
+            loading = false;
+            return;
+        }
+
+        categorias = await Api.GetCategorias();
+
+        if (!IsNovo && ProdutoId is not null)
+        {
+            // vamos buscar aos "meus produtos" e preencher
+            var meus = await Api.GetMeusProdutosFornecedor();
+            var p = meus.FirstOrDefault(x => x.ProdutoId == ProdutoId.Value);
+            if (p is not null)
+            {
+                model.Nome = p.Nome;
+                model.Descricao = p.Descricao;
+                model.PrecoBase = p.PrecoBase;
+                model.Stock = p.Stock;
+                model.ModoDisponibilizacaoId = p.ModoDisponibilizacaoId;
+                model.UrlImagem = p.UrlImagem;
+                model.CategoriaIds = p.CategoriaIds?.ToList() ?? new();
+            }
+        }
+
+        loading = false;
+    }
+
+    private readonly List<(int Id, string Nome)> modosDisponibilizacao = new()
+{
+    (1, "Para Venda"),
+    (2, "Para Listagem"),
+    (3, "Pré-Venda"),
+    (4, "Esgotado"),
+    (5, "Interno")
+};
+
+
+
+    private void ToggleCategoria(int id, bool check)
+    {
+        if (check)
+        {
+            if (!model.CategoriaIds.Contains(id)) model.CategoriaIds.Add(id);
+        }
+        else
+        {
+            model.CategoriaIds.Remove(id);
+        }
+    }
+
+    private async Task Guardar()
+    {
+        if (model.CategoriaIds.Count == 0)
+        {
+            msg = "Escolhe pelo menos 1 categoria.";
+            return;
+        }
+
+        if (IsNovo)
+        {
+            var res = await Api.CriarProdutoFornecedor(model);
+
+            if (res.Data > 0)
+            {
+                // mostra mensagem curta (opcional, 1 segundo)
+                msg = $"Produto criado (ID {res.Data}). Ficou pendente até validação.";
+
+                // pequeno delay para o utilizador ler
+                await Task.Delay(800);
+
+                // volta à lista
+                Nav.NavigateTo("/fornecedor/produtos");
+                return;
+            }
+
+            msg = $"Erro: {res.ErrorMessage}";
+        }
+        else if (ProdutoId is not null)
+        {
+            var res = await Api.EditarProdutoFornecedor(ProdutoId.Value, model);
+
+            if (res.Data)
+            {
+                msg = "Produto atualizado. Pode voltar a ficar pendente conforme regras.";
+
+                await Task.Delay(800);
+                Nav.NavigateTo("/fornecedor/produtos");
+                return;
+            }
+
+            msg = $"Erro: {res.ErrorMessage}";
+        }
+    }
+
+
+    private void Voltar() => Nav.NavigateTo("/fornecedor/produtos");
+
+    private static bool GetBool(ChangeEventArgs e)
+    {
+        if (e?.Value is bool b)
+            return b;
+
+        if (e?.Value is string s)
+            return s.Equals("true", StringComparison.OrdinalIgnoreCase)
+                || s.Equals("on", StringComparison.OrdinalIgnoreCase);
+
+        return false;
+    }
+
+}

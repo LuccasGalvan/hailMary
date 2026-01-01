@@ -1,0 +1,140 @@
+﻿@* NÃO PÔR @page AQUI *@
+
+@using RCLProdutos.Services.Interfaces
+@using RCLAPI.DTO
+@using RCLAPI.Services
+@inject ICarrinhoServices CarrinhoServices
+@inject IApiServices ApiService
+@inject NavigationManager NavigationManager
+
+<h3>Carrinho de Compras</h3>
+
+@if (itensCarrinho is null)
+{
+    <p>A carregar...</p>
+}
+else if (!itensCarrinho.Any())
+{
+    <p>O seu carrinho está vazio.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Produto</th>
+                <th>Quantidade</th>
+                <th>Preço unitário</th>
+                <th>Total</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in itensCarrinho)
+            {
+                <tr>
+                    <td>@item.ProdutoId</td>
+                    <td>@item.Quantidade</td>
+                    <td>@item.PrecoUnitario.ToString("C")</td>
+                    <td>@item.ValorTotal.ToString("C")</td>
+                    <td>
+                        <button class="btn btn-danger" @onclick="@(() => RemoverItem(item.ProdutoId))">
+                            Remover
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="text-right mt-3">
+        <h4>Total do carrinho: @totalCarrinho.ToString("C")</h4>
+        <button class="btn btn-primary" @onclick="FinalizarCompra">
+            Finalizar compra
+        </button>
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(mensagemErro))
+{
+    <div class="alert alert-danger mt-3">
+        @mensagemErro
+    </div>
+}
+
+@code {
+    private List<ItemCarrinhoCompra>? itensCarrinho;
+    private decimal totalCarrinho;
+    private string? mensagemErro;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CarregarCarrinho();
+    }
+
+    private async Task CarregarCarrinho()
+    {
+        itensCarrinho = CarrinhoServices.getItems();
+
+        // se for null, evita nullref
+        if (itensCarrinho is null)
+        {
+            totalCarrinho = 0;
+            return;
+        }
+
+        totalCarrinho = itensCarrinho.Sum(i => i.ValorTotal);
+    }
+
+    private async Task RemoverItem(int produtoId)
+    {
+        CarrinhoServices.RemoverItem(produtoId);
+        await CarregarCarrinho();
+    }
+
+    private async Task FinalizarCompra()
+    {
+        mensagemErro = null;
+
+        bool isLoggedIn = await ApiService.IsUserLoggedIn();
+        if (!isLoggedIn)
+        {
+            NavigationManager.NavigateTo("/login");
+            return;
+        }
+
+        if (itensCarrinho is null || !itensCarrinho.Any())
+        {
+            mensagemErro = "Carrinho vazio.";
+            return;
+        }
+
+        var idsCriados = new List<int>();
+
+        foreach (var item in itensCarrinho)
+        {
+            var res = await ApiService.CriaEncomenda(item);
+
+            if (res.Data <= 0)
+            {
+                mensagemErro = string.IsNullOrWhiteSpace(res.ErrorMessage)
+                    ? "Erro ao criar encomenda."
+                    : res.ErrorMessage;
+
+                return;
+            }
+
+            idsCriados.Add(res.Data);
+        }
+
+        // limpar carrinho
+        CarrinhoServices.LimparCarrinho();
+        await CarregarCarrinho();
+
+        // ✅ ir para pagamento SÓ destas encomendas
+        var encomendaIds = string.Join(",", idsCriados);
+        NavigationManager.NavigateTo($"/pagaencomendas?EncomendaIdsString={encomendaIds}");
+    }
+
+
+}
