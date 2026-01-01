@@ -91,7 +91,14 @@ namespace RESTfulAPIPWEB.Controllers
             _context.Produtos.Add(produto);
             await _context.SaveChangesAsync();
 
-            return Created($"/api/FornecedorProdutos/{produto.Id}", MapProdutoDto(produto));
+            var produtoDto = MapProdutoDto(produto);
+
+            return Created($"/api/FornecedorProdutos/{produto.Id}", new
+            {
+                ProdutoId = produto.Id,
+                Estado = produto.Estado,
+                Produto = produtoDto
+            });
         }
 
         [HttpPut("{id:int}")]
