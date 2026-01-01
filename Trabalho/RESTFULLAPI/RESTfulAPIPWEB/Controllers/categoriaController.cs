@@ -19,9 +19,9 @@ namespace RESTfulAPIPWEB.Controllers
         [HttpGet]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromQuery] int? tipoCategoriaId = null)
         {
-            var categorias = await _categoriaRepository.GetCategorias();
+            var categorias = await _categoriaRepository.GetCategorias(tipoCategoriaId);
             return Ok(categorias);
         }
     }

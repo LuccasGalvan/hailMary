@@ -11,6 +11,8 @@ namespace RESTfulAPIPWEB.Entity
         [Required]
         [StringLength(100)]
         public string Nome { get; set; } = default!;
+        public int? TipoCategoriaId { get; set; }
+        public TipoCategoria? TipoCategoria { get; set; }
         public int? ParentId { get; set; }
         [JsonIgnore]
         public Categoria? Parent { get; set; }
