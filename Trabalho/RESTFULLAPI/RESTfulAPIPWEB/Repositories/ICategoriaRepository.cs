@@ -4,6 +4,6 @@ namespace RESTfulAPIPWEB.Repositories
 {
     public interface ICategoriaRepository
     {
-        Task<IEnumerable<Categoria>> GetCategorias();
+        Task<IEnumerable<Categoria>> GetCategorias(int? tipoCategoriaId = null);
     }
 }

@@ -13,6 +13,7 @@ namespace RESTfulAPIPWEB.Data
         }
 
         public DbSet<Categoria> Categorias { get; set; } = default!;
+        public DbSet<TipoCategoria> TiposCategoria { get; set; } = default!;
         public DbSet<Produto> Produtos { get; set; } = default!;
         public DbSet<ModoEntrega> ModosEntrega { get; set; } = default!;
         public DbSet<Favoritos> Favoritos { get; set; } = default!;
@@ -31,11 +32,17 @@ namespace RESTfulAPIPWEB.Data
                 .OnDelete(DeleteBehavior.SetNull);
 
             builder.Entity<Categoria>().HasData(
-                new Categoria { Id = 1, Nome = "Eletrónicos", Ordem = 1 },
-                new Categoria { Id = 2, Nome = "Computadores", Ordem = 1, ParentId = 1 },
-                new Categoria { Id = 3, Nome = "Portáteis", Ordem = 1, ParentId = 2 },
-                new Categoria { Id = 4, Nome = "Telemóveis", Ordem = 2, ParentId = 1 },
-                new Categoria { Id = 5, Nome = "Acessórios", Ordem = 3, ParentId = 1 }
+                new Categoria { Id = 1, Nome = "Eletrónicos", Ordem = 1, TipoCategoriaId = 1 },
+                new Categoria { Id = 2, Nome = "Computadores", Ordem = 1, ParentId = 1, TipoCategoriaId = 1 },
+                new Categoria { Id = 3, Nome = "Portáteis", Ordem = 1, ParentId = 2, TipoCategoriaId = 1 },
+                new Categoria { Id = 4, Nome = "Telemóveis", Ordem = 2, ParentId = 1, TipoCategoriaId = 1 },
+                new Categoria { Id = 5, Nome = "Acessórios", Ordem = 3, ParentId = 1, TipoCategoriaId = 1 }
+            );
+
+            builder.Entity<TipoCategoria>().HasData(
+                new TipoCategoria { Id = 1, Nome = "Tecnologia" },
+                new TipoCategoria { Id = 2, Nome = "Casa" },
+                new TipoCategoria { Id = 3, Nome = "Lazer" }
             );
 
             // --- Produto ownership: don't allow deleting a supplier to cascade-delete products
