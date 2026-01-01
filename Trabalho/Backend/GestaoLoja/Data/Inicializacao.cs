@@ -397,7 +397,7 @@ namespace GestaoLoja.Data
                             Subtotal = subtotal
                         });
 
-                        encomenda.Total += subtotal;
+                        encomenda.ValorTotal += subtotal;
                     }
 
                     return encomenda;
