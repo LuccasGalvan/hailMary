@@ -74,6 +74,10 @@ namespace RESTfulAPIPWEB.Data
                 .HasForeignKey(i => i.EncomendaId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            builder.Entity<Encomenda>()
+                .HasIndex(e => e.VendaId)
+                .IsUnique();
+
             // --- Order item -> Produto (keep items even if product gets deleted later)
             builder.Entity<EncomendaItem>()
                 .HasOne(i => i.Produto)
