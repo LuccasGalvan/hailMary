@@ -27,7 +27,7 @@ namespace GestaoLoja.Data
                 .HasOne(c => c.Parent)
                 .WithMany(c => c.Children)
                 .HasForeignKey(c => c.ParentId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.SetNull);
 
             builder.Entity<Categoria>()
                 .HasOne(c => c.TipoCategoria)
@@ -84,6 +84,10 @@ namespace GestaoLoja.Data
                 .WithMany(e => e.Itens)
                 .HasForeignKey(i => i.EncomendaId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Encomenda>()
+                .HasIndex(e => e.VendaId)
+                .IsUnique();
 
             // --- Order item -> Produto (keep items even if product gets deleted later)
             builder.Entity<EncomendaItem>()
