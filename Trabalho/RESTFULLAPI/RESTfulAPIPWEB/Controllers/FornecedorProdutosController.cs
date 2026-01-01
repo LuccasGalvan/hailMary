@@ -163,11 +163,11 @@ namespace RESTfulAPIPWEB.Controllers
                 .Where(i => i.Produto != null && i.Produto.FornecedorId == fornecedorId)
                 .Include(i => i.Produto)
                 .Include(i => i.Encomenda)
-                .OrderByDescending(i => i.Encomenda!.CriadaEmUtc)
+                .OrderByDescending(i => i.Encomenda!.DataCriacao)
                 .Select(i => new FornecedorVendaDto
                 {
                     EncomendaId = i.EncomendaId,
-                    EncomendaCriadaEmUtc = i.Encomenda!.CriadaEmUtc,
+                    EncomendaCriadaEmUtc = i.Encomenda!.DataCriacao,
                     EncomendaEstado = i.Encomenda.Estado,
                     ProdutoId = i.ProdutoId,
                     ProdutoNome = i.Produto!.Nome,

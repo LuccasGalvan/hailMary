@@ -28,7 +28,7 @@ namespace RESTfulAPIPWEB.Controllers
                 .Where(e => e.ClienteId == userId)
                 .Include(e => e.Itens)
                     .ThenInclude(i => i.Produto)
-                .OrderByDescending(e => e.CriadaEmUtc)
+                .OrderByDescending(e => e.DataCriacao)
                 .ToListAsync();
 
             return Ok(encomendas);
@@ -120,7 +120,7 @@ namespace RESTfulAPIPWEB.Controllers
                 total += subtotal;
             }
 
-            encomenda.Total = total;
+            encomenda.ValorTotal = total;
 
             // Clear cart
             _context.CarrinhoCompras.RemoveRange(cartItems);
@@ -147,13 +147,15 @@ namespace RESTfulAPIPWEB.Controllers
                 return BadRequest("Encomenda não está pendente de pagamento.");
 
             encomenda.Estado = EncomendaEstado.Paga;
+            encomenda.PagamentoExecutado = true;
+            encomenda.DataPagamento = DateTime.Now;
             await _context.SaveChangesAsync();
 
             var response = new EncomendaPagamentoResponse
             {
                 EncomendaId = encomenda.Id,
                 Estado = encomenda.Estado,
-                PagoEmUtc = DateTime.UtcNow
+                PagoEmUtc = encomenda.DataPagamento ?? DateTime.Now
             };
 
             return Ok(response);
