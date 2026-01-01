@@ -216,17 +216,43 @@ namespace GestaoLoja.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("VendaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VendaId"));
+
                     b.Property<string>("ClienteId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CriadaEmUtc")
+                    b.Property<DateTime?>("DataConfirmacao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DataCriacao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DataExpedicao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DataPagamento")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Estado")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Total")
+                    b.Property<string>("MetodoPagamento")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Observacoes")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<bool>("PagamentoExecutado")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("ValorTotal")
                         .HasColumnType("decimal(10,2)");
 
                     b.HasKey("Id");

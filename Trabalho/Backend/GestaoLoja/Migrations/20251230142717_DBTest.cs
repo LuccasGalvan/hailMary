@@ -88,10 +88,18 @@ namespace GestaoLoja.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    VendaId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     ClienteId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CriadaEmUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataCriacao = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataPagamento = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DataConfirmacao = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DataExpedicao = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Estado = table.Column<int>(type: "int", nullable: false),
-                    Total = table.Column<decimal>(type: "decimal(10,2)", nullable: false)
+                    ValorTotal = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
+                    MetodoPagamento = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Observacoes = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    PagamentoExecutado = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

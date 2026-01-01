@@ -50,8 +50,8 @@
     <PropertyColumn Property="e => e.Id" Title="Id" />
     <PropertyColumn Property="e => e.ClienteNome" Title="Cliente" />
     <PropertyColumn Property="e => e.Estado" Title="Estado" />
-    <PropertyColumn Property="e => e.CriadaEmUtc" Title="Criada" />
-    <PropertyColumn Property="e => e.Total" Title="Total" />
+    <PropertyColumn Property="e => e.DataCriacao" Title="Criada" />
+    <PropertyColumn Property="e => e.ValorTotal" Title="Total" />
 
     <TemplateColumn Title="Ações" Context="e">
         <a href="@($"/encomenda/details?id={e.Id}")">Details</a> |
@@ -86,7 +86,7 @@
 
         // Default ordering (safe + consistent)
         var items = await q
-            .OrderByDescending(e => e.CriadaEmUtc)
+            .OrderByDescending(e => e.DataCriacao)
             .Skip(request.StartIndex)
             .Take(pageSize)
             .Select(e => new EncomendaRow
@@ -94,8 +94,8 @@
                 Id = e.Id,
                 ClienteId = e.ClienteId,
                 Estado = e.Estado,
-                CriadaEmUtc = e.CriadaEmUtc,
-                Total = e.Total
+                DataCriacao = e.DataCriacao,
+                ValorTotal = e.ValorTotal
             })
             .ToListAsync();
 
@@ -140,8 +140,8 @@
         public string? ClienteId { get; set; }
         public string? ClienteNome { get; set; }
         public EncomendaEstado Estado { get; set; }
-        public DateTime CriadaEmUtc { get; set; }
-        public decimal Total { get; set; }
+        public DateTime DataCriacao { get; set; }
+        public decimal ValorTotal { get; set; }
     }
 
     private static string BuildUserDisplay(ApplicationUser? user, string? fallbackId)
