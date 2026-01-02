@@ -34,12 +34,24 @@ namespace RESTfulAPIPWEB.Controllers
             if (request.Linhas.Count == 0)
                 return BadRequest("Linhas obrigatórias.");
 
-            var produtoIds = request.Linhas.Select(l => l.ProdutoId).Distinct().ToList();
+            if (request.Linhas.Any(l => l.Quantidade <= 0))
+                return BadRequest("Quantidade inválida.");
+
+            var linhasAgrupadas = request.Linhas
+                .GroupBy(l => l.ProdutoId)
+                .Select(g => new { ProdutoId = g.Key, Quantidade = g.Sum(l => l.Quantidade) })
+                .ToList();
+
+            if (linhasAgrupadas.Any(l => l.Quantidade <= 0))
+                return BadRequest("Quantidade inválida.");
+
+            var produtoIds = linhasAgrupadas.Select(l => l.ProdutoId).Distinct().ToList();
             var produtos = await _context.Produtos
+                .Include(p => p.ModoDisponibilizacao)
                 .Where(p => produtoIds.Contains(p.ProdutoId))
                 .ToDictionaryAsync(p => p.ProdutoId);
 
-            foreach (var linha in request.Linhas)
+            foreach (var linha in linhasAgrupadas)
             {
                 if (!produtos.TryGetValue(linha.ProdutoId, out var produto))
                     return BadRequest($"Produto inválido: {linha.ProdutoId}");
@@ -47,8 +59,8 @@ namespace RESTfulAPIPWEB.Controllers
                 if (produto.Estado != ProdutoEstado.Activo || produto.PrecoFinal == null)
                     return BadRequest($"Produto não disponível: {produto.Nome}");
 
-                if (linha.Quantidade <= 0)
-                    return BadRequest($"Quantidade inválida para: {produto.Nome}");
+                if (produto.ModoDisponibilizacao == null || !produto.ModoDisponibilizacao.IsForSale)
+                    return BadRequest($"Produto não disponível: {produto.Nome}");
 
                 if (produto.Stock < linha.Quantidade)
                     return BadRequest($"Stock insuficiente para: {produto.Nome}");
@@ -66,7 +78,7 @@ namespace RESTfulAPIPWEB.Controllers
 
             decimal total = 0m;
 
-            foreach (var linha in request.Linhas)
+            foreach (var linha in linhasAgrupadas)
             {
                 var produto = produtos[linha.ProdutoId];
                 var precoUnit = produto.PrecoFinal!.Value;
@@ -81,7 +93,6 @@ namespace RESTfulAPIPWEB.Controllers
                     TotalLinha = subtotal
                 });
 
-                produto.Stock -= linha.Quantidade;
                 total += subtotal;
             }
 
@@ -138,7 +149,14 @@ namespace RESTfulAPIPWEB.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<VendaPagamentoResponse>> Pagar(int id, [FromBody] PagarVendaRequest? request)
         {
-            var encomenda = await _context.Encomendas.FirstOrDefaultAsync(e => e.VendaId == id);
+            if (request == null)
+                return BadRequest("Dados de pagamento obrigatórios.");
+
+            var encomenda = await _context.Encomendas
+                .Include(e => e.Linhas)
+                .ThenInclude(l => l.Produto)
+                .ThenInclude(p => p!.ModoDisponibilizacao)
+                .FirstOrDefaultAsync(e => e.VendaId == id);
 
             if (encomenda == null)
                 return NotFound();
@@ -146,9 +164,31 @@ namespace RESTfulAPIPWEB.Controllers
             if (encomenda.Estado != EncomendaEstado.PendentePagamento)
                 return BadRequest("Encomenda não está pendente de pagamento.");
 
+            foreach (var linha in encomenda.Linhas)
+            {
+                if (linha.Produto == null)
+                    return BadRequest($"Produto inválido: {linha.ProdutoId}");
+
+                if (linha.Produto.Estado != ProdutoEstado.Activo || linha.Produto.PrecoFinal == null)
+                    return BadRequest($"Produto não disponível: {linha.Produto.Nome}");
+
+                if (linha.Produto.ModoDisponibilizacao == null || !linha.Produto.ModoDisponibilizacao.IsForSale)
+                    return BadRequest($"Produto não disponível: {linha.Produto.Nome}");
+
+                if (linha.Produto.Stock < linha.Quantidade)
+                    return BadRequest($"Stock insuficiente para: {linha.Produto.Nome}");
+            }
+
+            foreach (var linha in encomenda.Linhas)
+            {
+                linha.Produto!.Stock -= linha.Quantidade;
+            }
+
             encomenda.Estado = EncomendaEstado.Paga;
             encomenda.PagamentoExecutado = true;
             encomenda.DataPagamento = DateTime.Now;
+            encomenda.MetodoPagamento = request.MetodoPagamento;
+            encomenda.Observacoes = request.Observacoes;
             await _context.SaveChangesAsync();
 
             var response = new VendaPagamentoResponse
