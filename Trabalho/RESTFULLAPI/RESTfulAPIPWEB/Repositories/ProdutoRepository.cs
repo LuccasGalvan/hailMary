@@ -24,16 +24,44 @@ namespace RESTfulAPIPWEB.Repositories
                 .Where(p => p.Imagem != null && p.Imagem.Length > 0)
                 .Include(p => p.modoentrega)
                 .Include(p => p.ModoDisponibilizacao)
-                .Include(p => p.categoria);
+                .Include(p => p.categoria)
+                .Include(p => p.CategoriaProdutos);
+        }
+
+        public async Task<IEnumerable<Produto>> ObterProdutosAsync(int? categoriaId, string? texto, int? modoDisponibilizacaoId)
+        {
+            var query = QueryCatalogoVisivel();
+
+            if (categoriaId != null)
+            {
+                var categoriaIds = await GetCategoriaComDescendentesAsync(categoriaId.Value);
+                query = query.Where(p =>
+                    categoriaIds.Contains(p.CategoriaId)
+                    || p.CategoriaProdutos.Any(cp => categoriaIds.Contains(cp.CategoriaId)));
+            }
+
+            if (!string.IsNullOrWhiteSpace(texto))
+            {
+                var termo = texto.Trim();
+                query = query.Where(p =>
+                    (p.Nome ?? string.Empty).Contains(termo)
+                    || (p.Descricao ?? string.Empty).Contains(termo));
+            }
+
+            if (modoDisponibilizacaoId != null)
+            {
+                query = query.Where(p => p.ModoDisponibilizacaoId == modoDisponibilizacaoId);
+            }
+
+            return await query
+                .OrderBy(p => p.categoria!.Ordem)
+                .ThenBy(p => p.Nome)
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<Produto>> ObterProdutosPorCategoriaAsync(int categoriaID)
         {
-            var categoriaIds = await GetCategoriaComDescendentesAsync(categoriaID);
-            return await QueryCatalogoVisivel()
-                .Where(p => categoriaIds.Contains(p.CategoriaId))
-                .OrderBy(p => p.Nome)
-                .ToListAsync();
+            return await ObterProdutosAsync(categoriaID, null, null);
         }
 
         public async Task<IEnumerable<Produto>> ObterProdutosPromocaoAsync()
@@ -56,10 +84,7 @@ namespace RESTfulAPIPWEB.Repositories
 
         public async Task<IEnumerable<Produto>> ObterTodosProdutosAsync()
         {
-            return await QueryCatalogoVisivel()
-                .OrderBy(p => p.categoria!.Ordem)
-                .ThenBy(p => p.Nome)
-                .ToListAsync();
+            return await ObterProdutosAsync(null, null, null);
         }
 
         public async Task<Produto?> ObterDetalheProdutoAsync(int id)
