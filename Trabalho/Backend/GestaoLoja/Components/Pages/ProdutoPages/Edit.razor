@@ -155,7 +155,10 @@ else
     {
         await using var db = await DbFactory.CreateDbContextAsync();
 
-        var dbProduto = await db.Produtos.AsNoTracking().FirstOrDefaultAsync(p => p.Id == Id);
+        var dbProduto = await db.Produtos
+            .AsNoTracking()
+            .Include(p => p.CategoriaProdutos)
+            .FirstOrDefaultAsync(p => p.Id == Id);
         if (dbProduto is null)
         {
             Produto = null;
@@ -170,6 +173,9 @@ else
         // if this is the first GET, copy DB -> form model
         if (Produto is null || Produto.Id == 0)
             Produto = dbProduto;
+
+        if (Produto is not null)
+            Produto.CategoriaId = GetFirstCategoriaId(Produto.CategoriaProdutos);
 
         loaded = true;
     }
@@ -224,7 +230,9 @@ else
 
         await using var db = await DbFactory.CreateDbContextAsync();
 
-        var dbProduto = await db.Produtos.FirstOrDefaultAsync(p => p.Id == Id);
+        var dbProduto = await db.Produtos
+            .Include(p => p.CategoriaProdutos)
+            .FirstOrDefaultAsync(p => p.Id == Id);
         if (dbProduto is null)
         {
             NavigationManager.NavigateTo("notfound");
@@ -240,10 +248,25 @@ else
         dbProduto.Estado = Produto.Estado;
         dbProduto.Promocao = Produto.Promocao;
         dbProduto.MaisVendido = Produto.MaisVendido;
-        dbProduto.EmStock = Produto.EmStock;
+        dbProduto.Stock = Produto.Stock;
         dbProduto.ParaVenda = Produto.ParaVenda;
-        dbProduto.CategoriaId = Produto.CategoriaId;
         dbProduto.ModoEntregaId = Produto.ModoEntregaId;
+
+        if (Produto.CategoriaId <= 0)
+        {
+            error = "Seleciona uma categoria.";
+            return;
+        }
+
+        var categoria = await db.Categorias.FirstOrDefaultAsync(c => c.Id == Produto.CategoriaId);
+        if (categoria is null)
+        {
+            error = "Seleciona uma categoria válida.";
+            return;
+        }
+
+        dbProduto.CategoriaProdutos.Clear();
+        dbProduto.CategoriaProdutos.Add(categoria);
 
         dbProduto.PrecoFinal = dbProduto.Estado == ProdutoEstado.Activo && dbProduto.MargemPercentual is not null
             ? Math.Round(dbProduto.PrecoBase * (1 + (dbProduto.MargemPercentual.Value / 100m)), 2)
@@ -276,5 +299,15 @@ else
         var name = Path.GetFileNameWithoutExtension(originalName);
         var timestamp = DateTimeOffset.UtcNow.ToString("yyyyMMddHHmmssfff");
         return $"{name}_{timestamp}{ext}";
+    }
+
+    private static int GetFirstCategoriaId(ICollection<Categoria> categorias)
+    {
+        foreach (var categoria in categorias)
+        {
+            return categoria.Id;
+        }
+
+        return 0;
     }
 }

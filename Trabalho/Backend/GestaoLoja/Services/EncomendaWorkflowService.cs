@@ -45,7 +45,7 @@ public sealed class EncomendaWorkflowService
                 if (item.Produto is null)
                     return TransitionResult.Fail("Produto associado em falta para repor stock.");
 
-                item.Produto.EmStock += item.Quantidade;
+                item.Produto.Stock += item.Quantidade;
             }
         }
 
