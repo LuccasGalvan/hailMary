@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -51,6 +52,7 @@ namespace RESTfulAPIPWEB.Controllers
                     ParaVenda = p.ParaVenda,
                     Origem = p.Origem,
                     CategoriaId = p.CategoriaId,
+                    CategoriaIds = p.CategoriaProdutos.Select(cp => cp.CategoriaId).ToList(),
                     ModoEntregaId = p.ModoEntregaId,
                     ModoDisponibilizacaoId = p.ModoDisponibilizacaoId
                 })
@@ -69,6 +71,13 @@ namespace RESTfulAPIPWEB.Controllers
             if (string.IsNullOrWhiteSpace(fornecedorId))
                 return Unauthorized();
 
+            var categoriaIds = NormalizeCategoriaIds(dto.CategoriaIds, dto.CategoriaId);
+            if (categoriaIds.Count == 0)
+            {
+                ModelState.AddModelError(nameof(dto.CategoriaIds), "Pelo menos uma categoria é necessária.");
+                return ValidationProblem(ModelState);
+            }
+
             var produto = new Produto
             {
                 Nome = dto.Nome,
@@ -85,10 +94,15 @@ namespace RESTfulAPIPWEB.Controllers
                 Stock = dto.EmStock,
                 ParaVenda = dto.ParaVenda,
                 Origem = dto.Origem,
-                CategoriaId = dto.CategoriaId,
+                CategoriaId = categoriaIds[0],
                 ModoEntregaId = dto.ModoEntregaId,
                 ModoDisponibilizacaoId = dto.ModoDisponibilizacaoId
             };
+
+            foreach (var categoriaId in categoriaIds)
+            {
+                produto.CategoriaProdutos.Add(new CategoriaProduto { CategoriaId = categoriaId });
+            }
 
             _context.Produtos.Add(produto);
             await _context.SaveChangesAsync();
@@ -114,6 +128,7 @@ namespace RESTfulAPIPWEB.Controllers
                 return Unauthorized();
 
             var produto = await _context.Produtos
+                .Include(p => p.CategoriaProdutos)
                 .FirstOrDefaultAsync(p => p.ProdutoId == id && p.FornecedorId == fornecedorId);
 
             if (produto is null)
@@ -131,15 +146,39 @@ namespace RESTfulAPIPWEB.Controllers
             produto.Stock = dto.EmStock;
             produto.ParaVenda = dto.ParaVenda;
             produto.Origem = dto.Origem;
-            produto.CategoriaId = dto.CategoriaId;
+            var categoriaIds = NormalizeCategoriaIds(dto.CategoriaIds, dto.CategoriaId);
+            if (categoriaIds.Count == 0)
+            {
+                ModelState.AddModelError(nameof(dto.CategoriaIds), "Pelo menos uma categoria é necessária.");
+                return ValidationProblem(ModelState);
+            }
+
+            produto.CategoriaId = categoriaIds[0];
             produto.ModoEntregaId = dto.ModoEntregaId;
             produto.ModoDisponibilizacaoId = dto.ModoDisponibilizacaoId;
             produto.Estado = ProdutoEstado.Pendente;
             produto.PrecoFinal = null;
 
+            produto.CategoriaProdutos.Clear();
+            foreach (var categoriaId in categoriaIds)
+            {
+                produto.CategoriaProdutos.Add(new CategoriaProduto
+                {
+                    ProdutoId = produto.ProdutoId,
+                    CategoriaId = categoriaId
+                });
+            }
+
             await _context.SaveChangesAsync();
 
-            return Ok(MapProdutoDto(produto));
+            var produtoDto = MapProdutoDto(produto);
+
+            return Ok(new
+            {
+                ProdutoId = produto.Id,
+                Estado = produto.Estado,
+                Produto = produtoDto
+            });
         }
 
         [HttpDelete("{id:int}")]
@@ -155,10 +194,10 @@ namespace RESTfulAPIPWEB.Controllers
             if (produto is null)
                 return NotFound();
 
-            _context.Produtos.Remove(produto);
+            produto.Estado = ProdutoEstado.Inactivo;
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok(new { produto.ProdutoId, produto.Estado });
         }
 
         [HttpGet("vendas")]
@@ -197,6 +236,15 @@ namespace RESTfulAPIPWEB.Controllers
 
         private static FornecedorProdutoDto MapProdutoDto(Produto produto)
         {
+            var categoriaIds = produto.CategoriaProdutos
+                .Select(cp => cp.CategoriaId)
+                .ToList();
+
+            if (categoriaIds.Count == 0 && produto.CategoriaId > 0)
+            {
+                categoriaIds.Add(produto.CategoriaId);
+            }
+
             return new FornecedorProdutoDto
             {
                 Id = produto.Id,
@@ -214,9 +262,25 @@ namespace RESTfulAPIPWEB.Controllers
                 ParaVenda = produto.ParaVenda,
                 Origem = produto.Origem,
                 CategoriaId = produto.CategoriaId,
+                CategoriaIds = categoriaIds,
                 ModoEntregaId = produto.ModoEntregaId,
                 ModoDisponibilizacaoId = produto.ModoDisponibilizacaoId
             };
+        }
+
+        private static List<int> NormalizeCategoriaIds(List<int>? categoriaIds, int? categoriaId)
+        {
+            var ids = categoriaIds?
+                .Where(id => id > 0)
+                .Distinct()
+                .ToList() ?? new List<int>();
+
+            if (ids.Count == 0 && categoriaId is > 0)
+            {
+                ids.Add(categoriaId.Value);
+            }
+
+            return ids;
         }
     }
 }

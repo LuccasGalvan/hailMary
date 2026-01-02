@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using RESTfulAPIPWEB.Entity.Enums;
 
 namespace RESTfulAPIPWEB.DTO.Fornecedor
@@ -19,6 +20,7 @@ namespace RESTfulAPIPWEB.DTO.Fornecedor
         public bool ParaVenda { get; set; }
         public string? Origem { get; set; }
         public int CategoriaId { get; set; }
+        public List<int> CategoriaIds { get; set; } = new();
         public int? ModoEntregaId { get; set; }
         public int? ModoDisponibilizacaoId { get; set; }
     }
