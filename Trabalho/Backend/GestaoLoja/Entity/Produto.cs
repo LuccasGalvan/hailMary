@@ -1,5 +1,6 @@
 ﻿using GestaoLoja.Data;
 using GestaoLoja.Entity.Enums;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
@@ -8,6 +9,8 @@ namespace GestaoLoja.Entity
 {
     public class Produto
     {
+        private int _categoriaId;
+
         public int Id { get; set; }
 
         [StringLength(100)]
@@ -17,6 +20,7 @@ namespace GestaoLoja.Entity
         [StringLength(100)]
         [Required]
         public string? Detalhe {  get; set; }
+        public string? Descricao { get; set; }
         public string? UrlImagem {  get; set; }
         public byte[]?Imagem{get;set;}
 
@@ -26,6 +30,9 @@ namespace GestaoLoja.Entity
 
         [Column(TypeName = "decimal(5,2)")]
         public decimal? MargemPercentual { get; set; } // e.g. 15.00 for 15%
+
+        [Column(TypeName = "decimal(5,2)")]
+        public decimal? PercentagemComissao { get; set; }
 
         [Column(TypeName = "decimal(10,2)")]
         public decimal? PrecoFinal { get; set; }
@@ -42,16 +49,41 @@ namespace GestaoLoja.Entity
         public bool MaisVendido { get; set; }
 
         [Range(0, int.MaxValue)]
-        public int EmStock { get; set; }
+        public int Stock { get; set; }
 
         public bool ParaVenda { get; set; } = true;
         public string? Origem {  get; set; }
-        public int CategoriaId  { get; set; }
-        public Categoria? categoria { get; set; }
+        public int? ModoDisponibilizacaoId { get; set; }
+        public ICollection<Categoria> CategoriaProdutos { get; set; } = new List<Categoria>();
 
         [JsonIgnore]
         public int? ModoEntregaId { get; set; }
         public ModoEntrega? modoentrega { get; set; }
+
+        [NotMapped]
+        public int EmStock
+        {
+            get => Stock;
+            set => Stock = value;
+        }
+
+        [NotMapped]
+        public int CategoriaId
+        {
+            get
+            {
+                if (CategoriaProdutos.Count > 0)
+                {
+                    foreach (var categoria in CategoriaProdutos)
+                    {
+                        return categoria.Id;
+                    }
+                }
+
+                return _categoriaId;
+            }
+            set => _categoriaId = value;
+        }
 
         [NotMapped]
         public IFormFile? ImageFile { get; set; }

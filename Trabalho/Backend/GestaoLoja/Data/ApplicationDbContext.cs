@@ -56,6 +56,11 @@ namespace GestaoLoja.Data
                 .HasForeignKey(p => p.FornecedorId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Entity<Produto>()
+                .HasMany(p => p.CategoriaProdutos)
+                .WithMany(c => c.Produtos)
+                .UsingEntity(j => j.ToTable("CategoriaProdutos"));
+
             // --- Cart: FK + avoid duplicate rows per (UserId, ProdutoId)
             builder.Entity<CarrinhoCompras>()
                 .HasOne(c => c.Produto)

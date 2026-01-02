@@ -17,6 +17,7 @@ namespace GestaoLoja.Entity
         [JsonIgnore]
         public Categoria? Parent { get; set; }
         public ICollection<Categoria> Children { get; set; } = new List<Categoria>();
+        public ICollection<Produto> Produtos { get; set; } = new List<Produto>();
         public int? Ordem {  get; set; }
         public string? UrlImagem { get; set; }
         public byte[]? Imagem { get; set; }

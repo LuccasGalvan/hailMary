@@ -79,7 +79,7 @@
             <dd class="col-sm-10">@produto.MaisVendido</dd>
 
             <dt class="col-sm-2">Stock</dt>
-            <dd class="col-sm-10">@produto.EmStock</dd>
+            <dd class="col-sm-10">@produto.Stock</dd>
 
             <dt class="col-sm-2">Para Venda</dt>
             <dd class="col-sm-10">@produto.ParaVenda</dd>
@@ -117,7 +117,7 @@
 
         produto = await context.Produtos
             .AsNoTracking()
-            .Include(p => p.categoria)
+            .Include(p => p.CategoriaProdutos)
             .Include(p => p.modoentrega)
             .Include(p => p.Fornecedor)
             .FirstOrDefaultAsync(m => m.Id == Id);
@@ -128,7 +128,12 @@
             return;
         }
 
-        categoriaDisplay = produto.categoria?.Nome ?? $"#{produto.CategoriaId}";
+        var categorias = produto.CategoriaProdutos
+            .Select(c => c.Nome)
+            .Where(nome => !string.IsNullOrWhiteSpace(nome))
+            .ToList();
+
+        categoriaDisplay = categorias.Count > 0 ? string.Join(", ", categorias) : "—";
         modoEntregaDisplay = produto.modoentrega?.Nome ?? (produto.ModoEntregaId is null ? "—" : $"#{produto.ModoEntregaId}");
 
         fornecedorDisplay = BuildUserDisplay(produto.Fornecedor, produto.FornecedorId);

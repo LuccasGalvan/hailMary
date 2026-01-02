@@ -230,6 +230,16 @@
             : null;
 
         await using var db = await DbFactory.CreateDbContextAsync();
+
+        var categoria = await db.Categorias.FirstOrDefaultAsync(c => c.Id == Produto.CategoriaId);
+        if (categoria is null)
+        {
+            error = "Seleciona uma categoria válida.";
+            return;
+        }
+
+        Produto.CategoriaProdutos = new List<Categoria> { categoria };
+
         db.Produtos.Add(Produto);
         await db.SaveChangesAsync();
 
