@@ -101,18 +101,18 @@ namespace GestaoLoja.Data
                 .IsUnique();
 
             // --- Orders: Encomenda -> Items (explicit relationship; convention would also work)
-            builder.Entity<Encomenda>()
-                .HasKey(e => e.VendaId);
+            builder.Entity<Encomenda>(entity =>
+            {
+                entity.HasKey(e => e.VendaId);
+                entity.HasIndex(e => e.VendaId)
+                    .IsUnique();
+            });
 
             builder.Entity<EncomendaItem>()
                 .HasOne(i => i.Encomenda)
                 .WithMany(e => e.Linhas)
                 .HasForeignKey(i => i.VendaId)
                 .OnDelete(DeleteBehavior.Cascade);
-
-            builder.Entity<Encomenda>()
-                .HasIndex(e => e.VendaId)
-                .IsUnique();
 
             // --- Order item -> Produto (keep items even if product gets deleted later)
             builder.Entity<EncomendaItem>()
