@@ -1,0 +1,31 @@
+.btn-favoritos[b-ms3w5sicvr] {
+    display: flex;
+    padding: 5px;
+}
+
+a[b-ms3w5sicvr] {
+    text-decoration: none;
+    favoritos font-size: 10pt;
+}
+
+img[b-ms3w5sicvr] {
+    margin: 5px;
+    height: 15px;
+}
+
+p[b-ms3w5sicvr] {
+    margin: 2px;
+    color: white;
+}
+
+@media (max-width: 641px) {
+    .btn-favoritos[b-ms3w5sicvr] {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: absolute;
+        bottom: 3px;
+        left: 55px;
+        z-index: 100;
+    }
+}

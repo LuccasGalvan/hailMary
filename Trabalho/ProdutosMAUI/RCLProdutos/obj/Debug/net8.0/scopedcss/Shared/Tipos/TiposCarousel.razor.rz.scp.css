@@ -1,0 +1,42 @@
+.carousel-container[b-4ckgi10ewl] {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.carousel-track[b-4ckgi10ewl] {
+    display: flex;
+    gap: 12px;
+    overflow: hidden;
+    padding: 6px 0;
+}
+
+.carousel-nav[b-4ckgi10ewl] {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+    .carousel-nav:disabled[b-4ckgi10ewl] {
+        opacity: 0.3;
+        cursor: default;
+    }
+
+.tipo-card[b-4ckgi10ewl] {
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 10px 12px;
+    background: white;
+}
+
+    .tipo-card:hover[b-4ckgi10ewl] {
+        background-color: #f5f5f5;
+    }
+
+    .tipo-card.selected[b-4ckgi10ewl] {
+        border-color: #333;
+        font-weight: 600;
+    }
+
