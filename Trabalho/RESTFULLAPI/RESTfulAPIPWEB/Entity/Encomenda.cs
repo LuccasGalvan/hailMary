@@ -26,10 +26,10 @@ namespace RESTfulAPIPWEB.Entity
         [Column(TypeName = "decimal(10,2)")]
         public decimal ValorTotal { get; set; }
 
-        [StringLength(100)]
+        [StringLength(RESTfulAPIPWEB.Constants.StringLength.NomeMaxLength)]
         public string? MetodoPagamento { get; set; }
 
-        [StringLength(200)]
+        [StringLength(RESTfulAPIPWEB.Constants.StringLength.DescricaoMaxLength)]
         public string? Observacoes { get; set; }
 
         public bool PagamentoExecutado { get; set; }

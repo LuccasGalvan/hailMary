@@ -20,13 +20,13 @@ namespace RESTfulAPIPWEB.Entity
             set => ProdutoId = value;
         }
 
-        [StringLength(100)]
+        [StringLength(RESTfulAPIPWEB.Constants.StringLength.NomeMaxLength)]
         [Required]
         public string? Nome { get; set; }
 
-        [StringLength(100)]
+        [StringLength(RESTfulAPIPWEB.Constants.StringLength.NomeMaxLength)]
         [Required]
-        [StringLength(100)]
+        [StringLength(RESTfulAPIPWEB.Constants.StringLength.NomeMaxLength)]
         [Required]
         public string? Descricao { get; set; }
         public string? UrlImagem {  get; set; }

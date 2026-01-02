@@ -6,11 +6,11 @@ namespace RESTfulAPIPWEB.DTO.Fornecedor
     public class FornecedorProdutoUpdateDto
     {
         [Required]
-        [StringLength(100)]
+        [StringLength(RESTfulAPIPWEB.Constants.StringLength.NomeMaxLength)]
         public string? Nome { get; set; }
 
         [Required]
-        [StringLength(100)]
+        [StringLength(RESTfulAPIPWEB.Constants.StringLength.NomeMaxLength)]
         public string? Detalhe { get; set; }
 
         public string? UrlImagem { get; set; }

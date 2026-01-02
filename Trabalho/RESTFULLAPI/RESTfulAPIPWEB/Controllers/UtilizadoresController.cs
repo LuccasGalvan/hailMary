@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using RESTfulAPIPWEB.Constants;
 using RESTfulAPIPWEB.Data;
 using RESTfulAPIPWEB.DTO.Auth;
 using RESTfulAPIPWEB.Entity.Enums;
@@ -38,14 +39,14 @@ public class UtilizadoresController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> RegistarUser([FromBody] RegisterRequest dto)
-        => await RegistarComRole(dto, "Cliente");
+        => await RegistarComRole(dto, Roles.Cliente);
 
     // Add this for enunciado (supplier registration)
     [HttpPost("RegistarFornecedor")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> RegistarFornecedor([FromBody] RegisterRequest dto)
-        => await RegistarComRole(dto, "Fornecedor");
+        => await RegistarComRole(dto, Roles.Fornecedor);
 
     private async Task<IActionResult> RegistarComRole(RegisterRequest dto, string role)
     {
@@ -110,10 +111,10 @@ public class UtilizadoresController : ControllerBase
         }
 
         var userRoles = await _userManager.GetRolesAsync(utilizadorAtual);
-        var role = userRoles.FirstOrDefault() ?? "Cliente";
+        var role = userRoles.FirstOrDefault() ?? Roles.Cliente;
 
         // Enunciado: Cliente/Fornecedor Pendente não deve autenticar para usar a app.
-        if ((role == "Cliente" || role == "Fornecedor") && utilizadorAtual.Estado != UserEstado.Activo)
+        if ((role == Roles.Cliente || role == Roles.Fornecedor) && utilizadorAtual.Estado != UserEstado.Activo)
         {
             return Ok(new
             {
@@ -135,7 +136,7 @@ public class UtilizadoresController : ControllerBase
     }
 
     [HttpGet("userID")]
-    [Authorize(Roles = "Cliente,Fornecedor,Admin,Gestor")]
+    [Authorize(Roles = Roles.Cliente + "," + Roles.Fornecedor + ",Admin,Gestor")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetUserInformation(string userID)
@@ -148,7 +149,7 @@ public class UtilizadoresController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    [Authorize(Roles = "Cliente,Fornecedor")]
+    [Authorize(Roles = Roles.Cliente + "," + Roles.Fornecedor)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetUserInformationById(string id)
@@ -161,7 +162,7 @@ public class UtilizadoresController : ControllerBase
     }
 
     [HttpGet("me")]
-    [Authorize(Roles = "Cliente,Fornecedor,Admin,Gestor")]
+    [Authorize(Roles = Roles.Cliente + "," + Roles.Fornecedor + ",Admin,Gestor")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -179,7 +180,7 @@ public class UtilizadoresController : ControllerBase
     }
 
     [HttpPut("UpdateUser")]
-    [Authorize(Roles = "Cliente,Fornecedor,Admin,Gestor")]
+    [Authorize(Roles = Roles.Cliente + "," + Roles.Fornecedor + ",Admin,Gestor")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateUser([FromBody] UpdateUserRequest dto)
