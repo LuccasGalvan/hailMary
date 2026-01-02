@@ -11,8 +11,8 @@ namespace RESTfulAPIPWEB.Entity
         [Required]
         [StringLength(100)]
         public string Nome { get; set; } = default!;
-        public int? TipoCategoriaId { get; set; }
-        public TipoCategoria? TipoCategoria { get; set; }
+        public int TipoCategoriaId { get; set; }
+        public TipoCategoria TipoCategoria { get; set; } = null!;
         public int? ParentId { get; set; }
         [JsonIgnore]
         public Categoria? Parent { get; set; }
@@ -23,6 +23,8 @@ namespace RESTfulAPIPWEB.Entity
 
         [NotMapped]
         public IFormFile? ImageFile { get; set; }
+
+        public ICollection<CategoriaProduto> CategoriaProdutos { get; set; } = new List<CategoriaProduto>();
 
     }
 }

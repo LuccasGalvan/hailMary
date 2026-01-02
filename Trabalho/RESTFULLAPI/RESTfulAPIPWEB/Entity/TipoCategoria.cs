@@ -9,5 +9,7 @@ namespace RESTfulAPIPWEB.Entity
         [Required]
         [StringLength(100)]
         public string Nome { get; set; } = default!;
+
+        public ICollection<Categoria> Categorias { get; set; } = new List<Categoria>();
     }
 }
