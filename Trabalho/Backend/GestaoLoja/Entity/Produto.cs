@@ -20,7 +20,7 @@ namespace GestaoLoja.Entity
         [Required]
         public string? Nome { get; set; }
 
-        [StringLength(StringLength.NomeMaxLength)]
+        [StringLength(StringLength.DescricaoMaxLength)]
         [Required]
         public string? Descricao { get; set; }
         public string? UrlImagem {  get; set; }
