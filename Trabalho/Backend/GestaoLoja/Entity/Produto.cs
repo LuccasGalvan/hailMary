@@ -54,7 +54,7 @@ namespace GestaoLoja.Entity
         public bool ParaVenda { get; set; } = true;
         public string? Origem {  get; set; }
         public int? ModoDisponibilizacaoId { get; set; }
-        public ICollection<Categoria> CategoriaProdutos { get; set; } = new List<Categoria>();
+        public ICollection<CategoriaProduto> CategoriaProdutos { get; set; } = new List<CategoriaProduto>();
 
         [JsonIgnore]
         public int? ModoEntregaId { get; set; }
@@ -72,12 +72,9 @@ namespace GestaoLoja.Entity
         {
             get
             {
-                if (CategoriaProdutos.Count > 0)
+                foreach (var categoriaProduto in CategoriaProdutos)
                 {
-                    foreach (var categoria in CategoriaProdutos)
-                    {
-                        return categoria.Id;
-                    }
+                    return categoriaProduto.CategoriaId;
                 }
 
                 return _categoriaId;

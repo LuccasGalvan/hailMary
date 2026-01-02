@@ -18,6 +18,7 @@ namespace GestaoLoja.Data
         public DbSet<CarrinhoCompras> CarrinhoCompras { get; set; } = default!;
         public DbSet<Encomenda> Encomendas { get; set; } = default!;
         public DbSet<EncomendaItem> EncomendaItens { get; set; } = default!;
+        public DbSet<CategoriaProduto> CategoriaProdutos { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -33,7 +34,7 @@ namespace GestaoLoja.Data
                 .HasOne(c => c.TipoCategoria)
                 .WithMany()
                 .HasForeignKey(c => c.TipoCategoriaId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Categoria>().HasData(
                 new Categoria { Id = 1, Nome = "Eletrónicos", Ordem = 1, TipoCategoriaId = 1 },
@@ -56,10 +57,18 @@ namespace GestaoLoja.Data
                 .HasForeignKey(p => p.FornecedorId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Entity<Produto>()
-                .HasMany(p => p.CategoriaProdutos)
-                .WithMany(c => c.Produtos)
-                .UsingEntity(j => j.ToTable("CategoriaProdutos"));
+            builder.Entity<CategoriaProduto>()
+                .HasKey(cp => new { cp.ProdutoId, cp.CategoriaId });
+
+            builder.Entity<CategoriaProduto>()
+                .HasOne(cp => cp.Produto)
+                .WithMany(p => p.CategoriaProdutos)
+                .HasForeignKey(cp => cp.ProdutoId);
+
+            builder.Entity<CategoriaProduto>()
+                .HasOne(cp => cp.Categoria)
+                .WithMany(c => c.CategoriaProdutos)
+                .HasForeignKey(cp => cp.CategoriaId);
 
             // --- Cart: FK + avoid duplicate rows per (UserId, ProdutoId)
             builder.Entity<CarrinhoCompras>()

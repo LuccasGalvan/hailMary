@@ -118,6 +118,7 @@
         produto = await context.Produtos
             .AsNoTracking()
             .Include(p => p.CategoriaProdutos)
+            .ThenInclude(cp => cp.Categoria)
             .Include(p => p.modoentrega)
             .Include(p => p.Fornecedor)
             .FirstOrDefaultAsync(m => m.Id == Id);
@@ -129,7 +130,7 @@
         }
 
         var categorias = produto.CategoriaProdutos
-            .Select(c => c.Nome)
+            .Select(c => c.Categoria?.Nome)
             .Where(nome => !string.IsNullOrWhiteSpace(nome))
             .ToList();
 

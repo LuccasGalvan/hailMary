@@ -78,7 +78,7 @@ else
                 return;
             }
 
-            var hasProducts = await db.Produtos.AnyAsync(p => p.CategoriaProdutos.Any(c => c.Id == Id));
+            var hasProducts = await db.Produtos.AnyAsync(p => p.CategoriaProdutos.Any(c => c.CategoriaId == Id));
             if (hasProducts)
             {
                 error = "Não é possível apagar. Existem produtos associados a esta categoria.";
