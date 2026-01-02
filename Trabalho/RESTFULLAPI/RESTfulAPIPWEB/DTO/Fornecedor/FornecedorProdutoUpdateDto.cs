@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace RESTfulAPIPWEB.DTO.Fornecedor
@@ -29,8 +30,10 @@ namespace RESTfulAPIPWEB.DTO.Fornecedor
         public bool ParaVenda { get; set; }
         public string? Origem { get; set; }
 
+        public List<int>? CategoriaIds { get; set; }
+
         [Range(1, int.MaxValue)]
-        public int CategoriaId { get; set; }
+        public int? CategoriaId { get; set; }
 
         public int? ModoEntregaId { get; set; }
         public int? ModoDisponibilizacaoId { get; set; }
