@@ -1,3 +1,4 @@
+using GestaoLoja.Constants;
 using System.ComponentModel.DataAnnotations;
 
 namespace GestaoLoja.Entity
@@ -7,7 +8,7 @@ namespace GestaoLoja.Entity
         public int Id { get; set; }
 
         [Required]
-        [StringLength(100)]
+        [StringLength(StringLength.NomeMaxLength)]
         public string Nome { get; set; } = default!;
     }
 }

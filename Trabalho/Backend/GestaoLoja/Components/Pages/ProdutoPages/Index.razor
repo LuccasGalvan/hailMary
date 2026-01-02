@@ -110,11 +110,10 @@
 
         var q = db.Produtos
             .AsNoTracking()
-            .Include(p => p.categoria)
             .AsQueryable();
 
         if (filtroCategoriaId.HasValue)
-            q = q.Where(p => p.CategoriaId == filtroCategoriaId.Value);
+            q = q.Where(p => p.CategoriaProdutos.Any(c => c.CategoriaId == filtroCategoriaId.Value));
 
         if (filtroEstado.HasValue)
             q = q.Where(p => p.Estado == filtroEstado.Value);
@@ -123,29 +122,28 @@
 
         var pageSize = request.Count ?? pagination.ItemsPerPage;
 
-        var items = await q
+        var produtos = await q
             .OrderByDescending(p => p.Id)
             .Skip(request.StartIndex)
             .Take(pageSize)
-            .Select(p => new ProdutoRow
-            {
-                Id = p.Id,
-                Nome = p.Nome,
-                Detalhe = p.Detalhe,
-                PrecoBase = p.PrecoBase,
-                PrecoFinal = p.PrecoFinal,
-                Estado = p.Estado,
-                EmStock = p.EmStock,
-                FornecedorId = p.FornecedorId,
-
-                CategoriaId = p.CategoriaId,
-                CategoriaNome = p.categoria != null ? p.categoria.Nome : ("#" + p.CategoriaId),
-
-                // raw bytes (only for building the data-url below)
-                Imagem = p.Imagem,
-                UrlImagem = p.UrlImagem
-            })
+            .Include(p => p.CategoriaProdutos)
+            .ThenInclude(cp => cp.Categoria)
             .ToListAsync();
+
+        var items = produtos.Select(p => new ProdutoRow
+        {
+            Id = p.Id,
+            Nome = p.Nome,
+            Detalhe = p.Detalhe,
+            PrecoBase = p.PrecoBase,
+            PrecoFinal = p.PrecoFinal,
+            Estado = p.Estado,
+            EmStock = p.Stock,
+            FornecedorId = p.FornecedorId,
+            CategoriaNome = BuildCategoriaNome(p.CategoriaProdutos),
+            Imagem = p.Imagem,
+            UrlImagem = p.UrlImagem
+        }).ToList();
 
         var fornecedorIds = items
             .Select(p => p.FornecedorId)
@@ -231,7 +229,6 @@
         public string? FornecedorId { get; set; }
         public string? FornecedorNome { get; set; }
 
-        public int CategoriaId { get; set; }
         public string? CategoriaNome { get; set; }
 
         // internal-only for building the preview
@@ -276,4 +273,14 @@
 
     private static bool IsPlaceholderImage(byte[] bytes)
         => bytes.Length == PlaceholderImage.Length && bytes.AsSpan().SequenceEqual(PlaceholderImage);
+
+    private static string BuildCategoriaNome(ICollection<CategoriaProduto> categorias)
+    {
+        var nomes = categorias
+            .Select(c => c.Categoria?.Nome)
+            .Where(nome => !string.IsNullOrWhiteSpace(nome))
+            .ToList();
+
+        return nomes.Count > 0 ? string.Join(", ", nomes) : "—";
+    }
 }

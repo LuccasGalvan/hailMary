@@ -5,10 +5,11 @@ namespace GestaoLoja.Entity
 {
     public class EncomendaItem
     {
-        public int Id { get; set; }
+        [Key]
+        public int LinhaVendaId { get; set; }
 
         [Required]
-        public Guid EncomendaId { get; set; }
+        public int VendaId { get; set; }
         public Encomenda? Encomenda { get; set; }
 
         [Required]
@@ -23,6 +24,6 @@ namespace GestaoLoja.Entity
         public decimal PrecoUnitario { get; set; }
 
         [Column(TypeName = "decimal(10,2)")]
-        public decimal Subtotal { get; set; }
+        public decimal TotalLinha { get; set; }
     }
 }

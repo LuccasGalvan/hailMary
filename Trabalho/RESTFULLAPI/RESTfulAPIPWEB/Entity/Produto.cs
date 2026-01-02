@@ -9,22 +9,17 @@ namespace RESTfulAPIPWEB.Entity
 {
     public class Produto
     {
+        private int _categoriaId;
+
         [Key]
         [Column("Id")]
-        public int ProdutoId { get; set; }
-
-        [NotMapped]
-        public int Id
-        {
-            get => ProdutoId;
-            set => ProdutoId = value;
-        }
+        public int Id { get; set; }
 
         [StringLength(RESTfulAPIPWEB.Constants.StringLength.NomeMaxLength)]
         [Required]
         public string? Nome { get; set; }
 
-        [StringLength(RESTfulAPIPWEB.Constants.StringLength.NomeMaxLength)]
+        [StringLength(RESTfulAPIPWEB.Constants.StringLength.DescricaoMaxLength)]
         [Required]
         public string? Descricao { get; set; }
         public string? UrlImagem {  get; set; }
@@ -33,6 +28,9 @@ namespace RESTfulAPIPWEB.Entity
         [Required]
         [Column(TypeName = "decimal(10,2)")]
         public decimal PrecoBase { get; set; }
+
+        [Column(TypeName = "decimal(5,2)")]
+        public decimal? MargemPercentual { get; set; } // e.g. 15.00 for 15%
 
         [Column(TypeName = "decimal(5,2)")]
         public decimal? PercentagemComissao { get; set; } // e.g. 15.00 for 15%
@@ -56,8 +54,6 @@ namespace RESTfulAPIPWEB.Entity
 
         public bool ParaVenda { get; set; } = true;
         public string? Origem {  get; set; }
-        public int CategoriaId  { get; set; }
-        public Categoria? categoria { get; set; }
         public ICollection<CategoriaProduto> CategoriaProdutos { get; set; } = new List<CategoriaProduto>();
 
         [JsonIgnore]
@@ -66,6 +62,28 @@ namespace RESTfulAPIPWEB.Entity
 
         public int? ModoDisponibilizacaoId { get; set; }
         public ModoDisponibilizacao? ModoDisponibilizacao { get; set; }
+
+        [NotMapped]
+        public int EmStock
+        {
+            get => Stock;
+            set => Stock = value;
+        }
+
+        [NotMapped]
+        public int CategoriaId
+        {
+            get
+            {
+                foreach (var categoriaProduto in CategoriaProdutos)
+                {
+                    return categoriaProduto.CategoriaId;
+                }
+
+                return _categoriaId;
+            }
+            set => _categoriaId = value;
+        }
 
         [NotMapped]
         public IFormFile? ImageFile { get; set; }

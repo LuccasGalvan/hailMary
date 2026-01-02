@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using GestaoLoja.Constants;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace GestaoLoja.Entity
@@ -7,11 +8,11 @@ namespace GestaoLoja.Entity
     {
         public int Id   { get; set; }
 
-        [StringLength(100)]
+        [StringLength(StringLength.NomeMaxLength)]
         [Required]
         public string? Nome { get; set; }
 
-        [StringLength(200)]
+        [StringLength(StringLength.DescricaoMaxLength)]
         public string? Detalhe { get; set; }
 
         [JsonIgnore]

@@ -23,14 +23,14 @@ public sealed class EncomendaWorkflowService
     public bool CanTransition(EncomendaEstado from, EncomendaEstado to)
         => AllowedTransitions.TryGetValue(from, out var allowed) && allowed.Contains(to);
 
-    public async Task<TransitionResult> TryTransitionAsync(Guid encomendaId, EncomendaEstado targetEstado)
+    public async Task<TransitionResult> TryTransitionAsync(int encomendaId, EncomendaEstado targetEstado)
     {
         await using var db = await _dbFactory.CreateDbContextAsync();
 
         var encomenda = await db.Encomendas
-            .Include(e => e.Itens)
+            .Include(e => e.Linhas)
             .ThenInclude(i => i.Produto)
-            .FirstOrDefaultAsync(e => e.Id == encomendaId);
+            .FirstOrDefaultAsync(e => e.VendaId == encomendaId);
 
         if (encomenda is null)
             return TransitionResult.Fail("Encomenda não encontrada.");
@@ -40,12 +40,12 @@ public sealed class EncomendaWorkflowService
 
         if (targetEstado == EncomendaEstado.Rejeitada)
         {
-            foreach (var item in encomenda.Itens)
+            foreach (var item in encomenda.Linhas)
             {
                 if (item.Produto is null)
                     return TransitionResult.Fail("Produto associado em falta para repor stock.");
 
-                item.Produto.EmStock += item.Quantidade;
+                item.Produto.Stock += item.Quantidade;
             }
         }
 

@@ -22,7 +22,6 @@ namespace RESTfulAPIPWEB.Data
         public DbSet<CarrinhoCompras> CarrinhoCompras { get; set; } = default!;
         public DbSet<Encomenda> Encomendas { get; set; } = default!;
         public DbSet<EncomendaItem> EncomendaItens { get; set; } = default!;
-        public DbSet<Encomenda> Vendas { get; set; } = default!;
         public DbSet<EncomendaItem> LinhasVenda { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -34,6 +33,12 @@ namespace RESTfulAPIPWEB.Data
                 .WithMany(c => c.Children)
                 .HasForeignKey(c => c.ParentId)
                 .OnDelete(DeleteBehavior.SetNull);
+
+            builder.Entity<Categoria>()
+                .HasOne(c => c.TipoCategoria)
+                .WithMany()
+                .HasForeignKey(c => c.TipoCategoriaId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<CategoriaProduto>()
                 .HasKey(cp => new { cp.ProdutoId, cp.CategoriaId });
@@ -69,6 +74,12 @@ namespace RESTfulAPIPWEB.Data
                 .HasForeignKey(p => p.FornecedorId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Entity<Produto>()
+                .HasOne(p => p.ModoDisponibilizacao)
+                .WithMany(m => m.Produtos)
+                .HasForeignKey(p => p.ModoDisponibilizacaoId)
+                .OnDelete(DeleteBehavior.SetNull);
+
             // --- Cart: FK + avoid duplicate rows per (UserId, ProdutoId)
             builder.Entity<CarrinhoCompras>()
                 .HasOne(c => c.Produto)
@@ -92,6 +103,13 @@ namespace RESTfulAPIPWEB.Data
                 .IsUnique();
 
             // --- Orders: Encomenda -> Items (explicit relationship; convention would also work)
+            builder.Entity<Encomenda>(entity =>
+            {
+                entity.HasKey(e => e.VendaId);
+                entity.HasIndex(e => e.VendaId)
+                    .IsUnique();
+            });
+
             builder.Entity<EncomendaItem>()
                 .HasOne(i => i.Encomenda)
                 .WithMany(e => e.Linhas)

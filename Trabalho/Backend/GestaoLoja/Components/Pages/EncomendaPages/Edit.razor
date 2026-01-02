@@ -35,8 +35,8 @@ else
     <div class="row">
         <div class="col-md-4">
             <div class="mb-3">
-                <label class="form-label">Id</label>
-                <input class="form-control" value="@encomenda.Id.ToString()" disabled />
+                <label class="form-label">VendaId</label>
+                <input class="form-control" value="@encomenda.VendaId.ToString()" disabled />
             </div>
 
             <div class="mb-3">
@@ -86,7 +86,7 @@ else
 
 @code {
     [SupplyParameterFromQuery]
-    private Guid Id { get; set; }
+    private int Id { get; set; }
 
     private Encomenda? Encomenda { get; set; }
     private string? actionError;
@@ -113,7 +113,7 @@ else
 
         Encomenda = await db.Encomendas
             .AsNoTracking()
-            .FirstOrDefaultAsync(e => e.Id == Id);
+            .FirstOrDefaultAsync(e => e.VendaId == Id);
 
         if (Encomenda is null)
         {

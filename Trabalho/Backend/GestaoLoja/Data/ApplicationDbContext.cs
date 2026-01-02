@@ -14,10 +14,13 @@ namespace GestaoLoja.Data
         public DbSet<TipoCategoria> TiposCategoria { get; set; } = default!;
         public DbSet<Produto> Produtos { get; set; } = default!;
         public DbSet<ModoEntrega> ModosEntrega { get; set; } = default!;
+        public DbSet<ModoDisponibilizacao> ModosDisponibilizacao { get; set; } = default!;
         public DbSet<Favoritos> Favoritos { get; set; } = default!;
         public DbSet<CarrinhoCompras> CarrinhoCompras { get; set; } = default!;
         public DbSet<Encomenda> Encomendas { get; set; } = default!;
         public DbSet<EncomendaItem> EncomendaItens { get; set; } = default!;
+        public DbSet<EncomendaItem> LinhasVenda { get; set; } = default!;
+        public DbSet<CategoriaProduto> CategoriaProdutos { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -33,7 +36,7 @@ namespace GestaoLoja.Data
                 .HasOne(c => c.TipoCategoria)
                 .WithMany()
                 .HasForeignKey(c => c.TipoCategoriaId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Categoria>().HasData(
                 new Categoria { Id = 1, Nome = "Eletrónicos", Ordem = 1, TipoCategoriaId = 1 },
@@ -55,6 +58,25 @@ namespace GestaoLoja.Data
                 .WithMany()
                 .HasForeignKey(p => p.FornecedorId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Produto>()
+                .HasOne(p => p.ModoDisponibilizacao)
+                .WithMany(m => m.Produtos)
+                .HasForeignKey(p => p.ModoDisponibilizacaoId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            builder.Entity<CategoriaProduto>()
+                .HasKey(cp => new { cp.ProdutoId, cp.CategoriaId });
+
+            builder.Entity<CategoriaProduto>()
+                .HasOne(cp => cp.Produto)
+                .WithMany(p => p.CategoriaProdutos)
+                .HasForeignKey(cp => cp.ProdutoId);
+
+            builder.Entity<CategoriaProduto>()
+                .HasOne(cp => cp.Categoria)
+                .WithMany(c => c.CategoriaProdutos)
+                .HasForeignKey(cp => cp.CategoriaId);
 
             // --- Cart: FK + avoid duplicate rows per (UserId, ProdutoId)
             builder.Entity<CarrinhoCompras>()
@@ -79,15 +101,18 @@ namespace GestaoLoja.Data
                 .IsUnique();
 
             // --- Orders: Encomenda -> Items (explicit relationship; convention would also work)
+            builder.Entity<Encomenda>(entity =>
+            {
+                entity.HasKey(e => e.VendaId);
+                entity.HasIndex(e => e.VendaId)
+                    .IsUnique();
+            });
+
             builder.Entity<EncomendaItem>()
                 .HasOne(i => i.Encomenda)
-                .WithMany(e => e.Itens)
-                .HasForeignKey(i => i.EncomendaId)
+                .WithMany(e => e.Linhas)
+                .HasForeignKey(i => i.VendaId)
                 .OnDelete(DeleteBehavior.Cascade);
-
-            builder.Entity<Encomenda>()
-                .HasIndex(e => e.VendaId)
-                .IsUnique();
 
             // --- Order item -> Produto (keep items even if product gets deleted later)
             builder.Entity<EncomendaItem>()

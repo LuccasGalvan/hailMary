@@ -22,8 +22,8 @@
     else
     {
         <dl class="row">
-            <dt class="col-sm-2">Id</dt>
-            <dd class="col-sm-10">@encomenda.Id</dd>
+            <dt class="col-sm-2">VendaId</dt>
+            <dd class="col-sm-10">@encomenda.VendaId</dd>
 
             <dt class="col-sm-2">Cliente</dt>
             <dd class="col-sm-10">@clienteDisplay</dd>
@@ -38,11 +38,11 @@
             <dd class="col-sm-10">@encomenda.ValorTotal</dd>
         </dl>
 
-        <h4>Itens</h4>
+        <h4>Linhas</h4>
 
-        @if (encomenda.Itens is null || encomenda.Itens.Count == 0)
+        @if (encomenda.Linhas is null || encomenda.Linhas.Count == 0)
         {
-            <p>Sem itens.</p>
+            <p>Sem linhas.</p>
         }
         else
         {
@@ -52,17 +52,17 @@
                         <th>Produto</th>
                         <th>Qtd</th>
                         <th>Preço Unit.</th>
-                        <th>Subtotal</th>
+                        <th>Total Linha</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var i in encomenda.Itens)
+                    @foreach (var i in encomenda.Linhas)
                     {
                         <tr>
                             <td>@(i.Produto?.Nome ?? $"Produto #{i.ProdutoId}")</td>
                             <td>@i.Quantidade</td>
                             <td>@i.PrecoUnitario</td>
-                            <td>@i.Subtotal</td>
+                            <td>@i.TotalLinha</td>
                         </tr>
                     }
                 </tbody>
@@ -70,7 +70,7 @@
         }
 
         <p>
-            <a href="@($"/encomenda/edit?id={encomenda.Id}")">Edit</a> |
+            <a href="@($"/encomenda/edit?id={encomenda.VendaId}")">Edit</a> |
             <a href="/encomenda">Back to List</a>
         </p>
     }
@@ -81,7 +81,7 @@
     private string clienteDisplay = "—";
 
     [SupplyParameterFromQuery]
-    private Guid Id { get; set; }
+    private int Id { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -89,9 +89,9 @@
 
         encomenda = await context.Encomendas
             .AsNoTracking()
-            .Include(e => e.Itens)
+            .Include(e => e.Linhas)
                 .ThenInclude(i => i.Produto)
-            .FirstOrDefaultAsync(m => m.Id == Id);
+            .FirstOrDefaultAsync(m => m.VendaId == Id);
 
         if (encomenda is null)
         {

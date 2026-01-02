@@ -158,8 +158,10 @@ namespace GestaoLoja.Data
                 ["Casa"] = tipoCategoriaPorNome["Casa"]
             };
 
-            int? GetTipoCategoriaId(string nome)
-                => tipoCategoriaPorCategoria.TryGetValue(nome, out var id) ? id : null;
+            int GetTipoCategoriaId(string nome)
+                => tipoCategoriaPorCategoria.TryGetValue(nome, out var id)
+                    ? id
+                    : tipoCategoriaPorNome["Tecnologia"];
 
             var categoriasExistentes = await context.Categorias.ToListAsync();
             var categoriasPorNome = categoriasExistentes
@@ -170,7 +172,7 @@ namespace GestaoLoja.Data
             {
                 if (categoriasPorNome.TryGetValue(nome, out var categoriaExistente))
                 {
-                    if (categoriaExistente.TipoCategoriaId is null)
+                    if (categoriaExistente.TipoCategoriaId == 0)
                     {
                         categoriaExistente.TipoCategoriaId = GetTipoCategoriaId(nome);
                     }
@@ -193,13 +195,13 @@ namespace GestaoLoja.Data
                     categoriasPorNome[parentNome] = parent;
                 }
 
-                var child = new Categoria
-                {
-                    Nome = nome,
-                    Ordem = ordem,
-                    Parent = parent,
-                    TipoCategoriaId = GetTipoCategoriaId(nome)
-                };
+                    var child = new Categoria
+                    {
+                        Nome = nome,
+                        Ordem = ordem,
+                        Parent = parent,
+                        TipoCategoriaId = GetTipoCategoriaId(nome)
+                    };
                 context.Categorias.Add(child);
                 categoriasPorNome[nome] = child;
             }
@@ -336,9 +338,12 @@ namespace GestaoLoja.Data
                         PrecoFinal = precoFinal,
                         Estado = estado,
                         FornecedorId = fornecedorId,
-                        EmStock = stock,
+                        Stock = stock,
                         ParaVenda = paraVenda,
-                        CategoriaId = categoria.Id,
+                        CategoriaProdutos = new List<CategoriaProduto>
+                        {
+                            new CategoriaProduto { Categoria = categoria }
+                        },
                         ModoEntregaId = modoEntrega.Id,
                         Promocao = promocao,
                         MaisVendido = maisVendido,
@@ -439,17 +444,17 @@ namespace GestaoLoja.Data
                     foreach (var (produto, quantidade) in linhas)
                     {
                         var preco = produto.PrecoFinal ?? produto.PrecoBase;
-                        var subtotal = preco * quantidade;
+                        var totalLinha = preco * quantidade;
 
-                        encomenda.Itens.Add(new EncomendaItem
+                        encomenda.Linhas.Add(new EncomendaItem
                         {
                             ProdutoId = produto.Id,
                             Quantidade = quantidade,
                             PrecoUnitario = preco,
-                            Subtotal = subtotal
+                            TotalLinha = totalLinha
                         });
 
-                        total += subtotal;
+                        total += totalLinha;
                     }
 
                     encomenda.ValorTotal = total;

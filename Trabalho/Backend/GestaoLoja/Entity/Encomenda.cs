@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using GestaoLoja.Constants;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using GestaoLoja.Data;
 using GestaoLoja.Entity.Enums;
@@ -8,9 +9,6 @@ namespace GestaoLoja.Entity
     public class Encomenda
     {
         [Key]
-        public Guid Id { get; set; } = Guid.NewGuid();
-
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int VendaId { get; set; }
 
         // Identity user id (Cliente)
@@ -30,15 +28,15 @@ namespace GestaoLoja.Entity
         [Column(TypeName = "decimal(10,2)")]
         public decimal ValorTotal { get; set; }
 
-        [StringLength(100)]
+        [StringLength(StringLength.NomeMaxLength)]
         public string? MetodoPagamento { get; set; }
 
-        [StringLength(200)]
+        [StringLength(StringLength.DescricaoMaxLength)]
         public string? Observacoes { get; set; }
 
         public bool PagamentoExecutado { get; set; }
 
         // Navigation
-        public ICollection<EncomendaItem> Itens { get; set; } = new List<EncomendaItem>();
+        public ICollection<EncomendaItem> Linhas { get; set; } = new List<EncomendaItem>();
     }
 }
