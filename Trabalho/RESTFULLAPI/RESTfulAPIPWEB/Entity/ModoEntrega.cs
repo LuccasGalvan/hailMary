@@ -7,11 +7,11 @@ namespace RESTfulAPIPWEB.Entity
     {
         public int Id   { get; set; }
 
-        [StringLength(100)]
+        [StringLength(RESTfulAPIPWEB.Constants.StringLength.NomeMaxLength)]
         [Required]
         public string? Nome { get; set; }
 
-        [StringLength(200)]
+        [StringLength(RESTfulAPIPWEB.Constants.StringLength.DescricaoMaxLength)]
         public string? Detalhe { get; set; }
 
         [JsonIgnore]

@@ -2,6 +2,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using RESTfulAPIPWEB.Constants;
 using RESTfulAPIPWEB.Data;
 using RESTfulAPIPWEB.DTO.Vendas;
 using RESTfulAPIPWEB.Entity;
@@ -11,7 +12,7 @@ namespace RESTfulAPIPWEB.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Cliente")]
+    [Authorize(Roles = Roles.Cliente)]
     public class VendasController : ControllerBase
     {
         private readonly ApplicationDbContext _context;

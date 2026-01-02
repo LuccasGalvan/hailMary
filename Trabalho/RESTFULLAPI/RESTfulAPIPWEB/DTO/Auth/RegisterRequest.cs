@@ -4,10 +4,10 @@ namespace RESTfulAPIPWEB.DTO.Auth
 {
     public class RegisterRequest
     {
-        [Required, StringLength(100)]
+        [Required, StringLength(RESTfulAPIPWEB.Constants.StringLength.NomeMaxLength)]
         public string Nome { get; set; } = default!;
 
-        [Required, StringLength(100)]
+        [Required, StringLength(RESTfulAPIPWEB.Constants.StringLength.NomeMaxLength)]
         public string Apelido { get; set; } = default!;
 
         [Required, EmailAddress]

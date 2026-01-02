@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using RESTfulAPIPWEB.Constants;
 using RESTfulAPIPWEB.Data;
 using RESTfulAPIPWEB.DTO.Auth;
 using RESTfulAPIPWEB.Entity.Enums;
@@ -37,13 +38,13 @@ public class AuthController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> RegisterCliente([FromBody] AuthRegisterRequest dto)
-        => await RegisterWithRole(dto, "Cliente");
+        => await RegisterWithRole(dto, Roles.Cliente);
 
     [HttpPost("register/fornecedor")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> RegisterFornecedor([FromBody] AuthRegisterRequest dto)
-        => await RegisterWithRole(dto, "Fornecedor");
+        => await RegisterWithRole(dto, Roles.Fornecedor);
 
     [HttpPost("login")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -65,9 +66,9 @@ public class AuthController : ControllerBase
         }
 
         var userRoles = await _userManager.GetRolesAsync(utilizadorAtual);
-        var role = userRoles.FirstOrDefault() ?? "Cliente";
+        var role = userRoles.FirstOrDefault() ?? Roles.Cliente;
 
-        if ((role == "Cliente" || role == "Fornecedor") && utilizadorAtual.EstadoConta != EstadoConta.Ativo)
+        if ((role == Roles.Cliente || role == Roles.Fornecedor) && utilizadorAtual.EstadoConta != EstadoConta.Ativo)
         {
             return Unauthorized("Conta pendente de ativação.");
         }
@@ -93,10 +94,10 @@ public class AuthController : ControllerBase
             EstadoConta = EstadoConta.Pendente,
             TipoConta = role switch
             {
-                "Cliente" => TipoConta.Cliente,
-                "Fornecedor" => TipoConta.Fornecedor,
+                Roles.Cliente => TipoConta.Cliente,
+                Roles.Fornecedor => TipoConta.Fornecedor,
                 "Admin" => TipoConta.Admin,
-                "Funcionario" => TipoConta.Funcionario,
+                Roles.Funcionario => TipoConta.Funcionario,
                 _ => null
             }
         };
@@ -158,10 +159,10 @@ public class AuthController : ControllerBase
         [Required, MinLength(6)]
         public string Password { get; set; } = default!;
 
-        [Required, StringLength(100)]
+        [Required, StringLength(RESTfulAPIPWEB.Constants.StringLength.NomeMaxLength)]
         public string Nome { get; set; } = default!;
 
-        [Required, StringLength(100)]
+        [Required, StringLength(RESTfulAPIPWEB.Constants.StringLength.NomeMaxLength)]
         public string Apelido { get; set; } = default!;
     }
 }

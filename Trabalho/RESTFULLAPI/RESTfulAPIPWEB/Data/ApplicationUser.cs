@@ -13,10 +13,10 @@ namespace RESTfulAPIPWEB.Data
         public UserEstado Estado { get; set; } = UserEstado.Pendente;
 
         [Required]
-        [StringLength(100)]
+        [StringLength(RESTfulAPIPWEB.Constants.StringLength.NomeMaxLength)]
         public string Nome { get; set; } = string.Empty;
 
-        [StringLength(100)]
+        [StringLength(RESTfulAPIPWEB.Constants.StringLength.NomeMaxLength)]
         public string? Apelido { get; set; }
 
         public TipoConta? TipoConta { get; set; }

@@ -7,7 +7,7 @@ namespace RESTfulAPIPWEB.Entity
         public int Id { get; set; }
 
         [Required]
-        [StringLength(100)]
+        [StringLength(RESTfulAPIPWEB.Constants.StringLength.NomeMaxLength)]
         public string Nome { get; set; } = default!;
 
         public ICollection<Categoria> Categorias { get; set; } = new List<Categoria>();

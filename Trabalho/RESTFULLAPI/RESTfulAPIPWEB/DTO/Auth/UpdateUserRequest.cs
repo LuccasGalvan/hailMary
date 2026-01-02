@@ -10,10 +10,10 @@ public class UpdateUserRequest
     [EmailAddress]
     public string? Email { get; set; }
 
-    [StringLength(100)]
+    [StringLength(RESTfulAPIPWEB.Constants.StringLength.NomeMaxLength)]
     public string? Nome { get; set; }
 
-    [StringLength(100)]
+    [StringLength(RESTfulAPIPWEB.Constants.StringLength.NomeMaxLength)]
     public string? Apelido { get; set; }
 
     public long? NIF { get; set; }
