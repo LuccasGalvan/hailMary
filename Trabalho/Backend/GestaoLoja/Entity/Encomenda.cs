@@ -8,9 +8,6 @@ namespace GestaoLoja.Entity
     public class Encomenda
     {
         [Key]
-        public Guid Id { get; set; } = Guid.NewGuid();
-
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int VendaId { get; set; }
 
         // Identity user id (Cliente)
@@ -39,6 +36,6 @@ namespace GestaoLoja.Entity
         public bool PagamentoExecutado { get; set; }
 
         // Navigation
-        public ICollection<EncomendaItem> Itens { get; set; } = new List<EncomendaItem>();
+        public ICollection<EncomendaItem> Linhas { get; set; } = new List<EncomendaItem>();
     }
 }

@@ -24,8 +24,8 @@
     else
     {
         <dl class="row">
-            <dt class="col-sm-2">Id</dt>
-            <dd class="col-sm-10">@encomenda.Id</dd>
+            <dt class="col-sm-2">VendaId</dt>
+            <dd class="col-sm-10">@encomenda.VendaId</dd>
 
             <dt class="col-sm-2">Cliente</dt>
             <dd class="col-sm-10">@clienteDisplay</dd>
@@ -43,7 +43,7 @@
         @if (!canDelete)
         {
             <div class="alert alert-warning">
-                Esta encomenda não deve ser apagada (tem itens e/ou já não está em PendentePagamento).
+                Esta encomenda não deve ser apagada (tem linhas e/ou já não está em PendentePagamento).
             </div>
         }
 
@@ -60,15 +60,15 @@
     private string clienteDisplay = "—";
 
     [SupplyParameterFromQuery]
-    private Guid Id { get; set; }
+    private int Id { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         using var context = DbFactory.CreateDbContext();
 
         encomenda = await context.Encomendas
-            .Include(e => e.Itens)
-            .FirstOrDefaultAsync(m => m.Id == Id);
+            .Include(e => e.Linhas)
+            .FirstOrDefaultAsync(m => m.VendaId == Id);
 
         if (encomenda is null)
         {
@@ -83,7 +83,7 @@
         clienteDisplay = BuildUserDisplay(cliente, encomenda.ClienteId);
 
         canDelete = encomenda.Estado == EncomendaEstado.PendentePagamento
-                    && (encomenda.Itens is null || encomenda.Itens.Count == 0);
+                    && (encomenda.Linhas is null || encomenda.Linhas.Count == 0);
     }
 
     private async Task DeleteEncomenda()
@@ -94,8 +94,8 @@
         using var context = DbFactory.CreateDbContext();
 
         var existing = await context.Encomendas
-            .Include(e => e.Itens)
-            .FirstOrDefaultAsync(e => e.Id == Id);
+            .Include(e => e.Linhas)
+            .FirstOrDefaultAsync(e => e.VendaId == Id);
 
         if (existing is null)
         {
@@ -104,9 +104,9 @@
         }
 
         if (existing.Estado != EncomendaEstado.PendentePagamento ||
-            (existing.Itens is not null && existing.Itens.Count > 0))
+            (existing.Linhas is not null && existing.Linhas.Count > 0))
         {
-            NavigationManager.NavigateTo($"/encomenda/details?id={existing.Id}");
+            NavigationManager.NavigateTo($"/encomenda/details?id={existing.VendaId}");
             return;
         }
 
