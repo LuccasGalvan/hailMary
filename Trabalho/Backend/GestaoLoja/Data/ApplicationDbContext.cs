@@ -19,6 +19,7 @@ namespace GestaoLoja.Data
         public DbSet<CarrinhoCompras> CarrinhoCompras { get; set; } = default!;
         public DbSet<Encomenda> Encomendas { get; set; } = default!;
         public DbSet<EncomendaItem> EncomendaItens { get; set; } = default!;
+        public DbSet<EncomendaItem> LinhasVenda { get; set; } = default!;
         public DbSet<CategoriaProduto> CategoriaProdutos { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -100,6 +101,9 @@ namespace GestaoLoja.Data
                 .IsUnique();
 
             // --- Orders: Encomenda -> Items (explicit relationship; convention would also work)
+            builder.Entity<Encomenda>()
+                .HasKey(e => e.VendaId);
+
             builder.Entity<EncomendaItem>()
                 .HasOne(i => i.Encomenda)
                 .WithMany(e => e.Linhas)
