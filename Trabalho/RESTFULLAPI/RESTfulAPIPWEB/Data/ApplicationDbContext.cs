@@ -15,6 +15,7 @@ namespace RESTfulAPIPWEB.Data
         public DbSet<Categoria> Categorias { get; set; } = default!;
         public DbSet<TipoCategoria> TiposCategoria { get; set; } = default!;
         public DbSet<Produto> Produtos { get; set; } = default!;
+        public DbSet<CategoriaProduto> CategoriaProdutos { get; set; } = default!;
         public DbSet<ModoEntrega> ModosEntrega { get; set; } = default!;
         public DbSet<Favoritos> Favoritos { get; set; } = default!;
         public DbSet<CarrinhoCompras> CarrinhoCompras { get; set; } = default!;
@@ -30,6 +31,19 @@ namespace RESTfulAPIPWEB.Data
                 .WithMany(c => c.Children)
                 .HasForeignKey(c => c.ParentId)
                 .OnDelete(DeleteBehavior.SetNull);
+
+            builder.Entity<CategoriaProduto>()
+                .HasKey(cp => new { cp.ProdutoId, cp.CategoriaId });
+
+            builder.Entity<CategoriaProduto>()
+                .HasOne(cp => cp.Produto)
+                .WithMany(p => p.CategoriaProdutos)
+                .HasForeignKey(cp => cp.ProdutoId);
+
+            builder.Entity<CategoriaProduto>()
+                .HasOne(cp => cp.Categoria)
+                .WithMany(c => c.CategoriaProdutos)
+                .HasForeignKey(cp => cp.CategoriaId);
 
             builder.Entity<Categoria>().HasData(
                 new Categoria { Id = 1, Nome = "Eletrónicos", Ordem = 1, TipoCategoriaId = 1 },

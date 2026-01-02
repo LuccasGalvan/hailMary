@@ -16,8 +16,7 @@ namespace RESTfulAPIPWEB.Repositories
         public async Task<IEnumerable<Categoria>> GetCategorias(int? tipoCategoriaId = null)
         {
             var query = _context.Categorias
-                .AsNoTracking()
-                .Where(c => c.ParentId == null);
+                .AsNoTracking();
 
             if (tipoCategoriaId.HasValue)
             {

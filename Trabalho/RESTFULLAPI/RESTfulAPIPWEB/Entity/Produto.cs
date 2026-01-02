@@ -61,7 +61,7 @@ namespace RESTfulAPIPWEB.Entity
         public string? Origem {  get; set; }
         public int CategoriaId  { get; set; }
         public Categoria? categoria { get; set; }
-        public ICollection<Categoria> CategoriaProdutos { get; set; } = new List<Categoria>();
+        public ICollection<CategoriaProduto> CategoriaProdutos { get; set; } = new List<CategoriaProduto>();
 
         [JsonIgnore]
         public int? ModoEntregaId { get; set; }
