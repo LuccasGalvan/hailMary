@@ -1,0 +1,309 @@
+﻿@page "/produtos/editar/{id:int}"
+
+@using Gestao_Loja.Data
+@using Gestao_Loja.Entities
+@using Gestao_Loja.Constants
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Components.Forms
+@using System.Globalization
+@using System.IO
+
+@inject ApplicationDbContext Db
+@inject NavigationManager Nav
+@inject IWebHostEnvironment Env
+
+<h3>Editar Produto</h3>
+
+@if (isLoading)
+{
+    <p>A carregar...</p>
+}
+else if (produto is null)
+{
+    <p class="text-danger">Produto não encontrado.</p>
+}
+else
+{
+    <EditForm Model="produto" OnValidSubmit="SalvarAsync">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="row">
+            <div class="col-md-7">
+                <div class="mb-3">
+                    <label class="form-label">Nome</label>
+                    <InputText class="form-control" @bind-Value="produto.Nome" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Descrição</label>
+                    <InputTextArea class="form-control" @bind-Value="produto.Descricao" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Preço Base</label>
+                    <input type="number"
+                           class="form-control"
+                           @bind="produto.PrecoBase"
+                           @bind:event="oninput" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">% Comissão</label>
+                    <input type="number"
+                           class="form-control"
+                           @bind="produto.PercentagemComissao"
+                           @bind:event="oninput" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Stock</label>
+                    <InputNumber class="form-control" @bind-Value="produto.Stock" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Estado</label>
+                    <InputSelect class="form-select" @bind-Value="produto.Estado">
+                        @foreach (var estado in estadosProduto)
+                        {
+                            <option value="@estado">@estado</option>
+                        }
+                    </InputSelect>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Modo de Disponibilização</label>
+                    <InputSelect class="form-select" @bind-Value="produto.ModoDisponibilizacaoId">
+                        <option value="0">-- Selecione --</option>
+                        @foreach (var modo in modosDisponibilizacao)
+                        {
+                            <option value="@modo.ModoDisponibilizacaoId">@modo.Nome</option>
+                        }
+                    </InputSelect>
+                </div>
+
+                <div class="mb-3">
+                    <strong>Preço Final atual:</strong>
+                    @PrecoFinalCalculado.ToString("0.00")
+                </div>
+
+                <button type="submit" class="btn btn-primary me-2">Guardar</button>
+                <button type="button" class="btn btn-secondary" @onclick="Voltar">Voltar</button>
+            </div>
+
+            <div class="col-md-5">
+                <h5>Imagem</h5>
+
+                <div class="mb-2">
+                    <img src="@(string.IsNullOrWhiteSpace(CurrentImageUrl) ? "/images/no-image.png" : CurrentImageUrl)"
+                         alt="@produto.Nome"
+                         style="width:100%; max-width:260px; aspect-ratio: 1 / 1; object-fit: cover; border-radius:12px;"
+                         onerror="this.onerror=null;this.src='/images/no-image.png';" />
+                </div>
+
+                <InputFile OnChange="OnImageSelected" accept="image/*" />
+
+                @if (!string.IsNullOrWhiteSpace(imageError))
+                {
+                    <div class="text-danger mt-2">@imageError</div>
+                }
+
+                <hr />
+
+                <h5>Categorias</h5>
+                <div class="border rounded p-2" style="max-height: 250px; overflow-y: auto;">
+                    @if (categorias != null && categorias.Any())
+                    {
+                        @foreach (var cat in categorias)
+                        {
+                            <div class="form-check">
+                                <input type="checkbox"
+                                       class="form-check-input"
+                                       checked="@selectedCategoriaIds.Contains(cat.CategoriaId)"
+                                       @onchange="(ChangeEventArgs e) => OnCategoriaCheckedChanged((bool)e.Value!, cat.CategoriaId)" />
+
+                                <label class="form-check-label">
+                                    @cat.Nome (@cat.TipoCategoria?.Nome)
+                                </label>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p>Sem categorias definidas.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </EditForm>
+}
+
+@code {
+    [Parameter] public int Id { get; set; }
+
+    private Produto? produto;
+    private List<Categoria> categorias = new();
+    private List<ModoDisponibilizacao> modosDisponibilizacao = new();
+    private List<EstadoProduto> estadosProduto = Enum.GetValues<EstadoProduto>().ToList();
+    private HashSet<int> selectedCategoriaIds = new();
+    private bool isLoading = true;
+
+    // Image upload
+    private IBrowserFile? selectedImage;
+    private string? imageError;
+    private string? tempPreviewUrl;
+
+    private string? CurrentImageUrl => tempPreviewUrl ?? produto?.UrlImagem;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CarregarDadosAsync();
+    }
+
+    private async Task CarregarDadosAsync()
+    {
+        isLoading = true;
+
+        modosDisponibilizacao = await Db.ModosDisponibilizacao
+            .Where(m => m.Ativo)
+            .OrderBy(m => m.Nome)
+            .ToListAsync();
+
+        categorias = await Db.Categorias
+            .Include(c => c.TipoCategoria)
+            .OrderBy(c => c.TipoCategoria.Nome)
+            .ThenBy(c => c.Nome)
+            .ToListAsync();
+
+        produto = await Db.Produtos
+            .Include(p => p.CategoriaProdutos)
+                .ThenInclude(cp => cp.Categoria)
+            .Include(p => p.ModoDisponibilizacao)
+            .FirstOrDefaultAsync(p => p.ProdutoId == Id);
+
+        if (produto != null)
+        {
+            selectedCategoriaIds = produto.CategoriaProdutos
+                .Select(cp => cp.CategoriaId)
+                .ToHashSet();
+        }
+
+        isLoading = false;
+    }
+
+    private async Task OnImageSelected(InputFileChangeEventArgs e)
+    {
+        imageError = null;
+        selectedImage = e.File;
+
+        if (selectedImage.Size > 2 * 1024 * 1024)
+        {
+            imageError = "Imagem demasiado grande (máx 2MB).";
+            selectedImage = null;
+            tempPreviewUrl = null;
+            return;
+        }
+
+        // Live preview (no DB, no disk): convert to data URL
+        using var ms = new MemoryStream();
+        await selectedImage.OpenReadStream(maxAllowedSize: 2 * 1024 * 1024).CopyToAsync(ms);
+
+        var base64 = Convert.ToBase64String(ms.ToArray());
+        tempPreviewUrl = $"data:{selectedImage.ContentType};base64,{base64}";
+    }
+
+
+    private async Task<string?> SaveImageAsync(string productName)
+    {
+        if (selectedImage is null)
+            return null;
+
+        var ext = Path.GetExtension(selectedImage.Name).ToLowerInvariant();
+        var allowed = new[] { ".jpg", ".jpeg", ".png", ".webp" };
+
+        if (!allowed.Contains(ext))
+        {
+            imageError = "Formato inválido. Use JPG, PNG ou WEBP.";
+            return null;
+        }
+
+        var folder = Path.Combine(Env.WebRootPath, "images", "produtos");
+        Directory.CreateDirectory(folder);
+
+        // slug/safe filename (keeps letters/numbers/_/-)
+        var normalized = productName.Normalize(System.Text.NormalizationForm.FormD);
+        var withoutDiacritics = new string(
+            normalized.Where(ch => CharUnicodeInfo.GetUnicodeCategory(ch) != UnicodeCategory.NonSpacingMark).ToArray()
+        );
+
+        var safe = new string(withoutDiacritics
+            .Replace(" ", "_")
+            .Where(ch => char.IsLetterOrDigit(ch) || ch == '_' || ch == '-')
+            .ToArray());
+
+        if (string.IsNullOrWhiteSpace(safe))
+            safe = "produto";
+
+        var fileName = $"{safe}_{Guid.NewGuid():N}{ext}";
+        var filePath = Path.Combine(folder, fileName);
+
+        await using var fs = File.Create(filePath);
+        await selectedImage.OpenReadStream(maxAllowedSize: 2 * 1024 * 1024).CopyToAsync(fs);
+
+        var url = $"/images/produtos/{fileName}";
+        tempPreviewUrl = url; // updates preview after upload
+        return url;
+    }
+
+    private async Task SalvarAsync()
+    {
+        if (produto is null)
+            return;
+
+        if (produto.ModoDisponibilizacaoId == 0)
+            return;
+
+        // if user selected a new image, save it and update UrlImagem
+        var newUrl = await SaveImageAsync(produto.Nome);
+        if (!string.IsNullOrWhiteSpace(newUrl))
+            produto.UrlImagem = newUrl;
+
+        produto.PrecoFinal = PrecoFinalCalculado;
+
+        Db.Produtos.Update(produto);
+        await Db.SaveChangesAsync();
+
+        var existentes = await Db.CategoriaProdutos
+            .Where(cp => cp.ProdutoId == produto.ProdutoId)
+            .ToListAsync();
+
+        Db.CategoriaProdutos.RemoveRange(existentes);
+
+        var novasLigacoes = selectedCategoriaIds.Select(catId => new CategoriaProduto
+        {
+            ProdutoId = produto.ProdutoId,
+            CategoriaId = catId
+        });
+
+        await Db.CategoriaProdutos.AddRangeAsync(novasLigacoes);
+        await Db.SaveChangesAsync();
+
+        Nav.NavigateTo("/produtos");
+    }
+
+    private void OnCategoriaCheckedChanged(bool isChecked, int categoriaId)
+    {
+        if (isChecked)
+            selectedCategoriaIds.Add(categoriaId);
+        else
+            selectedCategoriaIds.Remove(categoriaId);
+    }
+
+
+
+    private void Voltar() => Nav.NavigateTo("/produtos");
+
+    private decimal PrecoFinalCalculado =>
+        produto is null ? 0m
+        : produto.PrecoBase + (produto.PrecoBase * (produto.PercentagemComissao / 100m));
+}

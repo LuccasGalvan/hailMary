@@ -1,0 +1,191 @@
+﻿@page "/vendas"
+@using Gestao_Loja.Entities
+@using Gestao_Loja.Constants
+@inject ApplicationDbContext Db
+@inject NavigationManager Nav
+@using Gestao_Loja.Data.Services
+@inject VendaService VendaService
+
+@attribute [Authorize(Policy = "EmpresaUser")]
+
+<h3>Vendas</h3>
+
+@if (isLoading)
+{
+    <p>A carregar...</p>
+}
+else
+{
+    <div class="row mb-3">
+
+        <div class="col-md-4">
+            <label>Estado:</label>
+            <select class="form-select" @onchange="OnEstadoFiltroChanged">
+                <option value="">--Todos--</option>
+                @foreach (var e in estadosVenda)
+                {
+                    <option value="@e" selected="@(estadoFiltro == e.ToString())">@e</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-4">
+            <label>Cliente:</label>
+            <select class="form-select" @onchange="OnClienteFiltroChanged">
+                <option value="">--Todos--</option>
+                @foreach (var cli in clientes)
+                {
+                    <option value="@cli.Id" selected="@(clienteSelecionadoId == cli.Id)">@cli.UserName</option>
+                }
+            </select>
+        </div>
+
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Cliente</th>
+                <th>Data</th>
+                <th>Estado</th>
+                <th>Total</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var v in vendas)
+            {
+                <tr>
+                    <td>@v.VendaId</td>
+                    <td>@v.Cliente?.UserName</td>
+                    <td>@v.DataCriacao.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@v.Estado</td>
+                    <td>@v.ValorTotal.ToString("0.00") €</td>
+                    <td>
+                        <button class="btn btn-sm btn-info me-1"
+                                @onclick="() => VerDetalhes(v.VendaId)">
+                            Detalhes
+                        </button>
+
+                        @if (v.Estado == EstadoVenda.Pendente)
+                        {
+                            <button class="btn btn-sm btn-success me-1"
+                                    @onclick="() => ConfirmarVendaAsync(v.VendaId)">
+                                Confirmar
+                            </button>
+                            <button class="btn btn-sm btn-danger me-1"
+                                    @onclick="() => RejeitarVendaAsync(v.VendaId)">
+                                Rejeitar
+                            </button>
+                        }
+                        else if (v.Estado == EstadoVenda.Confirmada)
+                        {
+                            <button class="btn btn-sm btn-primary"
+                                    @onclick="() => ExpedirVendaAsync(v.VendaId)">
+                                Expedir
+                            </button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private bool isLoading = true;
+    private List<Venda> vendas = new();
+    private List<EstadoVenda> estadosVenda = Enum.GetValues<EstadoVenda>().ToList();
+    private string? estadoFiltro;
+
+    private List<ApplicationUser> clientes = new();
+    private string clienteSelecionadoId = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CarregarClientesAsync();
+        await CarregarVendasAsync();
+    }
+
+    /// <summary>
+    /// Carrega apenas utilizadores que:
+    ///  - têm TipoConta.Cliente, OU
+    ///  - têm pelo menos uma venda associada na BD.
+    /// </summary>
+    private async Task CarregarClientesAsync()
+    {
+        var clientesQuery = Db.Users
+            .Where(u =>
+                u.TipoConta == TipoConta.Cliente
+                || Db.Vendas.Any(v => v.ClienteId == u.Id));
+
+        clientes = await clientesQuery
+            .OrderBy(u => u.UserName)
+            .ToListAsync();
+    }
+
+    private async Task CarregarVendasAsync()
+    {
+        isLoading = true;
+
+        var query = Db.Vendas
+            .Include(v => v.Cliente)
+            .AsQueryable();
+
+        // filter estado
+        if (!string.IsNullOrWhiteSpace(estadoFiltro) &&
+            Enum.TryParse<EstadoVenda>(estadoFiltro, out var e))
+        {
+            query = query.Where(v => v.Estado == e);
+        }
+
+        // filter cliente
+        if (!string.IsNullOrWhiteSpace(clienteSelecionadoId))
+        {
+            query = query.Where(v => v.ClienteId == clienteSelecionadoId);
+        }
+
+        vendas = await query
+            .OrderByDescending(v => v.DataCriacao)
+            .ToListAsync();
+
+        isLoading = false;
+    }
+
+    // FILTER HANDLERS
+    private async Task OnEstadoFiltroChanged(ChangeEventArgs e)
+    {
+        estadoFiltro = e.Value?.ToString();
+        await CarregarVendasAsync();
+    }
+
+    private async Task OnClienteFiltroChanged(ChangeEventArgs e)
+    {
+        clienteSelecionadoId = e.Value?.ToString() ?? "";
+        await CarregarVendasAsync();
+    }
+
+    private void VerDetalhes(int vendaId)
+    {
+        Nav.NavigateTo($"/vendas/{vendaId}");
+    }
+
+    private async Task ConfirmarVendaAsync(int vendaId)
+    {
+        await VendaService.ConfirmarVendaAsync(vendaId);
+        await CarregarVendasAsync();
+    }
+
+    private async Task RejeitarVendaAsync(int vendaId)
+    {
+        await VendaService.RejeitarVendaAsync(vendaId, "Rejeitada na gestão de loja.");
+        await CarregarVendasAsync();
+    }
+
+    private async Task ExpedirVendaAsync(int vendaId)
+    {
+        await VendaService.ExpedirVendaAsync(vendaId);
+        await CarregarVendasAsync();
+    }
+}

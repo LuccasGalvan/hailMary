@@ -1,4 +1,4 @@
-﻿.slide-children {
+﻿﻿.slide-children {
     height: 230px;
     position: relative;
     text-align: center;
@@ -7,16 +7,16 @@
     justify-content: center;
     align-items: center;
     border: solid;
-    border-color:transparent;
+    border-color: transparent;
 }
 
-    .slide-children p {
-        color: black;
-        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    }
+.slide-children p {
+    color: black;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
 
 .background-solid {
-    background-color:antiquewhite ;
+    background-color: antiquewhite;
 }
 
 .prod-container {
@@ -28,11 +28,10 @@
 .slide-img {
     width: 200px;
     margin: 0px 20px;
-
 }
 
     .slide-img img {
-        height: 200px;
+        height: 144px;
         border-radius: 8%;
     }
 
@@ -56,7 +55,6 @@
     position: absolute;
     top: 6px;
     left: 20px;
-
 }
 
 .slide-description-middle p {
@@ -125,8 +123,8 @@ a.button {
 }
 
 
-.div-sizes{
-    display:flex;
+.div-sizes {
+    display: flex;
 }
 
 
@@ -162,8 +160,8 @@ a.button {
 
 
 
-@media (max-width: 641px){
-    .slide-children{
+@media (max-width: 641px) {
+    .slide-children {
         height: 350px;
     }
 
@@ -173,6 +171,7 @@ a.button {
         left: 15%;
         margin: 1px;
     }
+
     .slide-descr {
         position: absolute;
         left: 0;
@@ -185,8 +184,8 @@ a.button {
         width: 350px;
     }
 
-    .slide-description-botton{
-        height:45px;
+    .slide-description-botton {
+        height: 45px;
     }
 
     .div-sizes {
@@ -198,7 +197,7 @@ a.button {
     .btn-comprar {
         height: 30px;
         width: 150px;
-        margin-top:33px;
+        margin-top: 33px;
     }
 
     .div-value-prod {

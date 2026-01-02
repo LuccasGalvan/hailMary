@@ -1,39 +1,4 @@
-﻿@* Web *@
+﻿@page "/"
+@using RCLComum.Pages
 
-@page "/"
-
-@using RCLAPI.Services
-@using Microsoft.AspNetCore.Components
-@using RCLAPI.DTO
-@using RCLProdutos.Shared.Slider
-@using RCLProdutos.Shared.CardProduto
-
-@inject IApiServices ApiServices
-
-<SliderComponent initProd="-1" ShowSuggestedProduct="false" />
-
-<section class="featured-product">
-    <h2>Produto em destaque</h2>
-    @if (featuredProduto is null)
-    {
-        <p>Sem produto em destaque disponível no momento.</p>
-    }
-    else
-    {
-        <SlideProdutoComponent sugestProduto="@featuredProduto" />
-    }
-</section>
-
-@code {
-    private ProdutoDTO? featuredProduto;
-
-    protected override async Task OnInitializedAsync()
-    {
-        var (data, error) = await ApiServices.GetAsync<ProdutoDTO>("api/Produtos/featured");
-
-        if (error is null && data is not null && data.Id > 0)
-        {
-            featuredProduto = data;
-        }
-    }
-}
+<IndexPage />

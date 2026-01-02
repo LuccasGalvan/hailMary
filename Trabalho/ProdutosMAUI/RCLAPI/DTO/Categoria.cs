@@ -1,21 +1,22 @@
-﻿
-using Microsoft.AspNetCore.Http;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.Text.Json.Serialization;
 
 namespace RCLAPI.DTO;
+
 public class Categoria
 {
+    [JsonPropertyName("categoriaId")]
     public int Id { get; set; }
+
+    [JsonPropertyName("nome")]
     public string? Nome { get; set; }
-    public int? ParentId { get; set; }
-    public List<Categoria> Children { get; set; } = new();
 
-    public int? Ordem { get; set; }
-    public string? UrlImagem { get;set; }
+    [JsonPropertyName("tipoCategoriaId")]
+    public int TipoCategoriaId { get; set; }
 
-    public byte[]? Imagem { get; set; }
+    [JsonPropertyName("urlImagem")]
+    public string? UrlImagem { get; set; }
 
-    [NotMapped]
-    public IFormFile? ImageFile { get; set; }
+    [JsonIgnore]
+    public string? Imagem => UrlImagem;
+
 }

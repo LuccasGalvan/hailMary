@@ -1,0 +1,113 @@
+﻿@page "/modos-disponibilizacao"
+
+
+@attribute [Authorize(Policy = "EmpresaUser")]
+@using Gestao_Loja.Data
+@using Gestao_Loja.Entities
+@using Microsoft.EntityFrameworkCore
+
+@inject ApplicationDbContext Db
+
+<h3>Gestão de Modos de Disponibilização</h3>
+
+@if (isLoading)
+{
+    <p>A carregar...</p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-7">
+            <h4>Lista de Modos</h4>
+
+            @if (modos == null || !modos.Any())
+            {
+                <p>Sem modos de disponibilização definidos.</p>
+            }
+            else
+            {
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Nome</th>
+                            <th>Usado para venda?</th>
+                            <th>Ativo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var m in modos)
+                        {
+                            <tr>
+                                <td>@m.ModoDisponibilizacaoId</td>
+                                <td>@m.Nome</td>
+                                <td>@(m.IsForSale ? "Sim" : "Não")</td>
+                                <td>@(m.Ativo ? "Sim" : "Não")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+
+        <div class="col-md-5">
+            <h4>Novo Modo</h4>
+
+            <EditForm Model="novoModo" OnValidSubmit="CriarModoAsync">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <div class="mb-3">
+                    <label class="form-label">Nome</label>
+                    <InputText class="form-control" @bind-Value="novoModo.Nome" />
+                </div>
+
+                <div class="form-check mb-2">
+                    <InputCheckbox class="form-check-input" @bind-Value="novoModo.IsForSale" />
+                    <label class="form-check-label">Usado para venda (permite compras)</label>
+                </div>
+
+                <div class="form-check mb-3">
+                    <InputCheckbox class="form-check-input" @bind-Value="novoModo.Ativo" />
+                    <label class="form-check-label">Ativo</label>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Guardar</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+@code {
+    private List<ModoDisponibilizacao> modos = new();
+    private ModoDisponibilizacao novoModo = new();
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CarregarModosAsync();
+    }
+
+    private async Task CarregarModosAsync()
+    {
+        isLoading = true;
+
+        modos = await Db.ModosDisponibilizacao
+            .OrderBy(m => m.Nome)
+            .ToListAsync();
+
+        isLoading = false;
+    }
+
+    private async Task CriarModoAsync()
+    {
+        if (string.IsNullOrWhiteSpace(novoModo.Nome))
+            return;
+
+        Db.ModosDisponibilizacao.Add(novoModo);
+        await Db.SaveChangesAsync();
+
+        novoModo = new ModoDisponibilizacao();
+        await CarregarModosAsync();
+    }
+}

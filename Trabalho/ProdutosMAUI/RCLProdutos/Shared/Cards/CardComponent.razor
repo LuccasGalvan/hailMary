@@ -11,13 +11,22 @@
 
 @* <div class="card" style="background-image:url(@pathurlimg); @marginLeft;position:center"> *@
 
-<div title="@categoria!.Nome" class="card @SelectedClass" style="@CardStyle @marginLeft;position:center">
+<div title="@categoria!.Nome"
+     class="card"
+     style="@GetStyle()">
+
     <div>
         <p>@categoria!.Nome</p>
     </div>
+
     <div class="footer-button">
-        <button type="button" class="card-action" @onclick='(() => HandleSelect(categoria))'>
-            <img alt="Pesquisar categoria" src="/images/searchredicon50x50.png" width="30" />
-        </button>
+        <div class="footer-button">
+            <button type="button" @onclick="() => OnSearchClick.InvokeAsync(categoria.Id)">
+                <img alt="Pesquisar categoria"
+                     src="images/searchredicon50x50.png"
+                     width="30" />
+            </button>
+        </div>
+
     </div>
 </div>

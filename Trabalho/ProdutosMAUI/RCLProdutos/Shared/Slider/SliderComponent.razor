@@ -1,69 +1,35 @@
-﻿@using RCLProdutos.Shared.Slider
+﻿﻿@using RCLProdutos.Shared.Slider
 @using RCLProdutos.Shared.Cards
 @using RCLProdutos.Shared.CardProduto
-
 @page "/slider"
 
-<div class="slider-page">
-    <div class="friso-filters">
-        @if (categoriaNivel1?.Any() == true)
+<section class="slider">
+    <div class="slider-container" style="width:@(witdthPerc)%">
+        <button @onclick="PreviousSlide" disabled="@IsDisbledPrevious" class="btn-slides-left"><img src="images/back.png" /></button>
+
+        @if (produtos.Count == 0 || sliderUtilsService.MarginLeftSlide.Count < produtos.Count)
         {
-            <CardsCarousel Title="Categorias"
-                           Categories="categoriaNivel1"
-                           SelectedCategoryId="selectedNivel1Id"
-                           OnSelect="HandleCategoriaSelecionada" />
+            <p>Produto indisponivel...</p>
+        }
+        else
+        {
+            @for (int i = 0; i < produtos.Count; i++)
+            {
+                var produto = produtos[i];
+                <SlideComponent produto="@produto"
+                                width="@sliderUtilsService.WidthSlide2"
+                                marginLeft="@(i < sliderUtilsService.MarginLeftSlide.Count ? sliderUtilsService.MarginLeftSlide[i] : "margin-left:0%")" />
+            }
+
         }
 
-        @if (categoriaNivel2?.Any() == true)
-        {
-            <CardsCarousel Title="Subcategorias"
-                           Categories="categoriaNivel2"
-                           SelectedCategoryId="selectedNivel2Id"
-                           OnSelect="HandleCategoriaSelecionada" />
-        }
-
-        @if (categoriaNivel3?.Any() == true)
-        {
-            <CardsCarousel Title="Detalhes"
-                           Categories="categoriaNivel3"
-                           SelectedCategoryId="selectedNivel3Id"
-                           OnSelect="HandleCategoriaSelecionada" />
-        }
+        <button @onclick="NextSlide" disabled="@IsDisabledNext" class="btn-slides-right"><img src="images/next.png" /></button>
     </div>
+</section>
 
-    <section class="slider">
-        <div class="slider-container" style="width:@(witdthPerc)%">
-            <button @onclick="PreviousSlide" disabled="@IsDisbledPrevious" class="btn-slides-left" type="button">
-                <img src="/images/back.png" />
-            </button>
+@* @if (Id > 0)
+{
+    <CardsCarousel catSel="Id" />
+} *@
 
-            @if (!string.IsNullOrWhiteSpace(favoritosAuthMessage))
-            {
-                <p class="font-valor3">@favoritosAuthMessage</p>
-            }
-
-            @if (produtos == null)
-            {
-                <p>Aguarde carregando...</p>
-            }
-            else
-            {
-                @for (var i = 0; i < produtos.Count; i++)
-                {
-                    var produto = produtos[i];
-                    <SlideComponent produto="@produto" width="@sliderUtilsService.WidthSlide2" marginLeft="@GetSlideMargin(i)" />
-                }
-                <IndicadoresComponent Produtos="@produtos" />
-            }
-
-            <button @onclick="NextSlide" disabled="@IsDisabledNext" class="btn-slides-right" type="button">
-                <img src="/images/next.png" />
-            </button>
-        </div>
-    </section>
-
-    @if (ShowSuggestedProduct)
-    {
-        <SlideProdutoComponent sugestProduto="@sugestaoProduto" />
-    }
-</div>
+<SlideProdutoComponent sugestProduto="@sugestaoProduto" />

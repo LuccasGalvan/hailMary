@@ -1,0 +1,91 @@
+﻿@page "/"
+@attribute [Authorize(Policy = "EmpresaUser")]
+
+<h2 class="mb-4">Painel de Gestão</h2>
+
+<p class="text-muted">
+    Bem-vindo ao sistema de gestão da loja.
+    Utilize os atalhos abaixo para aceder rapidamente às funcionalidades.
+</p>
+
+<div class="row g-4 mt-3">
+
+    <div class="col-md-4">
+        <a href="/produtos" class="text-decoration-none">
+            <div class="card shadow-sm h-100 hover-card">
+                <div class="card-body">
+                    <h5 class="card-title">📦 Produtos</h5>
+                    <p class="card-text">
+                        Criar, editar e gerir os produtos da loja.
+                    </p>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-4">
+        <a href="/categorias" class="text-decoration-none">
+            <div class="card shadow-sm h-100 hover-card">
+                <div class="card-body">
+                    <h5 class="card-title">🏷️ Categorias</h5>
+                    <p class="card-text">
+                        Gerir categorias e associações aos produtos.
+                    </p>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-4">
+        <a href="/tipos-categoria" class="text-decoration-none">
+            <div class="card shadow-sm h-100 hover-card">
+                <div class="card-body">
+                    <h5 class="card-title">🗂️ Tipos de Categoria</h5>
+                    <p class="card-text">
+                        Definir os tipos base de categorização.
+                    </p>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-4">
+        <a href="/modos-disponibilizacao" class="text-decoration-none">
+            <div class="card shadow-sm h-100 hover-card">
+                <div class="card-body">
+                    <h5 class="card-title">🚚 Modos de Disponibilização</h5>
+                    <p class="card-text">
+                        Configurar modos de venda e listagem.
+                    </p>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-4">
+        <a href="/vendas" class="text-decoration-none">
+            <div class="card shadow-sm h-100 hover-card">
+                <div class="card-body">
+                    <h5 class="card-title">💰 Vendas</h5>
+                    <p class="card-text">
+                        Consultar e acompanhar as vendas.
+                    </p>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-md-4">
+        <a href="/utilizadores" class="text-decoration-none">
+            <div class="card shadow-sm h-100 hover-card">
+                <div class="card-body">
+                    <h5 class="card-title">👤 Utilizadores</h5>
+                    <p class="card-text">
+                        Gerir contas e permissões de utilizadores.
+                    </p>
+                </div>
+            </div>
+        </a>
+    </div>
+
+</div>

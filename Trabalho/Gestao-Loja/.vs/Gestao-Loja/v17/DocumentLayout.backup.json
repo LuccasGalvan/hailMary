@@ -1,0 +1,58 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\ffgom\\Documents\\TP_PWEB\\Gestao-Loja\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{0046C8A1-4321-4426-86A1-47A9D6806591}|Gestao-Loja\\Gestao-Loja.csproj|c:\\users\\ffgom\\documents\\tp_pweb\\gestao-loja\\gestao-loja\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0046C8A1-4321-4426-86A1-47A9D6806591}|Gestao-Loja\\Gestao-Loja.csproj|solutionrelative:gestao-loja\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0046C8A1-4321-4426-86A1-47A9D6806591}|Gestao-Loja\\Gestao-Loja.csproj|c:\\users\\ffgom\\documents\\tp_pweb\\gestao-loja\\gestao-loja\\components\\pages\\produtopages\\produtoseditar.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{0046C8A1-4321-4426-86A1-47A9D6806591}|Gestao-Loja\\Gestao-Loja.csproj|solutionrelative:gestao-loja\\components\\pages\\produtopages\\produtoseditar.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 1,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedHeight": 25,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ProdutosEditar.razor",
+              "DocumentMoniker": "C:\\Users\\ffgom\\Documents\\TP_PWEB\\Gestao-Loja\\Gestao-Loja\\Components\\Pages\\ProdutoPages\\ProdutosEditar.razor",
+              "RelativeDocumentMoniker": "Gestao-Loja\\Components\\Pages\\ProdutoPages\\ProdutosEditar.razor",
+              "ToolTip": "C:\\Users\\ffgom\\Documents\\TP_PWEB\\Gestao-Loja\\Gestao-Loja\\Components\\Pages\\ProdutoPages\\ProdutosEditar.razor",
+              "RelativeToolTip": "Gestao-Loja\\Components\\Pages\\ProdutoPages\\ProdutosEditar.razor",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-30T15:17:19.135Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\ffgom\\Documents\\TP_PWEB\\Gestao-Loja\\Gestao-Loja\\Program.cs",
+              "RelativeDocumentMoniker": "Gestao-Loja\\Program.cs",
+              "ToolTip": "C:\\Users\\ffgom\\Documents\\TP_PWEB\\Gestao-Loja\\Gestao-Loja\\Program.cs",
+              "RelativeToolTip": "Gestao-Loja\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-30T13:52:49.502Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

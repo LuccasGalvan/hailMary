@@ -1,0 +1,472 @@
+﻿@page "/produtos"
+
+@attribute [Authorize(Policy = "EmpresaUser")]
+
+@using Gestao_Loja.Constants
+@using Gestao_Loja.Data
+@using Gestao_Loja.Entities
+@using Microsoft.EntityFrameworkCore
+
+@inject ApplicationDbContext Db
+@inject NavigationManager Nav
+
+<h3>Gestão de Produtos</h3>
+
+@if (isLoading)
+{
+    <p>A carregar...</p>
+}
+else
+{
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4>Lista de Produtos</h4>
+        <button class="btn btn-primary" @onclick="IrParaNovoProduto">
+            Novo Produto
+        </button>
+    </div>
+
+    <!-- FILTROS -->
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="row g-2">
+                <div class="col-md-4">
+                    <label class="form-label">Estado</label>
+                    <select class="form-select" @onchange="OnEstadoFilterChanged">
+                        <option value="">-- Todos --</option>
+                        @foreach (var estado in estadosProduto)
+                        {
+                            <option value="@estado"
+                                    selected="@(selectedEstado.HasValue && selectedEstado.Value == estado)">
+                                @estado
+                            </option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Modo de Disponibilização</label>
+                    <select class="form-select" @onchange="OnModoFilterChanged">
+                        <option value="0">-- Todos --</option>
+                        @foreach (var modo in modosDisponibilizacao)
+                        {
+                            <option value="@modo.ModoDisponibilizacaoId"
+                                    selected="@(selectedModoId.HasValue && selectedModoId.Value == modo.ModoDisponibilizacaoId)">
+                                @modo.Nome
+                            </option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Categoria</label>
+                    <select class="form-select" @onchange="OnCategoriaFilterChanged">
+                        <option value="0">-- Todas --</option>
+                        @foreach (var cat in categorias)
+                        {
+                            <option value="@cat.CategoriaId"
+                                    selected="@(selectedCategoriaId.HasValue && selectedCategoriaId.Value == cat.CategoriaId)">
+                                @cat.Nome (@cat.TipoCategoria?.Nome)
+                            </option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="row g-2 mt-3">
+                <div class="col-md-3">
+                    <label class="form-label">Produtos por página</label>
+                    <select class="form-select form-select-sm" @onchange="OnPageSizeChanged">
+                        @foreach (var size in pageSizeOptions)
+                        {
+                            <option value="@size" selected="@(size == pageSize)">@size</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (produtos == null || !produtos.Any())
+    {
+        <p>Sem produtos registados.</p>
+    }
+    else
+    {
+        @if (!string.IsNullOrEmpty(deleteError))
+        {
+            <div class="alert alert-danger">@deleteError</div>
+        }
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th style="width:80px;">Imagem</th>
+
+                    <th @onclick="() => OnSortChanged(ProdutoSortColumn.Nome)" style="cursor:pointer;">
+                        Nome @SortIndicator(ProdutoSortColumn.Nome)
+                    </th>
+                    <th @onclick="() => OnSortChanged(ProdutoSortColumn.PrecoBase)" style="cursor:pointer;">
+                        Preço Base @SortIndicator(ProdutoSortColumn.PrecoBase)
+                    </th>
+                    <th @onclick="() => OnSortChanged(ProdutoSortColumn.PercentagemComissao)" style="cursor:pointer;">
+                        % Comissão @SortIndicator(ProdutoSortColumn.PercentagemComissao)
+                    </th>
+                    <th @onclick="() => OnSortChanged(ProdutoSortColumn.PrecoFinal)" style="cursor:pointer;">
+                        Preço Final @SortIndicator(ProdutoSortColumn.PrecoFinal)
+                    </th>
+                    <th @onclick="() => OnSortChanged(ProdutoSortColumn.Stock)" style="cursor:pointer;">
+                        Stock @SortIndicator(ProdutoSortColumn.Stock)
+                    </th>
+                    <th>Estado</th>
+                    <th>Modo</th>
+                    <th>À venda</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var p in produtos)
+                {
+                    <tr>
+                        <td>
+                            <img src="@(string.IsNullOrWhiteSpace(p.UrlImagem) ? "/images/no-image.png" : p.UrlImagem)"
+                                 alt="@p.Nome"
+                                 style="width:60px;height:60px;object-fit:cover;border-radius:8px;"
+                                 onerror="this.onerror=null;this.src='/images/no-image.png';" />
+                        </td>
+                        <td>@p.Nome</td>
+                        <td>@p.PrecoBase.ToString("0.00")</td>
+                        <td>@p.PercentagemComissao.ToString("0.00")%</td>
+                        <td>@p.PrecoFinal.ToString("0.00")</td>
+                        <td>@p.Stock</td>
+                        <td>@p.Estado</td>
+                        <td>@p.ModoDisponibilizacao?.Nome</td>
+                        <td>@(p.ModoDisponibilizacao?.IsForSale == true ? "Sim" : "Não")</td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary me-1"
+                                    @onclick="() => ToggleEstadoAsync(p.ProdutoId)">
+                                @(p.Estado == EstadoProduto.Ativo ? "Inativar" : "Ativar")
+                            </button>
+
+                            <a class="btn btn-sm btn-secondary me-1" href="/produtos/editar/@p.ProdutoId">
+                                Editar
+                            </a>
+
+                            <button class="btn btn-sm btn-danger"
+                                    @onclick="() => RemoverProdutoAsync(p.ProdutoId)">
+                                Apagar
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <!-- PAGINAÇÃO -->
+        <div class="d-flex justify-content-between align-items-center mt-2">
+            <div>
+                Página @currentPage de @totalPages
+                (@totalProdutos produtos)
+            </div>
+            <div class="btn-group" role="group">
+                <button class="btn btn-sm btn-outline-secondary"
+                        @onclick="PaginaAnterior"
+                        disabled="@(!podePaginaAnterior)">
+                    « Anterior
+                </button>
+                <button class="btn btn-sm btn-outline-secondary"
+                        @onclick="ProximaPagina"
+                        disabled="@(!podeProximaPagina)">
+                    Próxima »
+                </button>
+            </div>
+        </div>
+    }
+}
+
+@code {
+    // ---- Sorting ----
+    private enum ProdutoSortColumn
+    {
+        Id,
+        Nome,
+        PrecoBase,
+        PercentagemComissao,
+        PrecoFinal,
+        Stock
+    }
+
+    private ProdutoSortColumn sortColumn = ProdutoSortColumn.Nome;
+    private bool sortAscending = true;
+
+    private string SortIndicator(ProdutoSortColumn column)
+    {
+        if (sortColumn != column) return string.Empty;
+        return sortAscending ? " ▲" : " ▼";
+    }
+
+    private async Task OnSortChanged(ProdutoSortColumn column)
+    {
+        if (sortColumn == column)
+        {
+            sortAscending = !sortAscending; // toggle direction
+        }
+        else
+        {
+            sortColumn = column;
+            sortAscending = true; // default ASC when changing column
+        }
+
+        currentPage = 1;
+        await CarregarProdutosAsync();
+    }
+
+    // ---- Existing fields ----
+    private List<Produto> produtos = new();
+    private List<Categoria> categorias = new();
+    private List<ModoDisponibilizacao> modosDisponibilizacao = new();
+    private List<EstadoProduto> estadosProduto = Enum.GetValues<EstadoProduto>().ToList();
+    private string? deleteError;
+
+    private bool isLoading = true;
+
+    // filtros
+    private EstadoProduto? selectedEstado = null;
+    private int? selectedModoId = null;
+    private int? selectedCategoriaId = null;
+
+    // paginação
+    private int currentPage = 1;
+    private int pageSize = 10;
+    private List<int> pageSizeOptions = new() { 5, 10, 20, 50 };
+    private int totalProdutos = 0;
+    private int totalPages = 1;
+
+    private bool podePaginaAnterior => currentPage > 1;
+    private bool podeProximaPagina => currentPage < totalPages;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CarregarCategoriasAsync();
+        await CarregarModosAsync();
+        await CarregarProdutosAsync();
+    }
+
+    private async Task CarregarCategoriasAsync()
+    {
+        categorias = await Db.Categorias
+            .Include(c => c.TipoCategoria)
+            .OrderBy(c => c.TipoCategoria.Nome)
+            .ThenBy(c => c.Nome)
+            .ToListAsync();
+    }
+
+    private async Task CarregarModosAsync()
+    {
+        modosDisponibilizacao = await Db.ModosDisponibilizacao
+            .OrderBy(m => m.Nome)
+            .ToListAsync();
+    }
+
+    private async Task CarregarProdutosAsync()
+    {
+        isLoading = true;
+
+        if (pageSize <= 0)
+            pageSize = 10;
+
+        var query = Db.Produtos
+            .Include(p => p.ModoDisponibilizacao)
+            .AsQueryable();
+
+        if (selectedEstado.HasValue)
+        {
+            var estado = selectedEstado.Value;
+            query = query.Where(p => p.Estado == estado);
+        }
+
+        if (selectedModoId.HasValue && selectedModoId.Value != 0)
+        {
+            var modoId = selectedModoId.Value;
+            query = query.Where(p => p.ModoDisponibilizacaoId == modoId);
+        }
+
+        if (selectedCategoriaId.HasValue && selectedCategoriaId.Value != 0)
+        {
+            var catId = selectedCategoriaId.Value;
+            query = query.Where(p => p.CategoriaProdutos.Any(cp => cp.CategoriaId == catId));
+        }
+
+        // ---- Sorting applied here ----
+        query = sortColumn switch
+        {
+            ProdutoSortColumn.Id => sortAscending
+                ? query.OrderBy(p => p.ProdutoId)
+                : query.OrderByDescending(p => p.ProdutoId),
+
+            ProdutoSortColumn.Nome => sortAscending
+                ? query.OrderBy(p => p.Nome)
+                : query.OrderByDescending(p => p.Nome),
+
+            ProdutoSortColumn.PrecoBase => sortAscending
+                ? query.OrderBy(p => p.PrecoBase)
+                : query.OrderByDescending(p => p.PrecoBase),
+
+            ProdutoSortColumn.PercentagemComissao => sortAscending
+                ? query.OrderBy(p => p.PercentagemComissao)
+                : query.OrderByDescending(p => p.PercentagemComissao),
+
+            ProdutoSortColumn.PrecoFinal => sortAscending
+                ? query.OrderBy(p => p.PrecoFinal)
+                : query.OrderByDescending(p => p.PrecoFinal),
+
+            ProdutoSortColumn.Stock => sortAscending
+                ? query.OrderBy(p => p.Stock)
+                : query.OrderByDescending(p => p.Stock),
+
+            _ => query.OrderBy(p => p.Nome)
+        };
+
+        totalProdutos = await query.CountAsync();
+
+        totalPages = (int)Math.Ceiling(totalProdutos / (double)pageSize);
+        if (totalPages == 0)
+            totalPages = 1;
+        if (currentPage > totalPages)
+            currentPage = totalPages;
+
+        var skip = (currentPage - 1) * pageSize;
+
+        produtos = await query
+            .Skip(skip)
+            .Take(pageSize)
+            .ToListAsync();
+
+        isLoading = false;
+    }
+
+    private async Task ToggleEstadoAsync(int produtoId)
+    {
+        var produto = await Db.Produtos.FindAsync(produtoId);
+        if (produto is null)
+            return;
+
+        produto.Estado = produto.Estado == EstadoProduto.Ativo
+            ? EstadoProduto.Inativo
+            : EstadoProduto.Ativo;
+
+        Db.Produtos.Update(produto);
+        await Db.SaveChangesAsync();
+
+        await CarregarProdutosAsync();
+    }
+
+    private async Task RemoverProdutoAsync(int produtoId)
+    {
+        deleteError = null; // clear previous message
+
+        // 1) verify if there are sales for this product
+        var hasSales = await Db.LinhasVenda
+            .AnyAsync(l => l.ProdutoId == produtoId);
+
+        if (hasSales)
+        {
+            deleteError = "Não é possível apagar este produto porque existem vendas associadas.";
+            return;
+        }
+
+        // 2) no sales: safe to physically delete
+        var produto = await Db.Produtos.FindAsync(produtoId);
+        if (produto is null)
+            return;
+
+        Db.Produtos.Remove(produto);
+        await Db.SaveChangesAsync();
+
+        // 3) reload list
+        await CarregarProdutosAsync();
+    }
+
+    private void IrParaNovoProduto()
+    {
+        Nav.NavigateTo("/produtos/novo");
+    }
+
+    private async Task OnEstadoFilterChanged(ChangeEventArgs e)
+    {
+        var value = e.Value?.ToString();
+
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            selectedEstado = null;
+        }
+        else if (Enum.TryParse<EstadoProduto>(value, out var estadoParsed))
+        {
+            selectedEstado = estadoParsed;
+        }
+        else
+        {
+            selectedEstado = null;
+        }
+
+        currentPage = 1;
+        await CarregarProdutosAsync();
+    }
+
+    private async Task OnModoFilterChanged(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out var modoId) && modoId != 0)
+        {
+            selectedModoId = modoId;
+        }
+        else
+        {
+            selectedModoId = null;
+        }
+
+        currentPage = 1;
+        await CarregarProdutosAsync();
+    }
+
+    private async Task OnCategoriaFilterChanged(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out var catId) && catId != 0)
+        {
+            selectedCategoriaId = catId;
+        }
+        else
+        {
+            selectedCategoriaId = null;
+        }
+
+        currentPage = 1;
+        await CarregarProdutosAsync();
+    }
+
+    private async Task OnPageSizeChanged(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out var newSize) && newSize > 0)
+        {
+            pageSize = newSize;
+            currentPage = 1;           // volta sempre à primeira página
+            await CarregarProdutosAsync();
+        }
+    }
+
+    private async Task PaginaAnterior()
+    {
+        if (currentPage > 1)
+        {
+            currentPage--;
+            await CarregarProdutosAsync();
+        }
+    }
+
+    private async Task ProximaPagina()
+    {
+        if (currentPage < totalPages)
+        {
+            currentPage++;
+            await CarregarProdutosAsync();
+        }
+    }
+}

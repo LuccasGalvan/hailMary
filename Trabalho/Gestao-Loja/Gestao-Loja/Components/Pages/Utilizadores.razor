@@ -1,0 +1,174 @@
+﻿@page "/utilizadores"
+@attribute [Authorize(Policy = "EmpresaUser")]
+
+@using Gestao_Loja.Data
+@using Gestao_Loja.Data.Services
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
+@inject UserManager<ApplicationUser> UserManager
+@inject AuthenticationStateProvider AuthStateProvider
+@inject UserManagementService UserManagementService
+
+<h3>Gestão de Utilizadores</h3>
+
+@if (isLoading)
+{
+    <p>A carregar...</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Utilizador</th>
+                <th>Email</th>
+                <th>Roles</th>
+                <th>Tipo Conta</th>
+                <th>Estado Conta</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var u in users)
+            {
+                var hasRoles = rolesByUser.TryGetValue(u.Id, out var rolesList) ? rolesList : new List<string>();
+                var isAdminRole = hasRoles.Contains("Administrador");
+                var isFuncionarioRole = hasRoles.Contains("Funcionario");
+                var isClienteOuFornecedorTipo = u.TipoConta is TipoConta.Cliente or TipoConta.Fornecedor;
+
+                // Mostrar botão de EstadoConta se:
+                //  - for Cliente/Fornecedor e o current user for Admin ou Func, OU
+                //  - for Funcionário e o current user for Admin
+                var showEstadoContaButton =
+                (isClienteOuFornecedorTipo && (isCurrentUserAdmin || isCurrentUserFuncionario))
+                || (isFuncionarioRole && isCurrentUserAdmin);
+
+                <tr>
+                    <td>@u.UserName</td>
+                    <td>@u.Email</td>
+                    <td>
+                        @if (hasRoles.Any())
+                        {
+                            @string.Join(", ", hasRoles)
+                        }
+                        else
+                        {
+                            <span class="text-muted">Sem role</span>
+                        }
+                    </td>
+                    <td>@(u.TipoConta?.ToString() ?? "-")</td>
+                    <td>@u.EstadoConta</td>
+                    <td>
+                        @* ----------------- Administrador: sem ações ----------------- *@
+                        @if (isAdminRole)
+                        {
+                            <span class="text-muted">Administrador (sem ações)</span>
+                        }
+                        else
+                        {
+                            @* --------- Ações que só o Admin pode ver/executar --------- *@
+                            @if (isCurrentUserAdmin)
+                            {
+                                @* Gerir Funcionário (só Admin) *@
+                                <button class="btn btn-sm btn-outline-warning me-1"
+                                        @onclick="() => OnToggleFuncionarioAsync(u.Id)">
+                                    @(isFuncionarioRole ? "Retirar Funcionário" : "Tornar Funcionário")
+                                </button>
+                            }
+
+                            @* --------- Gestão de Cliente/Fornecedor (Admin ou Func)
+                               Só faz sentido se o utilizador NÃO for Funcionário (role).
+                            *@
+                            @if (!isFuncionarioRole && (isCurrentUserAdmin || isCurrentUserFuncionario))
+                            {
+                                <button class="btn btn-sm btn-outline-primary me-1"
+                                        @onclick="() => OnDefinirTipoContaAsync(u.Id, TipoConta.Cliente)">
+                                    @(u.TipoConta == TipoConta.Cliente ? "Remover Cliente" : "Tornar Cliente")
+                                </button>
+
+                                <button class="btn btn-sm btn-outline-secondary me-1"
+                                        @onclick="() => OnDefinirTipoContaAsync(u.Id, TipoConta.Fornecedor)">
+                                    @(u.TipoConta == TipoConta.Fornecedor ? "Remover Fornecedor" : "Tornar Fornecedor")
+                                </button>
+                            }
+
+                            @* --------- Estado Conta (Cliente/Fornecedor ou Funcionário, conforme regras) --------- *@
+                            @if (showEstadoContaButton)
+                            {
+                                <button class="btn btn-sm btn-outline-success"
+                                        @onclick="() => OnToggleEstadoContaAsync(u.Id)">
+                                    @(u.EstadoConta == EstadoConta.Ativo ? "Tornar Pendente" : "Tornar Ativo")
+                                </button>
+                            }
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private bool isLoading = true;
+    private bool isCurrentUserAdmin;
+    private bool isCurrentUserFuncionario;
+    private List<ApplicationUser> users = new();
+    private Dictionary<string, List<string>> rolesByUser = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var currentUser = authState.User;
+
+        isCurrentUserAdmin = currentUser.IsInRole("Administrador");
+        isCurrentUserFuncionario = currentUser.IsInRole("Funcionario");
+
+        await LoadUsersAsync();
+        isLoading = false;
+    }
+
+    private async Task LoadUsersAsync()
+    {
+        users = await UserManager.Users
+            .OrderBy(u => u.UserName)
+            .ToListAsync();
+
+        rolesByUser = new Dictionary<string, List<string>>();
+
+        foreach (var u in users)
+        {
+            var roles = await UserManager.GetRolesAsync(u);
+            rolesByUser[u.Id] = roles.ToList();
+        }
+    }
+
+    private async Task OnToggleFuncionarioAsync(string userId)
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var currentUser = authState.User;
+
+        await UserManagementService.ToggleFuncionarioRoleAsync(userId, currentUser);
+        await LoadUsersAsync();
+    }
+
+    private async Task OnDefinirTipoContaAsync(string userId, TipoConta tipo)
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var currentUser = authState.User;
+
+        var user = await UserManager.FindByIdAsync(userId);
+        TipoConta? novoTipo = user?.TipoConta == tipo ? null : tipo;
+
+        await UserManagementService.DefinirTipoContaAsync(userId, novoTipo, currentUser);
+        await LoadUsersAsync();
+    }
+
+    private async Task OnToggleEstadoContaAsync(string userId)
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var currentUser = authState.User;
+
+        await UserManagementService.ToggleEstadoContaAsync(userId, currentUser);
+        await LoadUsersAsync();
+    }
+}

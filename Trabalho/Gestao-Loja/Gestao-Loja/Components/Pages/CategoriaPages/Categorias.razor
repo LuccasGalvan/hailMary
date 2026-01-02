@@ -1,0 +1,159 @@
+﻿@page "/categorias"
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Policy = "EmpresaUser")]
+@using Gestao_Loja.Data
+@using Gestao_Loja.Entities
+@using Microsoft.EntityFrameworkCore
+
+@inject ApplicationDbContext Db
+
+<h3>Gestão de Categorias</h3>
+
+@if (isLoading)
+{
+    <p>A carregar...</p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-8">
+            <h4>Lista de Categorias</h4>
+
+            <div class="mb-3">
+                <label class="form-label">Filtrar por Tipo</label>
+                <select class="form-select" @onchange="OnTipoFilterChanged">
+                    <option value="0">-- Todos --</option>
+                    @foreach (var tipo in tipos)
+                    {
+                        <option value="@tipo.TipoCategoriaId"
+                                selected="@(tipo.TipoCategoriaId == selectedTipoId)">
+                            @tipo.Nome
+                        </option>
+                    }
+                </select>
+            </div>
+
+            @if (categorias == null || !categorias.Any())
+            {
+                <p>Sem categorias registadas.</p>
+            }
+            else
+            {
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Nome</th>
+                            <th>Tipo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var cat in categorias)
+                        {
+                            <tr>
+                                <td>@cat.CategoriaId</td>
+                                <td>@cat.Nome</td>
+                                <td>@cat.TipoCategoria?.Nome</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+
+        <div class="col-md-4">
+            <h4>Nova Categoria</h4>
+
+            <EditForm Model="novaCategoria" OnValidSubmit="CriarCategoriaAsync">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <div class="mb-3">
+                    <label class="form-label">Nome</label>
+                    <InputText class="form-control" @bind-Value="novaCategoria.Nome" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Tipo de Categoria</label>
+                    <InputSelect class="form-select" @bind-Value="novaCategoria.TipoCategoriaId">
+                        <option value="0">-- Selecione --</option>
+                        @foreach (var tipo in tipos)
+                        {
+                            <option value="@tipo.TipoCategoriaId">@tipo.Nome</option>
+                        }
+                    </InputSelect>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Guardar</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+@code {
+    private List<TipoCategoria> tipos = new();
+    private List<Categoria> categorias = new();
+    private Categoria novaCategoria = new();
+    private bool isLoading = true;
+    private int selectedTipoId = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // carregar tipos primeiro
+        tipos = await Db.TipoCategorias
+            .OrderBy(t => t.Nome)
+            .ToListAsync();
+
+        await CarregarCategoriasAsync();
+    }
+
+    private async Task CarregarCategoriasAsync()
+    {
+        isLoading = true;
+
+        var query = Db.Categorias
+            .Include(c => c.TipoCategoria)
+            .AsQueryable();
+
+        if (selectedTipoId != 0)
+        {
+            query = query.Where(c => c.TipoCategoriaId == selectedTipoId);
+        }
+
+        categorias = await query
+            .OrderBy(c => c.TipoCategoria.Nome)
+            .ThenBy(c => c.Nome)
+            .ToListAsync();
+
+        isLoading = false;
+    }
+
+    private async Task CriarCategoriaAsync()
+    {
+        if (string.IsNullOrWhiteSpace(novaCategoria.Nome))
+            return;
+
+        if (novaCategoria.TipoCategoriaId == 0)
+            return;
+
+        Db.Categorias.Add(novaCategoria);
+        await Db.SaveChangesAsync();
+
+        novaCategoria = new Categoria();
+        await CarregarCategoriasAsync();
+    }
+
+    private async Task OnTipoFilterChanged(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out var tipoId))
+        {
+            selectedTipoId = tipoId;
+        }
+        else
+        {
+            selectedTipoId = 0;
+        }
+
+        await CarregarCategoriasAsync();
+    }
+}

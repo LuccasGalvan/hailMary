@@ -1,0 +1,110 @@
+﻿@page "/vendas/{id:int}"
+@using Gestao_Loja.Entities
+@using Gestao_Loja.Constants
+@inject ApplicationDbContext Db
+@inject NavigationManager Nav
+@using Gestao_Loja.Data.Services
+@inject VendaService VendaService
+
+<h3>Detalhes da Venda @Id</h3>
+
+@if (isLoading)
+{
+    <p>A carregar...</p>
+}
+else if (venda is null)
+{
+    <p class="text-danger">Venda não encontrada.</p>
+}
+else
+{
+        <p><strong>Cliente:</strong> @venda.Cliente?.UserName</p>
+        <p><strong>Data:</strong> @venda.DataCriacao</p>
+        <p><strong>Estado:</strong> @venda.Estado</p>
+        <p><strong>Total:</strong> @venda.ValorTotal.ToString("0.00") €</p>
+
+        @if (venda.DataPagamento is not null)
+        {
+            <p>
+                <strong>Pagamento:</strong>
+                @venda.MetodoPagamento
+                em @venda.DataPagamento.Value.ToString("dd/MM/yyyy HH:mm")
+            </p>
+        }
+        else
+        {
+            <p><strong>Pagamento:</strong> Ainda não registado.</p>
+
+            <button class="btn btn-success me-2"
+                    @onclick="SimularPagamentoAsync">
+                Simular pagamento
+            </button>
+        }
+
+    <h5>Linhas</h5>
+    <table class="table table-sm">
+        <thead>
+        <tr>
+            <th>Produto</th>
+            <th>Qtd</th>
+            <th>Preço Unit.</th>
+            <th>Total Linha</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var l in venda.Linhas)
+        {
+            <tr>
+                <td>@l.Produto.Nome</td>
+                <td>@l.Quantidade</td>
+                <td>@l.PrecoUnitario.ToString("0.00")</td>
+                <td>@l.TotalLinha.ToString("0.00")</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+
+    <button class="btn btn-secondary" @onclick='() => Nav.NavigateTo("/vendas")'>Voltar</button>
+}
+
+@code {
+    [Parameter] public int Id { get; set; }
+
+    private bool isLoading = true;
+    private Venda? venda;
+
+    protected override async Task OnInitializedAsync()
+    {
+        venda = await Db.Vendas
+            .Include(v => v.Cliente)
+            .Include(v => v.Linhas)
+                .ThenInclude(l => l.Produto)
+            .FirstOrDefaultAsync(v => v.VendaId == Id);
+
+        isLoading = false;
+    }
+
+    private async Task SimularPagamentoAsync()
+    {
+        if (venda is null)
+            return;
+
+        await VendaService.SimularPagamentoAsync(venda.VendaId);
+
+        // voltar a carregar para mostrar DataPagamento / MetodoPagamento atualizados
+        await CarregarVendaAsync();
+
+        StateHasChanged();
+    }
+
+    private async Task CarregarVendaAsync()
+    {
+        venda = await Db.Vendas
+            .Include(v => v.Cliente)
+            .Include(v => v.Linhas)
+                .ThenInclude(l => l.Produto)
+            .FirstOrDefaultAsync(v => v.VendaId == Id);
+
+        isLoading = false;
+    }
+}

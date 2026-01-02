@@ -7,5 +7,5 @@ public class ProdutoFavorito
     public bool Efavorito { get; set; }
     public int ProdutoId { get; set; }
     public ProdutoDTO produto { get; set; }
-    public string UserId { get; set; }
+    public string ClienteId { get; set; }
 }
