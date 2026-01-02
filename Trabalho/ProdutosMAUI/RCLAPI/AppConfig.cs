@@ -8,7 +8,7 @@ namespace RCLAPI;
 
 public class AppConfig
 {
-    public static readonly string BaseUrl = "https://tzr1pcwp-7058.uks1.devtunnels.ms";
+    public static readonly string BaseUrl = "https://tzr1pcwp-7058.uks1.devtunnels.ms/";
 
     public static readonly string tituloHomePage = "MyCOLL";
 

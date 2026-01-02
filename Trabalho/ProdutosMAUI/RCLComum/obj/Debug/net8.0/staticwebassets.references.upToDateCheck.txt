@@ -1,2 +1,4 @@
 C:\Users\Luccas\Desktop\testePWEB\Trabalho\ProdutosMAUI\RCLAPI\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\Luccas\Desktop\testePWEB\Trabalho\ProdutosMAUI\RCLProdutos\obj\Debug\net8.0\staticwebassets.build.json
+C:\Users\Luccas\Desktop\testePWEB\Trabalho\ProdutosMAUI\RclAPI\obj\Debug\net8.0\staticwebassets.build.json
+C:\Users\Luccas\Desktop\testePWEB\Trabalho\ProdutosMAUI\RCLProdutos\obj\Debug\net8.0\staticwebassets.build.json
