@@ -77,13 +77,9 @@ namespace RESTfulAPIPWEB.Data
             // --- Orders: Encomenda -> Items (explicit relationship; convention would also work)
             builder.Entity<EncomendaItem>()
                 .HasOne(i => i.Encomenda)
-                .WithMany(e => e.Itens)
-                .HasForeignKey(i => i.EncomendaId)
+                .WithMany(e => e.Linhas)
+                .HasForeignKey(i => i.VendaId)
                 .OnDelete(DeleteBehavior.Cascade);
-
-            builder.Entity<Encomenda>()
-                .HasIndex(e => e.VendaId)
-                .IsUnique();
 
             // --- Order item -> Produto (keep items even if product gets deleted later)
             builder.Entity<EncomendaItem>()

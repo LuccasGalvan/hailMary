@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using RESTfulAPIPWEB.Data;
 using RESTfulAPIPWEB.Entity.Enums;
 
@@ -8,9 +7,6 @@ namespace RESTfulAPIPWEB.Entity
     public class Encomenda
     {
         [Key]
-        public Guid Id { get; set; } = Guid.NewGuid();
-
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int VendaId { get; set; }
 
         // Identity user id (Cliente)
@@ -39,6 +35,6 @@ namespace RESTfulAPIPWEB.Entity
         public bool PagamentoExecutado { get; set; }
 
         // Navigation
-        public ICollection<EncomendaItem> Itens { get; set; } = new List<EncomendaItem>();
+        public ICollection<EncomendaItem> Linhas { get; set; } = new List<EncomendaItem>();
     }
 }
