@@ -4,11 +4,13 @@ namespace GestaoLoja.Entity
 {
     public class ModoDisponibilizacao
     {
-        public int Id { get; set; }
+        public int ModoDisponibilizacaoId { get; set; }
 
-        public bool IsForSale { get; set; }
+        public string Nome { get; set; } = string.Empty;
 
-        public bool Ativo { get; set; }
+        public bool IsForSale { get; set; } = false;
+
+        public bool Ativo { get; set; } = true;
 
         [JsonIgnore]
         public ICollection<Produto>? Produtos { get; set; }

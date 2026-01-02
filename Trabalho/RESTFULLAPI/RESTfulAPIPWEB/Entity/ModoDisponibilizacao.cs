@@ -6,7 +6,7 @@ namespace RESTfulAPIPWEB.Entity
     {
         public int ModoDisponibilizacaoId { get; set; }
         public string Nome { get; set; } = string.Empty;
-        public bool IsForSale { get; set; }
+        public bool IsForSale { get; set; } = false;
         public bool Ativo { get; set; } = true;
 
         [JsonIgnore]
