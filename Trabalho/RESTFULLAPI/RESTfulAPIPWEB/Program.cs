@@ -114,6 +114,8 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
+await InicializacaoUtilizadores.CriarDadosIniciaisAsync(app.Services);
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
