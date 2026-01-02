@@ -1,51 +1,50 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Luccas\\Desktop\\PWEBProj\\Trabalho\\Backend\\",
+  "WorkspaceRootPath": "C:\\Users\\Luccas\\Desktop\\testePWEB\\Trabalho\\Backend\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{878F1EBF-72EB-8000-4447-3A6BB58F0E14}|..\\RESTFULLAPI\\RESTfulAPIPWEB\\RESTfulAPIPWEB.csproj|c:\\users\\luccas\\desktop\\pwebproj\\trabalho\\restfullapi\\restfulapipweb\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Luccas\\Desktop\\PWEBProj\\Trabalho\\RESTFULLAPI\\RESTfulAPIPWEB\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{08424838-7FF2-4AA7-8FE8-464C2C4FFA87}|GestaoLoja\\GestaoLoja.csproj|c:\\users\\luccas\\desktop\\pwebproj\\trabalho\\backend\\gestaoloja\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{08424838-7FF2-4AA7-8FE8-464C2C4FFA87}|GestaoLoja\\GestaoLoja.csproj|c:\\users\\luccas\\desktop\\testepweb\\trabalho\\backend\\gestaoloja\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{08424838-7FF2-4AA7-8FE8-464C2C4FFA87}|GestaoLoja\\GestaoLoja.csproj|solutionrelative:gestaoloja\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{08424838-7FF2-4AA7-8FE8-464C2C4FFA87}|GestaoLoja\\GestaoLoja.csproj|c:\\users\\luccas\\desktop\\pwebproj\\trabalho\\backend\\gestaoloja\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "AbsoluteMoniker": "D:0:0:{08424838-7FF2-4AA7-8FE8-464C2C4FFA87}|GestaoLoja\\GestaoLoja.csproj|c:\\users\\luccas\\desktop\\testepweb\\trabalho\\backend\\gestaoloja\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{08424838-7FF2-4AA7-8FE8-464C2C4FFA87}|GestaoLoja\\GestaoLoja.csproj|solutionrelative:gestaoloja\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{878F1EBF-72EB-8000-4447-3A6BB58F0E14}|..\\RESTFULLAPI\\RESTfulAPIPWEB\\RESTfulAPIPWEB.csproj|c:\\users\\luccas\\desktop\\pwebproj\\trabalho\\restfullapi\\restfulapipweb\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{878F1EBF-72EB-8000-4447-3A6BB58F0E14}|..\\RESTFULLAPI\\RESTfulAPIPWEB\\RESTfulAPIPWEB.csproj|c:\\users\\luccas\\desktop\\pwebproj\\trabalho\\restfullapi\\restfulapipweb\\controllers\\utilizadorescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{08424838-7FF2-4AA7-8FE8-464C2C4FFA87}|GestaoLoja\\GestaoLoja.csproj|c:\\users\\luccas\\desktop\\pwebproj\\trabalho\\backend\\gestaoloja\\data\\inicializacao.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{08424838-7FF2-4AA7-8FE8-464C2C4FFA87}|GestaoLoja\\GestaoLoja.csproj|c:\\users\\luccas\\desktop\\testepweb\\trabalho\\backend\\gestaoloja\\data\\inicializacao.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{08424838-7FF2-4AA7-8FE8-464C2C4FFA87}|GestaoLoja\\GestaoLoja.csproj|solutionrelative:gestaoloja\\data\\inicializacao.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Luccas\\Desktop\\PWEBProj\\Trabalho\\Backend\\GestaoLoja\\Migrations\\20251230142031_DBTest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:GestaoLoja\\Migrations\\20251230142031_DBTest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Luccas\\Desktop\\PWEBProj\\Trabalho\\Backend\\GestaoLoja\\Migrations\\20251230142031_DBTest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{08424838-7FF2-4AA7-8FE8-464C2C4FFA87}|GestaoLoja\\GestaoLoja.csproj|c:\\users\\luccas\\desktop\\pwebproj\\trabalho\\backend\\gestaoloja\\components\\pages\\encomendapages\\index.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "AbsoluteMoniker": "D:0:0:{08424838-7FF2-4AA7-8FE8-464C2C4FFA87}|GestaoLoja\\GestaoLoja.csproj|c:\\users\\luccas\\desktop\\testepweb\\trabalho\\backend\\gestaoloja\\components\\pages\\encomendapages\\index.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{08424838-7FF2-4AA7-8FE8-464C2C4FFA87}|GestaoLoja\\GestaoLoja.csproj|solutionrelative:gestaoloja\\components\\pages\\encomendapages\\index.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{08424838-7FF2-4AA7-8FE8-464C2C4FFA87}|GestaoLoja\\GestaoLoja.csproj|c:\\users\\luccas\\desktop\\pwebproj\\trabalho\\backend\\gestaoloja\\components\\pages\\produtopages\\index.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "AbsoluteMoniker": "D:0:0:{08424838-7FF2-4AA7-8FE8-464C2C4FFA87}|GestaoLoja\\GestaoLoja.csproj|c:\\users\\luccas\\desktop\\testepweb\\trabalho\\backend\\gestaoloja\\components\\pages\\produtopages\\index.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{08424838-7FF2-4AA7-8FE8-464C2C4FFA87}|GestaoLoja\\GestaoLoja.csproj|solutionrelative:gestaoloja\\components\\pages\\produtopages\\index.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{08424838-7FF2-4AA7-8FE8-464C2C4FFA87}|GestaoLoja\\GestaoLoja.csproj|c:\\users\\luccas\\desktop\\pwebproj\\trabalho\\backend\\gestaoloja\\components\\pages\\gereuser.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "AbsoluteMoniker": "D:0:0:{08424838-7FF2-4AA7-8FE8-464C2C4FFA87}|GestaoLoja\\GestaoLoja.csproj|c:\\users\\luccas\\desktop\\testepweb\\trabalho\\backend\\gestaoloja\\components\\pages\\gereuser.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{08424838-7FF2-4AA7-8FE8-464C2C4FFA87}|GestaoLoja\\GestaoLoja.csproj|solutionrelative:gestaoloja\\components\\pages\\gereuser.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{08424838-7FF2-4AA7-8FE8-464C2C4FFA87}|GestaoLoja\\GestaoLoja.csproj|c:\\users\\luccas\\desktop\\pwebproj\\trabalho\\backend\\gestaoloja\\components\\pages\\encomendapages\\edit.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "AbsoluteMoniker": "D:0:0:{08424838-7FF2-4AA7-8FE8-464C2C4FFA87}|GestaoLoja\\GestaoLoja.csproj|c:\\users\\luccas\\desktop\\testepweb\\trabalho\\backend\\gestaoloja\\components\\pages\\encomendapages\\edit.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{08424838-7FF2-4AA7-8FE8-464C2C4FFA87}|GestaoLoja\\GestaoLoja.csproj|solutionrelative:gestaoloja\\components\\pages\\encomendapages\\edit.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{08424838-7FF2-4AA7-8FE8-464C2C4FFA87}|GestaoLoja\\GestaoLoja.csproj|c:\\users\\luccas\\desktop\\pwebproj\\trabalho\\backend\\gestaoloja\\migrations\\20251230142717_dbtest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{08424838-7FF2-4AA7-8FE8-464C2C4FFA87}|GestaoLoja\\GestaoLoja.csproj|c:\\users\\luccas\\desktop\\testepweb\\trabalho\\backend\\gestaoloja\\migrations\\20251230142717_dbtest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{08424838-7FF2-4AA7-8FE8-464C2C4FFA87}|GestaoLoja\\GestaoLoja.csproj|solutionrelative:gestaoloja\\migrations\\20251230142717_dbtest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Luccas\\Desktop\\PWEBProj\\Trabalho\\RESTFULLAPI\\RESTfulAPIPWEB\\Controllers\\UtilizadoresController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Luccas\\Desktop\\PWEBProj\\Trabalho\\RESTFULLAPI\\RESTfulAPIPWEB\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -70,9 +69,9 @@
               "DocumentIndex": 0,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\Luccas\\Desktop\\PWEBProj\\Trabalho\\RESTFULLAPI\\RESTfulAPIPWEB\\Program.cs",
-              "RelativeDocumentMoniker": "..\\RESTFULLAPI\\RESTfulAPIPWEB\\Program.cs",
+              "RelativeDocumentMoniker": "..\\..\\..\\PWEBProj\\Trabalho\\RESTFULLAPI\\RESTfulAPIPWEB\\Program.cs",
               "ToolTip": "C:\\Users\\Luccas\\Desktop\\PWEBProj\\Trabalho\\RESTFULLAPI\\RESTfulAPIPWEB\\Program.cs",
-              "RelativeToolTip": "..\\RESTFULLAPI\\RESTfulAPIPWEB\\Program.cs",
+              "RelativeToolTip": "..\\..\\..\\PWEBProj\\Trabalho\\RESTFULLAPI\\RESTfulAPIPWEB\\Program.cs",
               "ViewState": "AgIAADQAAAAAAAAAAADwvz4AAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-12-31T19:17:25.67Z",
@@ -82,48 +81,45 @@
               "$type": "Document",
               "DocumentIndex": 1,
               "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\Luccas\\Desktop\\PWEBProj\\Trabalho\\Backend\\GestaoLoja\\Program.cs",
+              "DocumentMoniker": "C:\\Users\\Luccas\\Desktop\\testePWEB\\Trabalho\\Backend\\GestaoLoja\\Program.cs",
               "RelativeDocumentMoniker": "GestaoLoja\\Program.cs",
-              "ToolTip": "C:\\Users\\Luccas\\Desktop\\PWEBProj\\Trabalho\\Backend\\GestaoLoja\\Program.cs",
+              "ToolTip": "C:\\Users\\Luccas\\Desktop\\testePWEB\\Trabalho\\Backend\\GestaoLoja\\Program.cs",
               "RelativeToolTip": "GestaoLoja\\Program.cs",
               "ViewState": "AgIAAGYAAAAAAAAAAAAAAGYAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-31T19:17:14.54Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-31T19:17:14.54Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 10,
               "Title": "UtilizadoresController.cs",
               "DocumentMoniker": "C:\\Users\\Luccas\\Desktop\\PWEBProj\\Trabalho\\RESTFULLAPI\\RESTfulAPIPWEB\\Controllers\\UtilizadoresController.cs",
-              "RelativeDocumentMoniker": "..\\RESTFULLAPI\\RESTfulAPIPWEB\\Controllers\\UtilizadoresController.cs",
+              "RelativeDocumentMoniker": "..\\..\\..\\PWEBProj\\Trabalho\\RESTFULLAPI\\RESTfulAPIPWEB\\Controllers\\UtilizadoresController.cs",
               "ToolTip": "C:\\Users\\Luccas\\Desktop\\PWEBProj\\Trabalho\\RESTFULLAPI\\RESTfulAPIPWEB\\Controllers\\UtilizadoresController.cs",
-              "RelativeToolTip": "..\\RESTFULLAPI\\RESTfulAPIPWEB\\Controllers\\UtilizadoresController.cs",
+              "RelativeToolTip": "..\\..\\..\\PWEBProj\\Trabalho\\RESTFULLAPI\\RESTfulAPIPWEB\\Controllers\\UtilizadoresController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAALUAAAA3AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-31T01:46:38.995Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-31T01:46:38.995Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 3,
               "Title": "Inicializacao.cs",
-              "DocumentMoniker": "C:\\Users\\Luccas\\Desktop\\PWEBProj\\Trabalho\\Backend\\GestaoLoja\\Data\\Inicializacao.cs",
+              "DocumentMoniker": "C:\\Users\\Luccas\\Desktop\\testePWEB\\Trabalho\\Backend\\GestaoLoja\\Data\\Inicializacao.cs",
               "RelativeDocumentMoniker": "GestaoLoja\\Data\\Inicializacao.cs",
-              "ToolTip": "C:\\Users\\Luccas\\Desktop\\PWEBProj\\Trabalho\\Backend\\GestaoLoja\\Data\\Inicializacao.cs",
+              "ToolTip": "C:\\Users\\Luccas\\Desktop\\testePWEB\\Trabalho\\Backend\\GestaoLoja\\Data\\Inicializacao.cs",
               "RelativeToolTip": "GestaoLoja\\Data\\Inicializacao.cs",
               "ViewState": "AgIAADQAAAAAAAAAAAAQwAwAAABFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-30T14:21:20.673Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-30T14:21:20.673Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 9,
               "Title": "20251230142717_DBTest.cs",
-              "DocumentMoniker": "C:\\Users\\Luccas\\Desktop\\PWEBProj\\Trabalho\\Backend\\GestaoLoja\\Migrations\\20251230142717_DBTest.cs",
+              "DocumentMoniker": "C:\\Users\\Luccas\\Desktop\\testePWEB\\Trabalho\\Backend\\GestaoLoja\\Migrations\\20251230142717_DBTest.cs",
               "RelativeDocumentMoniker": "GestaoLoja\\Migrations\\20251230142717_DBTest.cs",
-              "ToolTip": "C:\\Users\\Luccas\\Desktop\\PWEBProj\\Trabalho\\Backend\\GestaoLoja\\Migrations\\20251230142717_DBTest.cs",
+              "ToolTip": "C:\\Users\\Luccas\\Desktop\\testePWEB\\Trabalho\\Backend\\GestaoLoja\\Migrations\\20251230142717_DBTest.cs",
               "RelativeToolTip": "GestaoLoja\\Migrations\\20251230142717_DBTest.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -131,36 +127,35 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 11,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\Luccas\\Desktop\\PWEBProj\\Trabalho\\RESTFULLAPI\\RESTfulAPIPWEB\\appsettings.json",
-              "RelativeDocumentMoniker": "..\\RESTFULLAPI\\RESTfulAPIPWEB\\appsettings.json",
+              "RelativeDocumentMoniker": "..\\..\\..\\PWEBProj\\Trabalho\\RESTFULLAPI\\RESTfulAPIPWEB\\appsettings.json",
               "ToolTip": "C:\\Users\\Luccas\\Desktop\\PWEBProj\\Trabalho\\RESTFULLAPI\\RESTfulAPIPWEB\\appsettings.json",
-              "RelativeToolTip": "..\\RESTFULLAPI\\RESTfulAPIPWEB\\appsettings.json",
+              "RelativeToolTip": "..\\..\\..\\PWEBProj\\Trabalho\\RESTFULLAPI\\RESTfulAPIPWEB\\appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-12-30T14:26:49.152Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-30T14:26:49.152Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 4,
               "Title": "20251230142031_DBTest.cs",
               "DocumentMoniker": "C:\\Users\\Luccas\\Desktop\\PWEBProj\\Trabalho\\Backend\\GestaoLoja\\Migrations\\20251230142031_DBTest.cs",
-              "RelativeDocumentMoniker": "GestaoLoja\\Migrations\\20251230142031_DBTest.cs",
+              "RelativeDocumentMoniker": "..\\..\\..\\PWEBProj\\Trabalho\\Backend\\GestaoLoja\\Migrations\\20251230142031_DBTest.cs",
               "ToolTip": "C:\\Users\\Luccas\\Desktop\\PWEBProj\\Trabalho\\Backend\\GestaoLoja\\Migrations\\20251230142031_DBTest.cs",
-              "RelativeToolTip": "GestaoLoja\\Migrations\\20251230142031_DBTest.cs",
+              "RelativeToolTip": "..\\..\\..\\PWEBProj\\Trabalho\\Backend\\GestaoLoja\\Migrations\\20251230142031_DBTest.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-12-30T14:20:31.377Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 5,
               "Title": "Index.razor",
-              "DocumentMoniker": "C:\\Users\\Luccas\\Desktop\\PWEBProj\\Trabalho\\Backend\\GestaoLoja\\Components\\Pages\\EncomendaPages\\Index.razor",
+              "DocumentMoniker": "C:\\Users\\Luccas\\Desktop\\testePWEB\\Trabalho\\Backend\\GestaoLoja\\Components\\Pages\\EncomendaPages\\Index.razor",
               "RelativeDocumentMoniker": "GestaoLoja\\Components\\Pages\\EncomendaPages\\Index.razor",
-              "ToolTip": "C:\\Users\\Luccas\\Desktop\\PWEBProj\\Trabalho\\Backend\\GestaoLoja\\Components\\Pages\\EncomendaPages\\Index.razor",
+              "ToolTip": "C:\\Users\\Luccas\\Desktop\\testePWEB\\Trabalho\\Backend\\GestaoLoja\\Components\\Pages\\EncomendaPages\\Index.razor",
               "RelativeToolTip": "GestaoLoja\\Components\\Pages\\EncomendaPages\\Index.razor",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
@@ -168,11 +163,11 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 6,
               "Title": "Index.razor",
-              "DocumentMoniker": "C:\\Users\\Luccas\\Desktop\\PWEBProj\\Trabalho\\Backend\\GestaoLoja\\Components\\Pages\\ProdutoPages\\Index.razor",
+              "DocumentMoniker": "C:\\Users\\Luccas\\Desktop\\testePWEB\\Trabalho\\Backend\\GestaoLoja\\Components\\Pages\\ProdutoPages\\Index.razor",
               "RelativeDocumentMoniker": "GestaoLoja\\Components\\Pages\\ProdutoPages\\Index.razor",
-              "ToolTip": "C:\\Users\\Luccas\\Desktop\\PWEBProj\\Trabalho\\Backend\\GestaoLoja\\Components\\Pages\\ProdutoPages\\Index.razor",
+              "ToolTip": "C:\\Users\\Luccas\\Desktop\\testePWEB\\Trabalho\\Backend\\GestaoLoja\\Components\\Pages\\ProdutoPages\\Index.razor",
               "RelativeToolTip": "GestaoLoja\\Components\\Pages\\ProdutoPages\\Index.razor",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
@@ -180,11 +175,11 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 7,
               "Title": "GereUser.razor",
-              "DocumentMoniker": "C:\\Users\\Luccas\\Desktop\\PWEBProj\\Trabalho\\Backend\\GestaoLoja\\Components\\Pages\\GereUser.razor",
+              "DocumentMoniker": "C:\\Users\\Luccas\\Desktop\\testePWEB\\Trabalho\\Backend\\GestaoLoja\\Components\\Pages\\GereUser.razor",
               "RelativeDocumentMoniker": "GestaoLoja\\Components\\Pages\\GereUser.razor",
-              "ToolTip": "C:\\Users\\Luccas\\Desktop\\PWEBProj\\Trabalho\\Backend\\GestaoLoja\\Components\\Pages\\GereUser.razor",
+              "ToolTip": "C:\\Users\\Luccas\\Desktop\\testePWEB\\Trabalho\\Backend\\GestaoLoja\\Components\\Pages\\GereUser.razor",
               "RelativeToolTip": "GestaoLoja\\Components\\Pages\\GereUser.razor",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
@@ -194,22 +189,21 @@
               "$type": "Document",
               "DocumentIndex": 2,
               "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\Luccas\\Desktop\\PWEBProj\\Trabalho\\Backend\\GestaoLoja\\appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Luccas\\Desktop\\testePWEB\\Trabalho\\Backend\\GestaoLoja\\appsettings.json",
               "RelativeDocumentMoniker": "GestaoLoja\\appsettings.json",
-              "ToolTip": "C:\\Users\\Luccas\\Desktop\\PWEBProj\\Trabalho\\Backend\\GestaoLoja\\appsettings.json",
+              "ToolTip": "C:\\Users\\Luccas\\Desktop\\testePWEB\\Trabalho\\Backend\\GestaoLoja\\appsettings.json",
               "RelativeToolTip": "GestaoLoja\\appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-12-29T05:01:01.366Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-29T05:01:01.366Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 8,
               "Title": "Edit.razor",
-              "DocumentMoniker": "C:\\Users\\Luccas\\Desktop\\PWEBProj\\Trabalho\\Backend\\GestaoLoja\\Components\\Pages\\EncomendaPages\\Edit.razor",
+              "DocumentMoniker": "C:\\Users\\Luccas\\Desktop\\testePWEB\\Trabalho\\Backend\\GestaoLoja\\Components\\Pages\\EncomendaPages\\Edit.razor",
               "RelativeDocumentMoniker": "GestaoLoja\\Components\\Pages\\EncomendaPages\\Edit.razor",
-              "ToolTip": "C:\\Users\\Luccas\\Desktop\\PWEBProj\\Trabalho\\Backend\\GestaoLoja\\Components\\Pages\\EncomendaPages\\Edit.razor",
+              "ToolTip": "C:\\Users\\Luccas\\Desktop\\testePWEB\\Trabalho\\Backend\\GestaoLoja\\Components\\Pages\\EncomendaPages\\Edit.razor",
               "RelativeToolTip": "GestaoLoja\\Components\\Pages\\EncomendaPages\\Edit.razor",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",

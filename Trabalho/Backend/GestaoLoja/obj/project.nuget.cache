@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "8FDYiHhyWQ0=",
+  "dgSpecHash": "0q/7O+dO0Rw=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Luccas\\Desktop\\PWEBProj\\Trabalho\\Backend\\GestaoLoja\\GestaoLoja.csproj",
+  "projectFilePath": "C:\\Users\\Luccas\\Desktop\\testePWEB\\Trabalho\\Backend\\GestaoLoja\\GestaoLoja.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Luccas\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\Luccas\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",

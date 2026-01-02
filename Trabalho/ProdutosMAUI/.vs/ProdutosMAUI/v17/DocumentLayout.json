@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\Luccas\\Desktop\\testePWEB\\Trabalho\\ProdutosMAUI\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{C9A88A3C-25AD-44EA-AEF3-71A305D86C15}|RclAPI\\RCLAPI.csproj|c:\\users\\luccas\\desktop\\testepweb\\trabalho\\produtosmaui\\rclapi\\services\\apiservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C9A88A3C-25AD-44EA-AEF3-71A305D86C15}|RclAPI\\RCLAPI.csproj|solutionrelative:rclapi\\services\\apiservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{C9A88A3C-25AD-44EA-AEF3-71A305D86C15}|RclAPI\\RCLAPI.csproj|c:\\users\\luccas\\desktop\\testepweb\\trabalho\\produtosmaui\\rclapi\\appconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C9A88A3C-25AD-44EA-AEF3-71A305D86C15}|RclAPI\\RCLAPI.csproj|solutionrelative:rclapi\\appconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -39,6 +43,19 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "ApiService.cs",
+              "DocumentMoniker": "C:\\Users\\Luccas\\Desktop\\testePWEB\\Trabalho\\ProdutosMAUI\\RCLAPI\\Services\\ApiService.cs",
+              "RelativeDocumentMoniker": "RCLAPI\\Services\\ApiService.cs",
+              "ToolTip": "C:\\Users\\Luccas\\Desktop\\testePWEB\\Trabalho\\ProdutosMAUI\\RCLAPI\\Services\\ApiService.cs",
+              "RelativeToolTip": "RCLAPI\\Services\\ApiService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAIMCAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-02T02:45:43.136Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "AppConfig.cs",
               "DocumentMoniker": "C:\\Users\\Luccas\\Desktop\\testePWEB\\Trabalho\\ProdutosMAUI\\RCLAPI\\AppConfig.cs",
               "RelativeDocumentMoniker": "RCLAPI\\AppConfig.cs",
@@ -51,7 +68,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "launchSettings.json",
               "DocumentMoniker": "C:\\Users\\Luccas\\Desktop\\testePWEB\\Trabalho\\ProdutosMAUI\\ProdutosMAUI\\Properties\\launchSettings.json",
               "RelativeDocumentMoniker": "ProdutosMAUI\\Properties\\launchSettings.json",
@@ -59,12 +76,11 @@
               "RelativeToolTip": "ProdutosMAUI\\Properties\\launchSettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-01-01T20:21:40.369Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-01T20:21:40.369Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\Luccas\\Desktop\\testePWEB\\Trabalho\\ProdutosMAUI\\ProdutosBlazor\\appsettings.json",
               "RelativeDocumentMoniker": "ProdutosBlazor\\appsettings.json",
@@ -72,12 +88,11 @@
               "RelativeToolTip": "ProdutosBlazor\\appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-01-01T20:20:53.852Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-01T20:20:53.852Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "launchSettings.json",
               "DocumentMoniker": "C:\\Users\\Luccas\\Desktop\\testePWEB\\Trabalho\\ProdutosMAUI\\ProdutosBlazor\\Properties\\launchSettings.json",
               "RelativeDocumentMoniker": "ProdutosBlazor\\Properties\\launchSettings.json",
@@ -85,8 +100,7 @@
               "RelativeToolTip": "ProdutosBlazor\\Properties\\launchSettings.json",
               "ViewState": "AgIAABIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-01-01T20:20:17.937Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-01T20:20:17.937Z"
             }
           ]
         }

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ProdutosMAUI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+613eff3ada71f281732a802098641e3cd404c0d3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8e1865edcc9e080f669b108d99ce7f6db3a87467")]
 [assembly: System.Reflection.AssemblyProductAttribute("ProdutosMAUI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ProdutosMAUI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

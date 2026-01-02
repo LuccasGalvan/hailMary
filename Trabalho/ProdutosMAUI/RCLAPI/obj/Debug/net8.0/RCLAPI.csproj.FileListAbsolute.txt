@@ -1,0 +1,7 @@
+C:\Users\Luccas\Desktop\testePWEB\Trabalho\ProdutosMAUI\RclAPI\obj\Debug\net8.0\RCLAPI.csproj.AssemblyReference.cache
+C:\Users\Luccas\Desktop\testePWEB\Trabalho\ProdutosMAUI\RclAPI\obj\Debug\net8.0\rpswa.dswa.cache.json
+C:\Users\Luccas\Desktop\testePWEB\Trabalho\ProdutosMAUI\RclAPI\obj\Debug\net8.0\RCLAPI.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Luccas\Desktop\testePWEB\Trabalho\ProdutosMAUI\RclAPI\obj\Debug\net8.0\RCLAPI.AssemblyInfoInputs.cache
+C:\Users\Luccas\Desktop\testePWEB\Trabalho\ProdutosMAUI\RclAPI\obj\Debug\net8.0\RCLAPI.AssemblyInfo.cs
+C:\Users\Luccas\Desktop\testePWEB\Trabalho\ProdutosMAUI\RclAPI\obj\Debug\net8.0\RCLAPI.csproj.CoreCompileInputs.cache
+C:\Users\Luccas\Desktop\testePWEB\Trabalho\ProdutosMAUI\RclAPI\obj\Debug\net8.0\RCLAPI.sourcelink.json
