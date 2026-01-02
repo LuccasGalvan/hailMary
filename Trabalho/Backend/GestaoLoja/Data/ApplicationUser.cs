@@ -14,8 +14,6 @@ namespace GestaoLoja.Data
         [StringLength(StringLength.NomeMaxLength)]
         public string? Apelido { get; set; }
 
-        public TipoConta? TipoConta { get; set; }
-        public EstadoConta EstadoConta { get; set; } = EstadoConta.Pendente;
         public long? NIF { get; set; }
         public string? Rua { get; set; }
         public string ? Localidade1 {  get; set; }
