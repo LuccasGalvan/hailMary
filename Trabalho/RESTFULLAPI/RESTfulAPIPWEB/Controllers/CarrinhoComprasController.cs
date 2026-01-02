@@ -92,7 +92,7 @@ namespace RESTfulAPIPWEB.Controllers
                             if (itemExistente != null)
                             {
                                 var novaQuantidade = itemExistente.Quantidade + quantidade;
-                                if (novaQuantidade > produto.EmStock)
+                                if (novaQuantidade > produto.Stock)
                                     return BadRequest("Quantidade excede o stock disponível.");
 
                                 itemExistente.Quantidade = novaQuantidade;
@@ -100,7 +100,7 @@ namespace RESTfulAPIPWEB.Controllers
                             }
                             else
                             {
-                                if (quantidade > produto.EmStock)
+                                if (quantidade > produto.Stock)
                                     return BadRequest("Quantidade excede o stock disponível.");
 
                                 var novoItem = new CarrinhoCompras
@@ -152,14 +152,14 @@ namespace RESTfulAPIPWEB.Controllers
             {
                 Id = produto.Id,
                 Nome = produto.Nome,
-                Detalhe = produto.Detalhe,
+                Detalhe = produto.Descricao,
                 Origem = produto.Origem,
                 Titulo = string.Empty,
                 UrlImagem = produto.UrlImagem,
                 Preco = produto.PrecoFinal ?? produto.PrecoBase,
                 Promocao = produto.Promocao,
                 MaisVendido = produto.MaisVendido,
-                EmStock = produto.EmStock,
+                EmStock = produto.Stock,
                 Disponivel = produto.ParaVenda,
                 ModoEntregaId = produto.ModoEntregaId,
                 modoentrega = produto.modoentrega,

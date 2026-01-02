@@ -36,18 +36,18 @@ namespace RESTfulAPIPWEB.Controllers
                 .OrderBy(p => p.Nome)
                 .Select(p => new FornecedorProdutoDto
                 {
-                    Id = p.Id,
+                    Id = p.ProdutoId,
                     Nome = p.Nome,
-                    Detalhe = p.Detalhe,
+                    Detalhe = p.Descricao,
                     UrlImagem = p.UrlImagem,
                     Imagem = p.Imagem,
                     PrecoBase = p.PrecoBase,
-                    MargemPercentual = p.MargemPercentual,
+                    MargemPercentual = p.PercentagemComissao,
                     PrecoFinal = p.PrecoFinal,
                     Estado = p.Estado,
                     Promocao = p.Promocao,
                     MaisVendido = p.MaisVendido,
-                    EmStock = p.EmStock,
+                    EmStock = p.Stock,
                     ParaVenda = p.ParaVenda,
                     Origem = p.Origem,
                     CategoriaId = p.CategoriaId,
@@ -71,17 +71,17 @@ namespace RESTfulAPIPWEB.Controllers
             var produto = new Produto
             {
                 Nome = dto.Nome,
-                Detalhe = dto.Detalhe,
+                Descricao = dto.Detalhe,
                 UrlImagem = dto.UrlImagem,
                 Imagem = dto.Imagem,
                 PrecoBase = dto.PrecoBase,
-                MargemPercentual = dto.MargemPercentual,
+                PercentagemComissao = dto.MargemPercentual,
                 Estado = ProdutoEstado.Pendente,
                 PrecoFinal = null,
                 FornecedorId = fornecedorId,
                 Promocao = dto.Promocao,
                 MaisVendido = dto.MaisVendido,
-                EmStock = dto.EmStock,
+                Stock = dto.EmStock,
                 ParaVenda = dto.ParaVenda,
                 Origem = dto.Origem,
                 CategoriaId = dto.CategoriaId,
@@ -112,21 +112,21 @@ namespace RESTfulAPIPWEB.Controllers
                 return Unauthorized();
 
             var produto = await _context.Produtos
-                .FirstOrDefaultAsync(p => p.Id == id && p.FornecedorId == fornecedorId);
+                .FirstOrDefaultAsync(p => p.ProdutoId == id && p.FornecedorId == fornecedorId);
 
             if (produto is null)
                 return NotFound();
 
             produto.Nome = dto.Nome;
-            produto.Detalhe = dto.Detalhe;
+            produto.Descricao = dto.Detalhe;
             produto.UrlImagem = dto.UrlImagem;
             if (dto.Imagem is not null)
                 produto.Imagem = dto.Imagem;
             produto.PrecoBase = dto.PrecoBase;
-            produto.MargemPercentual = dto.MargemPercentual;
+            produto.PercentagemComissao = dto.MargemPercentual;
             produto.Promocao = dto.Promocao;
             produto.MaisVendido = dto.MaisVendido;
-            produto.EmStock = dto.EmStock;
+            produto.Stock = dto.EmStock;
             produto.ParaVenda = dto.ParaVenda;
             produto.Origem = dto.Origem;
             produto.CategoriaId = dto.CategoriaId;
@@ -147,7 +147,7 @@ namespace RESTfulAPIPWEB.Controllers
                 return Unauthorized();
 
             var produto = await _context.Produtos
-                .FirstOrDefaultAsync(p => p.Id == id && p.FornecedorId == fornecedorId);
+                .FirstOrDefaultAsync(p => p.ProdutoId == id && p.FornecedorId == fornecedorId);
 
             if (produto is null)
                 return NotFound();
@@ -198,16 +198,16 @@ namespace RESTfulAPIPWEB.Controllers
             {
                 Id = produto.Id,
                 Nome = produto.Nome,
-                Detalhe = produto.Detalhe,
+                Detalhe = produto.Descricao,
                 UrlImagem = produto.UrlImagem,
                 Imagem = produto.Imagem,
                 PrecoBase = produto.PrecoBase,
-                MargemPercentual = produto.MargemPercentual,
+                MargemPercentual = produto.PercentagemComissao,
                 PrecoFinal = produto.PrecoFinal,
                 Estado = produto.Estado,
                 Promocao = produto.Promocao,
                 MaisVendido = produto.MaisVendido,
-                EmStock = produto.EmStock,
+                EmStock = produto.Stock,
                 ParaVenda = produto.ParaVenda,
                 Origem = produto.Origem,
                 CategoriaId = produto.CategoriaId,

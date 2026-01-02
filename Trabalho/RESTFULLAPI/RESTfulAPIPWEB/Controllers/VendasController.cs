@@ -36,8 +36,8 @@ namespace RESTfulAPIPWEB.Controllers
 
             var produtoIds = request.Linhas.Select(l => l.ProdutoId).Distinct().ToList();
             var produtos = await _context.Produtos
-                .Where(p => produtoIds.Contains(p.Id))
-                .ToDictionaryAsync(p => p.Id);
+                .Where(p => produtoIds.Contains(p.ProdutoId))
+                .ToDictionaryAsync(p => p.ProdutoId);
 
             foreach (var linha in request.Linhas)
             {
@@ -50,7 +50,7 @@ namespace RESTfulAPIPWEB.Controllers
                 if (linha.Quantidade <= 0)
                     return BadRequest($"Quantidade inválida para: {produto.Nome}");
 
-                if (produto.EmStock < linha.Quantidade)
+                if (produto.Stock < linha.Quantidade)
                     return BadRequest($"Stock insuficiente para: {produto.Nome}");
             }
 
@@ -81,7 +81,7 @@ namespace RESTfulAPIPWEB.Controllers
                     TotalLinha = subtotal
                 });
 
-                produto.EmStock -= linha.Quantidade;
+                produto.Stock -= linha.Quantidade;
                 total += subtotal;
             }
 
