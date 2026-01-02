@@ -26,7 +26,7 @@ namespace RESTfulAPIPWEB.Controllers
         {
             var encomendas = await _context.Encomendas
                 .Where(e => e.ClienteId == userId)
-                .Include(e => e.Itens)
+                .Include(e => e.Linhas)
                     .ThenInclude(i => i.Produto)
                 .OrderByDescending(e => e.DataCriacao)
                 .ToListAsync();
@@ -35,13 +35,13 @@ namespace RESTfulAPIPWEB.Controllers
         }
 
         // GET: api/Encomendas/detalhes/{id}
-        [HttpGet("detalhes/{id:guid}")]
-        public async Task<ActionResult<Encomenda>> GetEncomendaDetalhes(Guid id)
+        [HttpGet("detalhes/{id:int}")]
+        public async Task<ActionResult<Encomenda>> GetEncomendaDetalhes(int id)
         {
             var encomenda = await _context.Encomendas
-                .Include(e => e.Itens)
+                .Include(e => e.Linhas)
                     .ThenInclude(i => i.Produto)
-                .FirstOrDefaultAsync(e => e.Id == id);
+                .FirstOrDefaultAsync(e => e.VendaId == id);
 
             if (encomenda == null)
                 return NotFound();
@@ -109,11 +109,11 @@ namespace RESTfulAPIPWEB.Controllers
 
                 _context.EncomendaItens.Add(new EncomendaItem
                 {
-                    EncomendaId = encomenda.Id,
+                    Encomenda = encomenda,
                     ProdutoId = produto.Id,
                     Quantidade = c.Quantidade,
                     PrecoUnitario = precoUnit,
-                    Subtotal = subtotal
+                    TotalLinha = subtotal
                 });
 
                 produto.EmStock -= c.Quantidade;
@@ -128,17 +128,17 @@ namespace RESTfulAPIPWEB.Controllers
             await _context.SaveChangesAsync();
             await tx.CommitAsync();
 
-            return CreatedAtAction(nameof(GetEncomendaDetalhes), new { id = encomenda.Id }, encomenda);
+            return CreatedAtAction(nameof(GetEncomendaDetalhes), new { id = encomenda.VendaId }, encomenda);
         }
 
         // POST: api/Encomendas/{id}/pagar
-        [HttpPost("{id:guid}/pagar")]
+        [HttpPost("{id:int}/pagar")]
         [ProducesResponseType(typeof(EncomendaPagamentoResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<EncomendaPagamentoResponse>> Pagar(Guid id)
+        public async Task<ActionResult<EncomendaPagamentoResponse>> Pagar(int id)
         {
-            var encomenda = await _context.Encomendas.FirstOrDefaultAsync(e => e.Id == id);
+            var encomenda = await _context.Encomendas.FirstOrDefaultAsync(e => e.VendaId == id);
 
             if (encomenda == null)
                 return NotFound();
@@ -153,7 +153,7 @@ namespace RESTfulAPIPWEB.Controllers
 
             var response = new EncomendaPagamentoResponse
             {
-                EncomendaId = encomenda.Id,
+                EncomendaId = encomenda.VendaId,
                 Estado = encomenda.Estado,
                 PagoEmUtc = encomenda.DataPagamento ?? DateTime.Now
             };

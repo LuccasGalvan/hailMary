@@ -4,7 +4,7 @@ namespace RESTfulAPIPWEB.DTO.Fornecedor
 {
     public class FornecedorVendaDto
     {
-        public Guid EncomendaId { get; set; }
+        public int EncomendaId { get; set; }
         public DateTime EncomendaCriadaEmUtc { get; set; }
         public EncomendaEstado EncomendaEstado { get; set; }
         public int ProdutoId { get; set; }

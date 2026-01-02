@@ -173,14 +173,14 @@ namespace RESTfulAPIPWEB.Controllers
                 .OrderByDescending(i => i.Encomenda!.DataCriacao)
                 .Select(i => new FornecedorVendaDto
                 {
-                    EncomendaId = i.EncomendaId,
+                    EncomendaId = i.VendaId,
                     EncomendaCriadaEmUtc = i.Encomenda!.DataCriacao,
                     EncomendaEstado = i.Encomenda.Estado,
                     ProdutoId = i.ProdutoId,
                     ProdutoNome = i.Produto!.Nome,
                     Quantidade = i.Quantidade,
                     PrecoUnitario = i.PrecoUnitario,
-                    Subtotal = i.Subtotal
+                    Subtotal = i.TotalLinha
                 })
                 .ToListAsync();
 

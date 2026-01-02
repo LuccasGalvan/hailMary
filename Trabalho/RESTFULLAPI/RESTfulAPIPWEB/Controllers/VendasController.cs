@@ -74,11 +74,11 @@ namespace RESTfulAPIPWEB.Controllers
 
                 _context.EncomendaItens.Add(new EncomendaItem
                 {
-                    EncomendaId = encomenda.Id,
+                    Encomenda = encomenda,
                     ProdutoId = produto.Id,
                     Quantidade = linha.Quantidade,
                     PrecoUnitario = precoUnit,
-                    Subtotal = subtotal
+                    TotalLinha = subtotal
                 });
 
                 produto.EmStock -= linha.Quantidade;
@@ -109,7 +109,7 @@ namespace RESTfulAPIPWEB.Controllers
             var vendas = await _context.Encomendas
                 .AsNoTracking()
                 .Where(e => e.ClienteId == userId)
-                .Include(e => e.Itens)
+                .Include(e => e.Linhas)
                 .OrderByDescending(e => e.DataCriacao)
                 .Select(e => new VendaMinhasDto
                 {
@@ -118,12 +118,12 @@ namespace RESTfulAPIPWEB.Controllers
                     Estado = e.Estado,
                     ValorTotal = e.ValorTotal,
                     PagamentoExecutado = e.PagamentoExecutado,
-                    Linhas = e.Itens.Select(i => new VendaLinhaDto
+                    Linhas = e.Linhas.Select(i => new VendaLinhaDto
                     {
                         ProdutoId = i.ProdutoId,
                         Quantidade = i.Quantidade,
                         PrecoUnitario = i.PrecoUnitario,
-                        TotalLinha = i.Subtotal
+                        TotalLinha = i.TotalLinha
                     }).ToList()
                 })
                 .ToListAsync();
