@@ -11,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestaoLoja.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251229120000_UpdateSeedData")]
+    partial class UpdateSeedData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -533,23 +535,9 @@ namespace GestaoLoja.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("Gestao_Loja.Entities.Categoria", b =>
-                {
-                    b.HasOne("Gestao_Loja.Entities.TipoCategoria", "TipoCategoria")
-                        .WithMany("Categorias")
-                        .HasForeignKey("TipoCategoriaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("TipoCategoria");
                 });
 
             modelBuilder.Entity("Gestao_Loja.Entities.CategoriaProduto", b =>
@@ -574,13 +562,13 @@ namespace GestaoLoja.Migrations
             modelBuilder.Entity("Gestao_Loja.Entities.LinhaVenda", b =>
                 {
                     b.HasOne("Gestao_Loja.Entities.Produto", "Produto")
-                        .WithMany()
+                        .WithMany("LinhasVenda")
                         .HasForeignKey("ProdutoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Gestao_Loja.Entities.Venda", "Venda")
-                        .WithMany("Linhas")
+                        .WithMany("LinhasVenda")
                         .HasForeignKey("VendaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -604,7 +592,7 @@ namespace GestaoLoja.Migrations
             modelBuilder.Entity("Gestao_Loja.Entities.Venda", b =>
                 {
                     b.HasOne("Gestao_Loja.Data.ApplicationUser", "Cliente")
-                        .WithMany()
+                        .WithMany("Vendas")
                         .HasForeignKey("ClienteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -612,55 +600,20 @@ namespace GestaoLoja.Migrations
                     b.Navigation("Cliente");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("Gestao_Loja.Entities.Categoria", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
+                    b.HasOne("Gestao_Loja.Entities.TipoCategoria", "TipoCategoria")
+                        .WithMany("Categorias")
+                        .HasForeignKey("TipoCategoriaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("TipoCategoria");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Gestao_Loja.Data.ApplicationUser", b =>
                 {
-                    b.HasOne("Gestao_Loja.Data.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
-                {
-                    b.HasOne("Gestao_Loja.Data.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Gestao_Loja.Data.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-                {
-                    b.HasOne("Gestao_Loja.Data.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Vendas");
                 });
 
             modelBuilder.Entity("Gestao_Loja.Entities.Categoria", b =>
@@ -676,6 +629,8 @@ namespace GestaoLoja.Migrations
             modelBuilder.Entity("Gestao_Loja.Entities.Produto", b =>
                 {
                     b.Navigation("CategoriaProdutos");
+
+                    b.Navigation("LinhasVenda");
                 });
 
             modelBuilder.Entity("Gestao_Loja.Entities.TipoCategoria", b =>
@@ -685,7 +640,7 @@ namespace GestaoLoja.Migrations
 
             modelBuilder.Entity("Gestao_Loja.Entities.Venda", b =>
                 {
-                    b.Navigation("Linhas");
+                    b.Navigation("LinhasVenda");
                 });
 #pragma warning restore 612, 618
         }
