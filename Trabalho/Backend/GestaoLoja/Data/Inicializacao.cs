@@ -158,8 +158,10 @@ namespace GestaoLoja.Data
                 ["Casa"] = tipoCategoriaPorNome["Casa"]
             };
 
-            int? GetTipoCategoriaId(string nome)
-                => tipoCategoriaPorCategoria.TryGetValue(nome, out var id) ? id : null;
+            int GetTipoCategoriaId(string nome)
+                => tipoCategoriaPorCategoria.TryGetValue(nome, out var id)
+                    ? id
+                    : tipoCategoriaPorNome["Tecnologia"];
 
             var categoriasExistentes = await context.Categorias.ToListAsync();
             var categoriasPorNome = categoriasExistentes
@@ -170,7 +172,7 @@ namespace GestaoLoja.Data
             {
                 if (categoriasPorNome.TryGetValue(nome, out var categoriaExistente))
                 {
-                    if (categoriaExistente.TipoCategoriaId is null)
+                    if (categoriaExistente.TipoCategoriaId == 0)
                     {
                         categoriaExistente.TipoCategoriaId = GetTipoCategoriaId(nome);
                     }
@@ -193,13 +195,13 @@ namespace GestaoLoja.Data
                     categoriasPorNome[parentNome] = parent;
                 }
 
-                var child = new Categoria
-                {
-                    Nome = nome,
-                    Ordem = ordem,
-                    Parent = parent,
-                    TipoCategoriaId = GetTipoCategoriaId(nome)
-                };
+                    var child = new Categoria
+                    {
+                        Nome = nome,
+                        Ordem = ordem,
+                        Parent = parent,
+                        TipoCategoriaId = GetTipoCategoriaId(nome)
+                    };
                 context.Categorias.Add(child);
                 categoriasPorNome[nome] = child;
             }
@@ -338,7 +340,10 @@ namespace GestaoLoja.Data
                         FornecedorId = fornecedorId,
                         Stock = stock,
                         ParaVenda = paraVenda,
-                        CategoriaProdutos = new List<Categoria> { categoria },
+                        CategoriaProdutos = new List<CategoriaProduto>
+                        {
+                            new CategoriaProduto { Categoria = categoria }
+                        },
                         ModoEntregaId = modoEntrega.Id,
                         Promocao = promocao,
                         MaisVendido = maisVendido,

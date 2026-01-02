@@ -238,7 +238,10 @@
             return;
         }
 
-        Produto.CategoriaProdutos = new List<Categoria> { categoria };
+        Produto.CategoriaProdutos = new List<CategoriaProduto>
+        {
+            new CategoriaProduto { CategoriaId = categoria.Id }
+        };
 
         db.Produtos.Add(Produto);
         await db.SaveChangesAsync();

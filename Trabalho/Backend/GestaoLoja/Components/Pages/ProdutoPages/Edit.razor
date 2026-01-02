@@ -158,6 +158,7 @@ else
         var dbProduto = await db.Produtos
             .AsNoTracking()
             .Include(p => p.CategoriaProdutos)
+            .ThenInclude(cp => cp.Categoria)
             .FirstOrDefaultAsync(p => p.Id == Id);
         if (dbProduto is null)
         {
@@ -266,7 +267,7 @@ else
         }
 
         dbProduto.CategoriaProdutos.Clear();
-        dbProduto.CategoriaProdutos.Add(categoria);
+        dbProduto.CategoriaProdutos.Add(new CategoriaProduto { CategoriaId = categoria.Id });
 
         dbProduto.PrecoFinal = dbProduto.Estado == ProdutoEstado.Activo && dbProduto.MargemPercentual is not null
             ? Math.Round(dbProduto.PrecoBase * (1 + (dbProduto.MargemPercentual.Value / 100m)), 2)
@@ -301,11 +302,11 @@ else
         return $"{name}_{timestamp}{ext}";
     }
 
-    private static int GetFirstCategoriaId(ICollection<Categoria> categorias)
+    private static int GetFirstCategoriaId(ICollection<CategoriaProduto> categorias)
     {
         foreach (var categoria in categorias)
         {
-            return categoria.Id;
+            return categoria.CategoriaId;
         }
 
         return 0;

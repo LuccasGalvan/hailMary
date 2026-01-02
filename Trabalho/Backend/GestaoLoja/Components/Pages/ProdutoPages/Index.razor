@@ -113,7 +113,7 @@
             .AsQueryable();
 
         if (filtroCategoriaId.HasValue)
-            q = q.Where(p => p.CategoriaProdutos.Any(c => c.Id == filtroCategoriaId.Value));
+            q = q.Where(p => p.CategoriaProdutos.Any(c => c.CategoriaId == filtroCategoriaId.Value));
 
         if (filtroEstado.HasValue)
             q = q.Where(p => p.Estado == filtroEstado.Value);
@@ -127,6 +127,7 @@
             .Skip(request.StartIndex)
             .Take(pageSize)
             .Include(p => p.CategoriaProdutos)
+            .ThenInclude(cp => cp.Categoria)
             .ToListAsync();
 
         var items = produtos.Select(p => new ProdutoRow
@@ -273,10 +274,10 @@
     private static bool IsPlaceholderImage(byte[] bytes)
         => bytes.Length == PlaceholderImage.Length && bytes.AsSpan().SequenceEqual(PlaceholderImage);
 
-    private static string BuildCategoriaNome(ICollection<Categoria> categorias)
+    private static string BuildCategoriaNome(ICollection<CategoriaProduto> categorias)
     {
         var nomes = categorias
-            .Select(c => c.Nome)
+            .Select(c => c.Categoria?.Nome)
             .Where(nome => !string.IsNullOrWhiteSpace(nome))
             .ToList();
 
