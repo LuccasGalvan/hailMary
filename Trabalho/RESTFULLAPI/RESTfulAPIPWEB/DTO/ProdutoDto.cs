@@ -1,4 +1,5 @@
 using RESTfulAPIPWEB.Entity;
+using System.Collections.Generic;
 
 namespace RESTfulAPIPWEB.DTO;
 
@@ -21,5 +22,6 @@ public class ProdutoDto
     public ModoDisponibilizacao? ModoDisponibilizacao { get; set; }
     public int CategoriaId { get; set; }
     public Categoria? categoria { get; set; }
+    public List<int> CategoriaIds { get; set; } = new();
     public byte[]? Imagem { get; set; }
 }

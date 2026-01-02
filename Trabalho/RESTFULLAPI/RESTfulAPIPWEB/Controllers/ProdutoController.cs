@@ -21,20 +21,20 @@ namespace RESTfulAPIPWEB.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> GetProdutos(int? categoriaId = null, bool soAtivos = true)
+        public async Task<IActionResult> GetProdutos(
+            int? categoriaId = null,
+            string? texto = null,
+            int? modoDisponibilizacaoId = null,
+            bool soAtivos = true)
         {
             IEnumerable<Produto> produtos;
             if (!soAtivos)
             {
                 produtos = await _produtoRepository.ObterTodosProdutosAsync();
             }
-            else if (categoriaId != null)
-            {
-                produtos = await _produtoRepository.ObterProdutosPorCategoriaAsync(categoriaId.Value);
-            }
             else
             {
-                produtos = await _produtoRepository.ObterTodosProdutosAsync();
+                produtos = await _produtoRepository.ObterProdutosAsync(categoriaId, texto, modoDisponibilizacaoId);
             }
 
             var produtosDto = produtos.Select(MapProduto);
@@ -65,6 +65,16 @@ namespace RESTfulAPIPWEB.Controllers
 
         private static ProdutoDto MapProduto(Produto produto)
         {
+            var categoriaIds = produto.CategoriaProdutos
+                .Select(cp => cp.CategoriaId)
+                .Distinct()
+                .ToList();
+
+            if (categoriaIds.Count == 0 && produto.CategoriaId != 0)
+            {
+                categoriaIds.Add(produto.CategoriaId);
+            }
+
             return new ProdutoDto
             {
                 Id = produto.Id,
@@ -84,6 +94,7 @@ namespace RESTfulAPIPWEB.Controllers
                 ModoDisponibilizacao = produto.ModoDisponibilizacao,
                 CategoriaId = produto.CategoriaId,
                 categoria = produto.categoria,
+                CategoriaIds = categoriaIds,
                 Imagem = produto.Imagem,
             };
         }
