@@ -11,6 +11,8 @@ namespace GestaoLoja.Entity
     {
         private int _categoriaId;
 
+        [Key]
+        [Column("Id")]
         public int Id { get; set; }
 
         [StringLength(100)]
@@ -19,7 +21,6 @@ namespace GestaoLoja.Entity
 
         [StringLength(100)]
         [Required]
-        public string? Detalhe {  get; set; }
         public string? Descricao { get; set; }
         public string? UrlImagem {  get; set; }
         public byte[]?Imagem{get;set;}
