@@ -67,7 +67,7 @@ public class AuthController : ControllerBase
         var userRoles = await _userManager.GetRolesAsync(utilizadorAtual);
         var role = userRoles.FirstOrDefault() ?? "Cliente";
 
-        if ((role == "Cliente" || role == "Fornecedor") && utilizadorAtual.Estado != UserEstado.Activo)
+        if ((role == "Cliente" || role == "Fornecedor") && utilizadorAtual.EstadoConta != EstadoConta.Ativo)
         {
             return Unauthorized("Conta pendente de ativação.");
         }
@@ -89,7 +89,16 @@ public class AuthController : ControllerBase
             Email = dto.Email,
             Nome = dto.Nome,
             Apelido = dto.Apelido,
-            Estado = UserEstado.Pendente
+            Estado = UserEstado.Pendente,
+            EstadoConta = EstadoConta.Pendente,
+            TipoConta = role switch
+            {
+                "Cliente" => TipoConta.Cliente,
+                "Fornecedor" => TipoConta.Fornecedor,
+                "Admin" => TipoConta.Admin,
+                "Funcionario" => TipoConta.Funcionario,
+                _ => null
+            }
         };
 
         var resultado = await _userManager.CreateAsync(novoUtilizador, dto.Password);
