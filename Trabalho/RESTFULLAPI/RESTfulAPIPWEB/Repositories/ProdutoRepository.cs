@@ -23,6 +23,7 @@ namespace RESTfulAPIPWEB.Repositories
                 // your old "must have image" rule, but null-safe
                 .Where(p => p.Imagem != null && p.Imagem.Length > 0)
                 .Include(p => p.modoentrega)
+                .Include(p => p.ModoDisponibilizacao)
                 .Include(p => p.categoria);
         }
 
