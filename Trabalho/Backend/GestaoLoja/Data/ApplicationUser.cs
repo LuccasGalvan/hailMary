@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using GestaoLoja.Constants;
 using GestaoLoja.Entity.Enums;
 using System.ComponentModel.DataAnnotations;
 
@@ -7,10 +8,10 @@ namespace GestaoLoja.Data
     public class ApplicationUser : IdentityUser
     {
         [Required]
-        [StringLength(100)]
+        [StringLength(StringLength.NomeMaxLength)]
         public string Nome { get; set; } = string.Empty;
 
-        [StringLength(100)]
+        [StringLength(StringLength.NomeMaxLength)]
         public string? Apelido { get; set; }
 
         public TipoConta? TipoConta { get; set; }

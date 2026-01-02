@@ -1,4 +1,5 @@
-﻿using GestaoLoja.Data;
+﻿using GestaoLoja.Constants;
+using GestaoLoja.Data;
 using GestaoLoja.Entity.Enums;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -15,11 +16,11 @@ namespace GestaoLoja.Entity
         [Column("Id")]
         public int Id { get; set; }
 
-        [StringLength(100)]
+        [StringLength(StringLength.NomeMaxLength)]
         [Required]
         public string? Nome { get; set; }
 
-        [StringLength(100)]
+        [StringLength(StringLength.NomeMaxLength)]
         [Required]
         public string? Descricao { get; set; }
         public string? UrlImagem {  get; set; }
