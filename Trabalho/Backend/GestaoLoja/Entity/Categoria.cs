@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using GestaoLoja.Constants;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
@@ -9,7 +10,7 @@ namespace GestaoLoja.Entity
     {
         public int Id { get; set; }
         [Required]
-        [StringLength(100)]
+        [StringLength(StringLength.NomeMaxLength)]
         public string Nome { get; set; } = default!;
         public int TipoCategoriaId { get; set; }
         public TipoCategoria TipoCategoria { get; set; } = null!;
