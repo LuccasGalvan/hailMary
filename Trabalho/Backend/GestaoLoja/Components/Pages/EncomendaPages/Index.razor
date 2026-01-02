@@ -47,16 +47,16 @@
            ItemsProvider="LoadEncomendas"
            Pagination="pagination">
 
-    <PropertyColumn Property="e => e.Id" Title="Id" />
+    <PropertyColumn Property="e => e.VendaId" Title="VendaId" />
     <PropertyColumn Property="e => e.ClienteNome" Title="Cliente" />
     <PropertyColumn Property="e => e.Estado" Title="Estado" />
     <PropertyColumn Property="e => e.DataCriacao" Title="Criada" />
     <PropertyColumn Property="e => e.ValorTotal" Title="Total" />
 
     <TemplateColumn Title="Ações" Context="e">
-        <a href="@($"/encomenda/details?id={e.Id}")">Details</a> |
-        <a href="@($"/encomenda/edit?id={e.Id}")">Edit</a> |
-        <a href="@($"/encomenda/delete?id={e.Id}")">Delete</a>
+        <a href="@($"/encomenda/details?id={e.VendaId}")">Details</a> |
+        <a href="@($"/encomenda/edit?id={e.VendaId}")">Edit</a> |
+        <a href="@($"/encomenda/delete?id={e.VendaId}")">Delete</a>
     </TemplateColumn>
 </QuickGrid>
 
@@ -91,7 +91,7 @@
             .Take(pageSize)
             .Select(e => new EncomendaRow
             {
-                Id = e.Id,
+                VendaId = e.VendaId,
                 ClienteId = e.ClienteId,
                 Estado = e.Estado,
                 DataCriacao = e.DataCriacao,
@@ -136,7 +136,7 @@
 
     private sealed class EncomendaRow
     {
-        public Guid Id { get; set; }
+        public int VendaId { get; set; }
         public string? ClienteId { get; set; }
         public string? ClienteNome { get; set; }
         public EncomendaEstado Estado { get; set; }

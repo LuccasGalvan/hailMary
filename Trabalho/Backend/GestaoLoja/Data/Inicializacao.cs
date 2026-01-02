@@ -439,17 +439,17 @@ namespace GestaoLoja.Data
                     foreach (var (produto, quantidade) in linhas)
                     {
                         var preco = produto.PrecoFinal ?? produto.PrecoBase;
-                        var subtotal = preco * quantidade;
+                        var totalLinha = preco * quantidade;
 
-                        encomenda.Itens.Add(new EncomendaItem
+                        encomenda.Linhas.Add(new EncomendaItem
                         {
                             ProdutoId = produto.Id,
                             Quantidade = quantidade,
                             PrecoUnitario = preco,
-                            Subtotal = subtotal
+                            TotalLinha = totalLinha
                         });
 
-                        total += subtotal;
+                        total += totalLinha;
                     }
 
                     encomenda.ValorTotal = total;
