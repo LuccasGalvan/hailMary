@@ -41,52 +41,29 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             .HasForeignKey(cp => cp.CategoriaId);
 
         modelBuilder.Entity<TipoCategoria>().HasData(
-    new TipoCategoria { TipoCategoriaId = 1, Nome = "Tipo" },
-    new TipoCategoria { TipoCategoriaId = 2, Nome = "Editora" },
-    new TipoCategoria { TipoCategoriaId = 3, Nome = "Grupo" },
-    new TipoCategoria { TipoCategoriaId = 4, Nome = "Género" },
-    new TipoCategoria { TipoCategoriaId = 5, Nome = "Plataforma" }
-);
+            new TipoCategoria { TipoCategoriaId = 1, Nome = "Tipo" },
+            new TipoCategoria { TipoCategoriaId = 2, Nome = "PaÃ­s" }
+        );
 
         // Categorias
         modelBuilder.Entity<Categoria>().HasData(
             // Tipo
-            new Categoria { CategoriaId = 1, Nome = "Filme", TipoCategoriaId = 1 },
-            new Categoria { CategoriaId = 2, Nome = "Música", TipoCategoriaId = 1 },
-            new Categoria { CategoriaId = 3, Nome = "Jogo", TipoCategoriaId = 1 },
-            new Categoria { CategoriaId = 4, Nome = "Série", TipoCategoriaId = 1 },
+            new Categoria { CategoriaId = 1, Nome = "Coins", TipoCategoriaId = 1 },
+            new Categoria { CategoriaId = 2, Nome = "Match boxes", TipoCategoriaId = 1 },
+            new Categoria { CategoriaId = 3, Nome = "Stamps", TipoCategoriaId = 1 },
+            new Categoria { CategoriaId = 4, Nome = "Playing Cards", TipoCategoriaId = 1 },
 
-            // Editora
-            new Categoria { CategoriaId = 5, Nome = "Sony", TipoCategoriaId = 2 },
-            new Categoria { CategoriaId = 6, Nome = "Warner", TipoCategoriaId = 2 },
-            new Categoria { CategoriaId = 7, Nome = "Universal", TipoCategoriaId = 2 },
-            new Categoria { CategoriaId = 8, Nome = "EA Games", TipoCategoriaId = 2 },
-
-            // Grupo / Artista
-            new Categoria { CategoriaId = 9, Nome = "Metallica", TipoCategoriaId = 3 },
-            new Categoria { CategoriaId = 10, Nome = "Queen", TipoCategoriaId = 3 },
-            new Categoria { CategoriaId = 11, Nome = "Eminem", TipoCategoriaId = 3 },
-            new Categoria { CategoriaId = 12, Nome = "Coldplay", TipoCategoriaId = 3 },
-
-            // Género
-            new Categoria { CategoriaId = 13, Nome = "Ação", TipoCategoriaId = 4 },
-            new Categoria { CategoriaId = 14, Nome = "Drama", TipoCategoriaId = 4 },
-            new Categoria { CategoriaId = 15, Nome = "Rock", TipoCategoriaId = 4 },
-            new Categoria { CategoriaId = 16, Nome = "Pop", TipoCategoriaId = 4 },
-            new Categoria { CategoriaId = 17, Nome = "RAP", TipoCategoriaId = 4 },
-
-            // Plataforma
-            new Categoria { CategoriaId = 18, Nome = "PS5", TipoCategoriaId = 5 },
-            new Categoria { CategoriaId = 19, Nome = "Xbox", TipoCategoriaId = 5 },
-            new Categoria { CategoriaId = 20, Nome = "PC", TipoCategoriaId = 5 },
-            new Categoria { CategoriaId = 21, Nome = "Nintendo Switch", TipoCategoriaId = 5 }
+            // PaÃ­s
+            new Categoria { CategoriaId = 5, Nome = "Brazil", TipoCategoriaId = 2 },
+            new Categoria { CategoriaId = 6, Nome = "UK", TipoCategoriaId = 2 },
+            new Categoria { CategoriaId = 7, Nome = "Japan", TipoCategoriaId = 2 }
         );
 
-        // Modos de Disponibilização
+        // Modos de DisponibilizaÃ§Ã£o
         modelBuilder.Entity<ModoDisponibilizacao>().HasData(
             new ModoDisponibilizacao { ModoDisponibilizacaoId = 1, Nome = "Para Venda", IsForSale = true, Ativo = true },
             new ModoDisponibilizacao { ModoDisponibilizacaoId = 2, Nome = "Para Listagem", IsForSale = false, Ativo = true },
-            new ModoDisponibilizacao { ModoDisponibilizacaoId = 3, Nome = "Pré-Venda", IsForSale = true, Ativo = true },
+            new ModoDisponibilizacao { ModoDisponibilizacaoId = 3, Nome = "PrÃ©-Venda", IsForSale = true, Ativo = true },
             new ModoDisponibilizacao { ModoDisponibilizacaoId = 4, Nome = "Esgotado", IsForSale = false, Ativo = true },
             new ModoDisponibilizacao { ModoDisponibilizacaoId = 5, Nome = "Interno", IsForSale = false, Ativo = false }
         );
