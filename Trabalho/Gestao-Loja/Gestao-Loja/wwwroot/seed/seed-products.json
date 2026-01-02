@@ -1,4 +1,4 @@
-﻿[
+[
   {
     "nome": "The Dark Knight (Blu-ray)",
     "descricao": "Filme de ação em Blu-ray, edição standard.",
@@ -7,7 +7,11 @@
     "stock": 12,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 1,
-    "categorias": [ 1, 6, 13 ],
+    "categorias": [
+      1,
+      6,
+      1
+    ],
     "imagePath": "/images/produtos/dark_knight.jpg"
   },
   {
@@ -18,7 +22,11 @@
     "stock": 18,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 1,
-    "categorias": [ 1, 6, 13 ],
+    "categorias": [
+      1,
+      6,
+      1
+    ],
     "imagePath": "/images/produtos/inception.jpg"
   },
   {
@@ -29,7 +37,11 @@
     "stock": 10,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 1,
-    "categorias": [ 1, 6, 14 ],
+    "categorias": [
+      1,
+      6,
+      2
+    ],
     "imagePath": "/images/produtos/003_movie_Interstellar.jpg"
   },
   {
@@ -40,7 +52,11 @@
     "stock": 9,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 1,
-    "categorias": [ 1, 6, 14 ],
+    "categorias": [
+      1,
+      6,
+      2
+    ],
     "imagePath": "/images/produtos/004_movie_Joker.jpg"
   },
   {
@@ -51,7 +67,11 @@
     "stock": 14,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 1,
-    "categorias": [ 1, 6, 13 ],
+    "categorias": [
+      1,
+      6,
+      1
+    ],
     "imagePath": "/images/produtos/005_movie_Mad_Max_Fury_Road.jpg"
   },
   {
@@ -62,7 +82,11 @@
     "stock": 25,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 2,
-    "categorias": [ 1, 6, 13 ],
+    "categorias": [
+      1,
+      6,
+      1
+    ],
     "imagePath": "/images/produtos/006_movie_The_Matrix.jpg"
   },
   {
@@ -73,7 +97,11 @@
     "stock": 11,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 1,
-    "categorias": [ 1, 7, 14 ],
+    "categorias": [
+      1,
+      7,
+      2
+    ],
     "imagePath": "/images/produtos/007_movie_Gladiator.jpg"
   },
   {
@@ -84,7 +112,11 @@
     "stock": 16,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 2,
-    "categorias": [ 1, 7, 13 ],
+    "categorias": [
+      1,
+      7,
+      1
+    ],
     "imagePath": "/images/produtos/008_movie_Fast_&_Furious_7.jpg"
   },
   {
@@ -95,7 +127,11 @@
     "stock": 13,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 1,
-    "categorias": [ 1, 7, 13 ],
+    "categorias": [
+      1,
+      7,
+      1
+    ],
     "imagePath": "/images/produtos/009_movie_Jurassic_Park.jpg"
   },
   {
@@ -106,10 +142,13 @@
     "stock": 22,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 2,
-    "categorias": [ 1, 7, 14 ],
+    "categorias": [
+      1,
+      7,
+      2
+    ],
     "imagePath": "/images/produtos/010_movie_ET.jpg"
   },
-
   {
     "nome": "Breaking Bad - Temporada 1 (DVD)",
     "descricao": "Série completa da temporada 1 em DVD.",
@@ -118,7 +157,11 @@
     "stock": 8,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 1,
-    "categorias": [ 4, 6, 14 ],
+    "categorias": [
+      4,
+      6,
+      2
+    ],
     "imagePath": "/images/produtos/011_series_Breaking_Bad.jpg"
   },
   {
@@ -129,7 +172,11 @@
     "stock": 7,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 1,
-    "categorias": [ 4, 6, 14 ],
+    "categorias": [
+      4,
+      6,
+      2
+    ],
     "imagePath": "/images/produtos/012_series_Breaking_Bad.jpg"
   },
   {
@@ -140,7 +187,11 @@
     "stock": 6,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 1,
-    "categorias": [ 4, 5, 13 ],
+    "categorias": [
+      4,
+      5,
+      1
+    ],
     "imagePath": "/images/produtos/013_series_Stranger_Things.jpg"
   },
   {
@@ -151,7 +202,11 @@
     "stock": 5,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 1,
-    "categorias": [ 4, 6, 14 ],
+    "categorias": [
+      4,
+      6,
+      2
+    ],
     "imagePath": "/images/produtos/014_series_Chernobyl.jpg"
   },
   {
@@ -162,7 +217,11 @@
     "stock": 10,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 2,
-    "categorias": [ 4, 7, 14 ],
+    "categorias": [
+      4,
+      7,
+      2
+    ],
     "imagePath": "/images/produtos/015_series_The_Office.jpg"
   },
   {
@@ -173,7 +232,11 @@
     "stock": 4,
     "estado": "Pendente",
     "modoDisponibilizacaoId": 1,
-    "categorias": [ 4, 6, 13 ],
+    "categorias": [
+      4,
+      6,
+      1
+    ],
     "imagePath": "/images/produtos/016_series_Game_of_Thrones.jpg"
   },
   {
@@ -184,7 +247,11 @@
     "stock": 9,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 1,
-    "categorias": [ 4, 7, 13 ],
+    "categorias": [
+      4,
+      7,
+      1
+    ],
     "imagePath": "/images/produtos/the_boys.jpg"
   },
   {
@@ -195,7 +262,11 @@
     "stock": 8,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 2,
-    "categorias": [ 4, 6, 14 ],
+    "categorias": [
+      4,
+      6,
+      2
+    ],
     "imagePath": "/images/produtos/018_series_Peaky_Blinders.jpg"
   },
   {
@@ -206,7 +277,11 @@
     "stock": 12,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 2,
-    "categorias": [ 4, 7, 14 ],
+    "categorias": [
+      4,
+      7,
+      2
+    ],
     "imagePath": "/images/produtos/019_series_Friends_-_Temporada_1.jpeg"
   },
   {
@@ -217,10 +292,13 @@
     "stock": 6,
     "estado": "Pendente",
     "modoDisponibilizacaoId": 3,
-    "categorias": [ 4, 5, 13 ],
+    "categorias": [
+      4,
+      5,
+      1
+    ],
     "imagePath": "/images/produtos/the_witcher.jpg"
   },
-
   {
     "nome": "Metallica - Master of Puppets (CD)",
     "descricao": "CD remasterizado, álbum clássico.",
@@ -229,7 +307,12 @@
     "stock": 20,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 1,
-    "categorias": [ 2, 5, 9, 15 ],
+    "categorias": [
+      2,
+      5,
+      1,
+      3
+    ],
     "imagePath": "/images/produtos/021_album_Metallica_-_Master_of_Puppets.jpg"
   },
   {
@@ -240,7 +323,12 @@
     "stock": 18,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 1,
-    "categorias": [ 2, 7, 9, 15 ],
+    "categorias": [
+      2,
+      7,
+      1,
+      3
+    ],
     "imagePath": "/images/produtos/022_album_Metallica_-_Black_Album.jpg"
   },
   {
@@ -251,7 +339,12 @@
     "stock": 22,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 1,
-    "categorias": [ 2, 6, 10, 15 ],
+    "categorias": [
+      2,
+      6,
+      2,
+      3
+    ],
     "imagePath": "/images/produtos/023_album_Queen_-_Greatest_Hits.jpg"
   },
   {
@@ -262,7 +355,12 @@
     "stock": 15,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 2,
-    "categorias": [ 2, 6, 10, 15 ],
+    "categorias": [
+      2,
+      6,
+      2,
+      3
+    ],
     "imagePath": "/images/produtos/024_album_Queen_-_A_Night_at_the_Opera.jpg"
   },
   {
@@ -273,7 +371,12 @@
     "stock": 17,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 1,
-    "categorias": [ 2, 5, 11, 17 ],
+    "categorias": [
+      2,
+      5,
+      3,
+      1
+    ],
     "imagePath": "/images/produtos/025_album_Eminem_-_The_Marshall_Mathers_LP.jpg"
   },
   {
@@ -284,7 +387,12 @@
     "stock": 16,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 2,
-    "categorias": [ 2, 7, 11, 17 ],
+    "categorias": [
+      2,
+      7,
+      3,
+      1
+    ],
     "imagePath": "/images/produtos/026_album_Eminem_-_The_Eminem_Show.jpg"
   },
   {
@@ -295,7 +403,12 @@
     "stock": 14,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 1,
-    "categorias": [ 2, 7, 12, 16 ],
+    "categorias": [
+      2,
+      7,
+      4,
+      4
+    ],
     "imagePath": "/images/produtos/027_album_Coldplay_-_A_Rush_of_Blood_to_the_Head.jpg"
   },
   {
@@ -306,7 +419,12 @@
     "stock": 13,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 2,
-    "categorias": [ 2, 5, 12, 16 ],
+    "categorias": [
+      2,
+      5,
+      4,
+      4
+    ],
     "imagePath": "/images/produtos/028_album_Coldplay_-_Parachutes.jpg"
   },
   {
@@ -317,7 +435,12 @@
     "stock": 3,
     "estado": "Pendente",
     "modoDisponibilizacaoId": 2,
-    "categorias": [ 2, 6, 9, 15 ],
+    "categorias": [
+      2,
+      6,
+      1,
+      3
+    ],
     "imagePath": "/images/produtos/029_album_Metallica_-_Ride_the_Lightning.jpg"
   },
   {
@@ -328,10 +451,14 @@
     "stock": 2,
     "estado": "Pendente",
     "modoDisponibilizacaoId": 2,
-    "categorias": [ 2, 7, 10, 15 ],
+    "categorias": [
+      2,
+      7,
+      2,
+      3
+    ],
     "imagePath": "/images/produtos/030_album_Queen_-_News_of_the_World.jpg"
   },
-
   {
     "nome": "FIFA 25 (PS5)",
     "descricao": "Jogo de desporto para PS5.",
@@ -340,7 +467,12 @@
     "stock": 15,
     "estado": "Pendente",
     "modoDisponibilizacaoId": 3,
-    "categorias": [ 3, 8, 18, 13 ],
+    "categorias": [
+      3,
+      5,
+      5,
+      1
+    ],
     "imagePath": "/images/produtos/fifa25.jpg"
   },
   {
@@ -351,7 +483,12 @@
     "stock": 12,
     "estado": "Pendente",
     "modoDisponibilizacaoId": 3,
-    "categorias": [ 3, 8, 19, 13 ],
+    "categorias": [
+      3,
+      5,
+      6,
+      1
+    ],
     "imagePath": "/images/produtos/fifa25.jpg"
   },
   {
@@ -362,7 +499,12 @@
     "stock": 20,
     "estado": "Pendente",
     "modoDisponibilizacaoId": 3,
-    "categorias": [ 3, 8, 20, 13 ],
+    "categorias": [
+      3,
+      5,
+      7,
+      1
+    ],
     "imagePath": "/images/produtos/fifa25.jpg"
   },
   {
@@ -373,7 +515,12 @@
     "stock": 9,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 1,
-    "categorias": [ 3, 8, 18, 13 ],
+    "categorias": [
+      3,
+      5,
+      5,
+      1
+    ],
     "imagePath": "/images/produtos/034_game_EA_FC_24.jpg"
   },
   {
@@ -384,7 +531,12 @@
     "stock": 7,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 1,
-    "categorias": [ 3, 8, 19, 13 ],
+    "categorias": [
+      3,
+      5,
+      6,
+      1
+    ],
     "imagePath": "/images/produtos/035_game_EA_FC_24.jpg"
   },
   {
@@ -395,7 +547,12 @@
     "stock": 6,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 1,
-    "categorias": [ 3, 8, 18, 13 ],
+    "categorias": [
+      3,
+      5,
+      5,
+      1
+    ],
     "imagePath": "/images/produtos/036_game_Need_for_Speed_Unbound.jpg"
   },
   {
@@ -406,7 +563,12 @@
     "stock": 11,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 2,
-    "categorias": [ 3, 8, 20, 13 ],
+    "categorias": [
+      3,
+      5,
+      7,
+      1
+    ],
     "imagePath": "/images/produtos/037_game_Need_for_Speed_Unbound.jpg"
   },
   {
@@ -417,7 +579,12 @@
     "stock": 8,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 1,
-    "categorias": [ 3, 8, 18, 14 ],
+    "categorias": [
+      3,
+      5,
+      5,
+      2
+    ],
     "imagePath": "/images/produtos/038_game_It_Takes_Two.jpg"
   },
   {
@@ -428,7 +595,12 @@
     "stock": 5,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 1,
-    "categorias": [ 3, 8, 21, 14 ],
+    "categorias": [
+      3,
+      5,
+      5,
+      2
+    ],
     "imagePath": "/images/produtos/039_game_It_Takes_Two.jpg"
   },
   {
@@ -439,10 +611,14 @@
     "stock": 0,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 2,
-    "categorias": [ 3, 8, 20, 13 ],
+    "categorias": [
+      3,
+      5,
+      7,
+      1
+    ],
     "imagePath": "/images/produtos/040_game_Apex_Legends.jpg"
   },
-
   {
     "nome": "Uncharted 4 (PS5)",
     "descricao": "Ação e aventura, PS5.",
@@ -451,7 +627,12 @@
     "stock": 7,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 1,
-    "categorias": [ 3, 5, 18, 13 ],
+    "categorias": [
+      3,
+      5,
+      5,
+      1
+    ],
     "imagePath": "/images/produtos/041_game_Uncharted_4.jpg"
   },
   {
@@ -462,7 +643,12 @@
     "stock": 10,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 1,
-    "categorias": [ 3, 5, 18, 13 ],
+    "categorias": [
+      3,
+      5,
+      5,
+      1
+    ],
     "imagePath": "/images/produtos/042_game_God_of_War_Ragnarok.jpg"
   },
   {
@@ -473,7 +659,12 @@
     "stock": 6,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 4,
-    "categorias": [ 3, 5, 18, 14 ],
+    "categorias": [
+      3,
+      5,
+      5,
+      2
+    ],
     "imagePath": "/images/produtos/043_game_The_Last_of_Us_Part_I.jpg"
   },
   {
@@ -484,7 +675,12 @@
     "stock": 0,
     "estado": "Pendente",
     "modoDisponibilizacaoId": 3,
-    "categorias": [ 3, 5, 18, 13 ],
+    "categorias": [
+      3,
+      5,
+      5,
+      1
+    ],
     "imagePath": "/images/produtos/044_game_Spider-Man_2.jpg"
   },
   {
@@ -495,10 +691,14 @@
     "stock": 9,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 1,
-    "categorias": [ 3, 5, 18, 13 ],
+    "categorias": [
+      3,
+      5,
+      5,
+      1
+    ],
     "imagePath": "/images/produtos/045_game_Horizon_Forbidden_West.jpg"
   },
-
   {
     "nome": "Halo Infinite (Xbox)",
     "descricao": "Ação, Xbox.",
@@ -507,7 +707,12 @@
     "stock": 8,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 1,
-    "categorias": [ 3, 6, 19, 13 ],
+    "categorias": [
+      3,
+      6,
+      6,
+      1
+    ],
     "imagePath": "/images/produtos/046_game_Halo_Infinite.jpg"
   },
   {
@@ -518,7 +723,12 @@
     "stock": 5,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 4,
-    "categorias": [ 3, 6, 19, 13 ],
+    "categorias": [
+      3,
+      6,
+      6,
+      1
+    ],
     "imagePath": "/images/produtos/047_game_Forza_Horizon_5.jpg"
   },
   {
@@ -529,7 +739,12 @@
     "stock": 6,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 2,
-    "categorias": [ 3, 6, 19, 13 ],
+    "categorias": [
+      3,
+      6,
+      6,
+      1
+    ],
     "imagePath": "/images/produtos/048_game_Gears_5.jpg"
   },
   {
@@ -540,7 +755,12 @@
     "stock": 9,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 2,
-    "categorias": [ 3, 6, 19, 14 ],
+    "categorias": [
+      3,
+      6,
+      6,
+      2
+    ],
     "imagePath": "/images/produtos/049_game_Sea_of_Thieves.jpg"
   },
   {
@@ -551,10 +771,14 @@
     "stock": 7,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 1,
-    "categorias": [ 3, 6, 19, 14 ],
+    "categorias": [
+      3,
+      6,
+      6,
+      2
+    ],
     "imagePath": "/images/produtos/050_game_Ori_and_the_Will_of_the_Wisps.jpg"
   },
-
   {
     "nome": "Super Mario Odyssey (Switch)",
     "descricao": "Aventura, Switch.",
@@ -563,7 +787,12 @@
     "stock": 10,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 1,
-    "categorias": [ 3, 7, 21, 13 ],
+    "categorias": [
+      3,
+      7,
+      5,
+      1
+    ],
     "imagePath": "/images/produtos/051_game_Super_Mario_Odyssey.jpg"
   },
   {
@@ -574,7 +803,12 @@
     "stock": 6,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 1,
-    "categorias": [ 3, 7, 21, 14 ],
+    "categorias": [
+      3,
+      7,
+      5,
+      2
+    ],
     "imagePath": "/images/produtos/052_game_The_Legend_of_Zelda_Breath_of_the_Wild.jpg"
   },
   {
@@ -585,7 +819,12 @@
     "stock": 8,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 4,
-    "categorias": [ 3, 7, 21, 13 ],
+    "categorias": [
+      3,
+      7,
+      5,
+      1
+    ],
     "imagePath": "/images/produtos/053_game_Mario_Kart_8_Deluxe.jpg"
   },
   {
@@ -596,7 +835,12 @@
     "stock": 9,
     "estado": "Ativo",
     "modoDisponibilizacaoId": 2,
-    "categorias": [ 3, 7, 21, 14 ],
+    "categorias": [
+      3,
+      7,
+      5,
+      2
+    ],
     "imagePath": "/images/produtos/054_game_Animal_Crossing_New_Horizons.jpg"
   },
   {
@@ -607,7 +851,12 @@
     "stock": 5,
     "estado": "Pendente",
     "modoDisponibilizacaoId": 2,
-    "categorias": [ 3, 7, 21, 13 ],
+    "categorias": [
+      3,
+      7,
+      5,
+      1
+    ],
     "imagePath": "/images/produtos/055_game_Metroid_Dread.jpg"
   }
 ]
