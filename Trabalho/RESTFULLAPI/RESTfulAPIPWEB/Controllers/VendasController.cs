@@ -25,7 +25,7 @@ namespace RESTfulAPIPWEB.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(VendaCreateResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<VendaCreateResponse>> Criar([FromBody] VendaCreateRequest request)
+        public async Task<ActionResult<VendaCreateResponse>> Criar([FromBody] CreateVendaRequest request)
         {
             var userId = GetUserId();
             if (string.IsNullOrWhiteSpace(userId))
@@ -136,7 +136,7 @@ namespace RESTfulAPIPWEB.Controllers
         [ProducesResponseType(typeof(VendaPagamentoResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<VendaPagamentoResponse>> Pagar(int id)
+        public async Task<ActionResult<VendaPagamentoResponse>> Pagar(int id, [FromBody] PagarVendaRequest? request)
         {
             var encomenda = await _context.Encomendas.FirstOrDefaultAsync(e => e.VendaId == id);
 
