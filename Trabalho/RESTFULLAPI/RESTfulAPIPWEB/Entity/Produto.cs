@@ -26,8 +26,6 @@ namespace RESTfulAPIPWEB.Entity
 
         [StringLength(RESTfulAPIPWEB.Constants.StringLength.NomeMaxLength)]
         [Required]
-        [StringLength(RESTfulAPIPWEB.Constants.StringLength.NomeMaxLength)]
-        [Required]
         public string? Descricao { get; set; }
         public string? UrlImagem {  get; set; }
         public byte[]?Imagem{get;set;}
@@ -53,7 +51,6 @@ namespace RESTfulAPIPWEB.Entity
         public bool Promocao { get; set; }
         public bool MaisVendido { get; set; }
 
-        [Range(0, int.MaxValue)]
         [Range(0, int.MaxValue)]
         public int Stock { get; set; }
 

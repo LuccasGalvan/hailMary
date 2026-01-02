@@ -23,13 +23,12 @@ namespace RESTfulAPIPWEB.Entity
         public EncomendaEstado Estado { get; set; } = EncomendaEstado.PendentePagamento;
 
         [Range(0, double.MaxValue)]
-        [Column(TypeName = "decimal(10,2)")]
         public decimal ValorTotal { get; set; }
 
-        [StringLength(RESTfulAPIPWEB.Constants.StringLength.NomeMaxLength)]
+        [StringLength(50)]
         public string? MetodoPagamento { get; set; }
 
-        [StringLength(RESTfulAPIPWEB.Constants.StringLength.DescricaoMaxLength)]
+        [StringLength(200)]
         public string? Observacoes { get; set; }
 
         public bool PagamentoExecutado { get; set; }
