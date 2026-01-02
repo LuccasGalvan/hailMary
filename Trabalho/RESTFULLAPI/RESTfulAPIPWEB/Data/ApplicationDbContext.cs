@@ -22,6 +22,8 @@ namespace RESTfulAPIPWEB.Data
         public DbSet<CarrinhoCompras> CarrinhoCompras { get; set; } = default!;
         public DbSet<Encomenda> Encomendas { get; set; } = default!;
         public DbSet<EncomendaItem> EncomendaItens { get; set; } = default!;
+        public DbSet<Encomenda> Vendas { get; set; } = default!;
+        public DbSet<EncomendaItem> LinhasVenda { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
