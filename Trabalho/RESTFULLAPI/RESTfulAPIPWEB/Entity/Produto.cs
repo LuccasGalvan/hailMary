@@ -19,7 +19,7 @@ namespace RESTfulAPIPWEB.Entity
         [Required]
         public string? Nome { get; set; }
 
-        [StringLength(RESTfulAPIPWEB.Constants.StringLength.NomeMaxLength)]
+        [StringLength(RESTfulAPIPWEB.Constants.StringLength.DescricaoMaxLength)]
         [Required]
         public string? Descricao { get; set; }
         public string? UrlImagem {  get; set; }
