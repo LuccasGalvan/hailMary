@@ -54,6 +54,8 @@ namespace GestaoLoja.Entity
         public bool ParaVenda { get; set; } = true;
         public string? Origem {  get; set; }
         public int? ModoDisponibilizacaoId { get; set; }
+        [JsonIgnore]
+        public ModoDisponibilizacao? ModoDisponibilizacao { get; set; }
         public ICollection<CategoriaProduto> CategoriaProdutos { get; set; } = new List<CategoriaProduto>();
 
         [JsonIgnore]

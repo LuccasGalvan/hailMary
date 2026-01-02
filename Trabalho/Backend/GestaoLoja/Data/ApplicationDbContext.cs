@@ -14,6 +14,7 @@ namespace GestaoLoja.Data
         public DbSet<TipoCategoria> TiposCategoria { get; set; } = default!;
         public DbSet<Produto> Produtos { get; set; } = default!;
         public DbSet<ModoEntrega> ModosEntrega { get; set; } = default!;
+        public DbSet<ModoDisponibilizacao> ModosDisponibilizacao { get; set; } = default!;
         public DbSet<Favoritos> Favoritos { get; set; } = default!;
         public DbSet<CarrinhoCompras> CarrinhoCompras { get; set; } = default!;
         public DbSet<Encomenda> Encomendas { get; set; } = default!;
@@ -56,6 +57,12 @@ namespace GestaoLoja.Data
                 .WithMany()
                 .HasForeignKey(p => p.FornecedorId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Produto>()
+                .HasOne(p => p.ModoDisponibilizacao)
+                .WithMany(m => m.Produtos)
+                .HasForeignKey(p => p.ModoDisponibilizacaoId)
+                .OnDelete(DeleteBehavior.SetNull);
 
             builder.Entity<CategoriaProduto>()
                 .HasKey(cp => new { cp.ProdutoId, cp.CategoriaId });
