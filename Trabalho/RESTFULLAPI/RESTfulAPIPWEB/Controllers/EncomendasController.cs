@@ -69,8 +69,8 @@ namespace RESTfulAPIPWEB.Controllers
             // Load all products in one query
             var produtoIds = cartItems.Select(c => c.ProdutoId).Distinct().ToList();
             var produtos = await _context.Produtos
-                .Where(p => produtoIds.Contains(p.Id))
-                .ToDictionaryAsync(p => p.Id);
+                .Where(p => produtoIds.Contains(p.ProdutoId))
+                .ToDictionaryAsync(p => p.ProdutoId);
 
             // Validate everything before creating the order
             foreach (var c in cartItems)
@@ -84,7 +84,7 @@ namespace RESTfulAPIPWEB.Controllers
                 if (c.Quantidade <= 0)
                     return BadRequest($"Quantidade inválida no carrinho para: {produto.Nome}");
 
-                if (produto.EmStock < c.Quantidade)
+                if (produto.Stock < c.Quantidade)
                     return BadRequest($"Stock insuficiente para: {produto.Nome}");
             }
 
@@ -116,7 +116,7 @@ namespace RESTfulAPIPWEB.Controllers
                     TotalLinha = subtotal
                 });
 
-                produto.EmStock -= c.Quantidade;
+                produto.Stock -= c.Quantidade;
                 total += subtotal;
             }
 

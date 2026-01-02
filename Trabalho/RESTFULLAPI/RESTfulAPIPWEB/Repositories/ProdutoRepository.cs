@@ -65,7 +65,7 @@ namespace RESTfulAPIPWEB.Repositories
         {
             // Detail endpoint for catalog also must respect visibility
             return await QueryCatalogoVisivel()
-                .FirstOrDefaultAsync(p => p.Id == id);
+                .FirstOrDefaultAsync(p => p.ProdutoId == id);
         }
 
         public async Task<Produto?> ObterProdutoEmDestaqueAsync()
