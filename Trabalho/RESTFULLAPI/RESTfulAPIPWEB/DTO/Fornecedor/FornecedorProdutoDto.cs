@@ -20,5 +20,6 @@ namespace RESTfulAPIPWEB.DTO.Fornecedor
         public string? Origem { get; set; }
         public int CategoriaId { get; set; }
         public int? ModoEntregaId { get; set; }
+        public int? ModoDisponibilizacaoId { get; set; }
     }
 }

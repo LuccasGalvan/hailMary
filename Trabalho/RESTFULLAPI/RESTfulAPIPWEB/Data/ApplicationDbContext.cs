@@ -17,6 +17,7 @@ namespace RESTfulAPIPWEB.Data
         public DbSet<Produto> Produtos { get; set; } = default!;
         public DbSet<CategoriaProduto> CategoriaProdutos { get; set; } = default!;
         public DbSet<ModoEntrega> ModosEntrega { get; set; } = default!;
+        public DbSet<ModoDisponibilizacao> ModosDisponibilizacao { get; set; } = default!;
         public DbSet<Favoritos> Favoritos { get; set; } = default!;
         public DbSet<CarrinhoCompras> CarrinhoCompras { get; set; } = default!;
         public DbSet<Encomenda> Encomendas { get; set; } = default!;

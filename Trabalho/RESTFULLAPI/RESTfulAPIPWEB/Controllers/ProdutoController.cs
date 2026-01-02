@@ -80,6 +80,8 @@ namespace RESTfulAPIPWEB.Controllers
                 Disponivel = produto.ParaVenda,
                 ModoEntregaId = produto.ModoEntregaId,
                 modoentrega = produto.modoentrega,
+                ModoDisponibilizacaoId = produto.ModoDisponibilizacaoId,
+                ModoDisponibilizacao = produto.ModoDisponibilizacao,
                 CategoriaId = produto.CategoriaId,
                 categoria = produto.categoria,
                 Imagem = produto.Imagem,

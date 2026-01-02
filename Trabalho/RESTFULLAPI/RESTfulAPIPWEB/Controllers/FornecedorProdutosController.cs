@@ -51,7 +51,8 @@ namespace RESTfulAPIPWEB.Controllers
                     ParaVenda = p.ParaVenda,
                     Origem = p.Origem,
                     CategoriaId = p.CategoriaId,
-                    ModoEntregaId = p.ModoEntregaId
+                    ModoEntregaId = p.ModoEntregaId,
+                    ModoDisponibilizacaoId = p.ModoDisponibilizacaoId
                 })
                 .ToListAsync();
 
@@ -85,7 +86,8 @@ namespace RESTfulAPIPWEB.Controllers
                 ParaVenda = dto.ParaVenda,
                 Origem = dto.Origem,
                 CategoriaId = dto.CategoriaId,
-                ModoEntregaId = dto.ModoEntregaId
+                ModoEntregaId = dto.ModoEntregaId,
+                ModoDisponibilizacaoId = dto.ModoDisponibilizacaoId
             };
 
             _context.Produtos.Add(produto);
@@ -131,6 +133,7 @@ namespace RESTfulAPIPWEB.Controllers
             produto.Origem = dto.Origem;
             produto.CategoriaId = dto.CategoriaId;
             produto.ModoEntregaId = dto.ModoEntregaId;
+            produto.ModoDisponibilizacaoId = dto.ModoDisponibilizacaoId;
             produto.Estado = ProdutoEstado.Pendente;
             produto.PrecoFinal = null;
 
@@ -211,7 +214,8 @@ namespace RESTfulAPIPWEB.Controllers
                 ParaVenda = produto.ParaVenda,
                 Origem = produto.Origem,
                 CategoriaId = produto.CategoriaId,
-                ModoEntregaId = produto.ModoEntregaId
+                ModoEntregaId = produto.ModoEntregaId,
+                ModoDisponibilizacaoId = produto.ModoDisponibilizacaoId
             };
         }
     }

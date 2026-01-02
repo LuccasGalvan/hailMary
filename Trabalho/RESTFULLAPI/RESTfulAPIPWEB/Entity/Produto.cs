@@ -68,6 +68,7 @@ namespace RESTfulAPIPWEB.Entity
         public ModoEntrega? modoentrega { get; set; }
 
         public int? ModoDisponibilizacaoId { get; set; }
+        public ModoDisponibilizacao? ModoDisponibilizacao { get; set; }
 
         [NotMapped]
         public IFormFile? ImageFile { get; set; }

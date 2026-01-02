@@ -17,6 +17,8 @@ public class ProdutoDto
     public bool Disponivel { get; set; }
     public int? ModoEntregaId { get; set; }
     public ModoEntrega? modoentrega { get; set; }
+    public int? ModoDisponibilizacaoId { get; set; }
+    public ModoDisponibilizacao? ModoDisponibilizacao { get; set; }
     public int CategoriaId { get; set; }
     public Categoria? categoria { get; set; }
     public byte[]? Imagem { get; set; }
